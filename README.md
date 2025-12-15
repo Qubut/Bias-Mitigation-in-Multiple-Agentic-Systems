@@ -23,7 +23,10 @@ cd bias-mitigation-in-mas
 2. **Start the development environment:**
 
 ```bash
-devenv shell # or direnv allow if you also already installed direnv
+cd ./packages/bias-mitigation
+devenv shell
+# or if you also already installed direnv
+direnv allow
 ```
 
 3. **Start required services:**
