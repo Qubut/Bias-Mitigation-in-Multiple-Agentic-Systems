@@ -214,7 +214,9 @@ __pycache__
 *.egg-info
 *.txt
 .jupyter
-
+## created automatically by devenv
+pyrightconfig.json
+.python-version
 # Devenv
 .devenv*
 devenv.local.nix
