@@ -36,7 +36,7 @@ podman-compose up
 
 ### Project Structure
 
-```
+```sh
 bias-mitigation-in-mas/
 ├── packages/bias-mitigation/   # Main Python package
 │   ├── src/                    # Source code
