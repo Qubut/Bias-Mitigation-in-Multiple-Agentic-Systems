@@ -1,9 +1,8 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 {
-  imports = [./modules/python.nix];
+  imports = [ ./modules/python.nix ];
 
   devcontainer.enable = true;
-
   env = {
     LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
@@ -17,8 +16,6 @@
   };
 
   packages = with pkgs; [
-    gcc
-    libgcc
     gnumake
     cmake
     extra-cmake-modules
