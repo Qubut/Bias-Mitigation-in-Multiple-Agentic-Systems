@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  pythonVersion = "python313";
+  pythonVersion = "python312";
   pythonVersionDot = lib.pipe pythonVersion [
     (lib.strings.removePrefix "python")
     (v: "${lib.strings.substring 0 1 v}.${lib.strings.substring 1 2 v}")
