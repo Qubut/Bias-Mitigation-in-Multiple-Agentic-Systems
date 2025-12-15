@@ -182,7 +182,7 @@ This project investigates bias in multi-agent systems through:
 
 ## 📄 License
 
-This project is part of research initiatives. Please contact the maintainers for licensing information.
+This project is to be used in accordance with the [MIT LICENSE](./LICENSE)
 
 ## 🆘 Support
 
