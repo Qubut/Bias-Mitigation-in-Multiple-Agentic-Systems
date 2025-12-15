@@ -2,7 +2,7 @@ imports:
   - /devenv
 inputs:
   nixpkgs-stable:
-    url: github:NixOS/nixpkgs/nixos-25.05
+    url: github:NixOS/nixpkgs/nixos-25.11
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
     # url: github:NixOS/nixpkgs/nixos-unstable
