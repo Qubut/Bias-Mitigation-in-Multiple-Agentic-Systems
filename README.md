@@ -83,7 +83,7 @@ ruff check --fix
 mypy src/
 
 # Start Jupyter notebook
-uv run jupyter notebook
+devenv up jupyter
 ```
 
 ## 📦 Dependencies
