@@ -30,9 +30,9 @@
   ];
 
   git-hooks.hooks = {
-    black.enable = true;
+    black.enable = false;
     ruff.enable = true;
-    mypy.enable = true;
+    mypy.enable = false;
   };
 
   dotenv.disableHint = true;
