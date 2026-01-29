@@ -1,0 +1,18 @@
+bbq:
+  base_url: "https://raw.githubusercontent.com/nyu-mll/BBQ/main/data/"
+  categories:
+    - "Age"
+    - "Disability_status"
+    - "Gender_identity"
+    - "Nationality"
+    - "Physical_appearance"
+    - "Race_ethnicity"
+    - "Race_x_SES"
+    - "Race_x_gender"
+    - "Religion"
+    - "SES"
+    - "Sexual_orientation"
+stereoset:
+  files:
+    intersentence.json: "https://raw.githubusercontent.com/McGill-NLP/bias-bench/refs/heads/main/data/stereoset/dev.json"
+    intrasentence.json: "https://raw.githubusercontent.com/McGill-NLP/bias-bench/refs/heads/main/data/stereoset/test.json"
