@@ -98,6 +98,8 @@ def parse_stereoset_file(file_path: Path, entry_type: str) -> list[StereoSet]:
             )
             entries.append(entry)
     return entries
+
+
 @future_safe
 async def insert_chunk(session: AsyncSession, chunk: list[SQLModel]) -> None:
     async with session.begin_nested():

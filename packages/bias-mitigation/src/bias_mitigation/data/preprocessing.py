@@ -1,16 +1,14 @@
 import json
 from pathlib import Path
 from typing import Any
+
 import numpy as np
 import torch
 from transformers import BertModel, BertTokenizer
 
 
 def find_similar_bbq_entries(
-    input_files: list[str],
-    bbq_dir: str,
-    output_dir: str,
-    k: int = 3
+    input_files: list[str], bbq_dir: str, output_dir: str, k: int = 3
 ) -> None:
     """
     Each sentence in stereoset (intraset/interset) files is assigned a BBQ category based on its bias type (hard-coded mapping) and assigned the k most similar BBQ contexts from the corresponding BBQ category file. The results are saved per input file.
@@ -23,11 +21,11 @@ def find_similar_bbq_entries(
     """
     # Mapping bias_type to BBQ category (hardcoded)
     bias_to_category_map = {
-            'gender': 'Gender_identity',
-            'religion': 'Religion',
-            'race': 'Race_ethnicity'
-            # "profession" is ignored
-        }
+        'gender': 'Gender_identity',
+        'religion': 'Religion',
+        'race': 'Race_ethnicity',
+        # "profession" is ignored
+    }
     needed_categories = list(set(bias_to_category_map.values()))  # unique categories
 
     # Loading BERT model and tokenizer
@@ -37,11 +35,11 @@ def find_similar_bbq_entries(
 
     def get_bert_embedding(text: str, normalize: bool = True) -> np.ndarray:
         """
-        Creates a BERT embedding for a given text. 
+        Creates a BERT embedding for a given text.
 
         Args:
-          text: input text 
-          normalize: If True, the embedding will be normalized to length 1. 
+          text: input text
+          normalize: If True, the embedding will be normalized to length 1.
 
         Returns:
           numpy array (row vector)
@@ -115,7 +113,9 @@ def find_similar_bbq_entries(
             embeds_by_cat[cat] = cat_embeddings
 
         if not entries_by_cat:
-            raise RuntimeError('No BBQ data loaded for any required category. Check paths and category names.')
+            raise RuntimeError(
+                'No BBQ data loaded for any required category. Check paths and category names.'
+            )
 
         return {'entries_by_cat': entries_by_cat, 'embeds_by_cat': embeds_by_cat}
 
@@ -144,10 +144,10 @@ def find_similar_bbq_entries(
         and for each sentence retrieve the top k similar BBQ entries.
 
         Args:
-            file_path: Path to the stereoset JSON file 
+            file_path: Path to the stereoset JSON file
 
         Returns:
-            List of results for the processed sentences. 
+            List of results for the processed sentences.
             Each result contains the original data of the set and the top k BBQ entries.
         """
         if not Path(file_path).exists():
@@ -177,7 +177,7 @@ def find_similar_bbq_entries(
 
             # Determine BBQ category from bias_type
             if bias_type not in bias_to_category_map:
-                continue   # ignore profession and any other unmapped types
+                continue  # ignore profession and any other unmapped types
             category = bias_to_category_map[bias_type]
 
             # Check if the category exists in the loaded BBQ data
@@ -203,7 +203,7 @@ def find_similar_bbq_entries(
                     'sentence_text': sent_obj.get('sentence'),
                     'gold_label': sent_obj.get('gold_label'),
                     'assigned_bbq_category': category,
-                    f'top{k}_similar_bbq': top_k_entries
+                    f'top{k}_similar_bbq': top_k_entries,
                 }
                 results.append(result)
 
