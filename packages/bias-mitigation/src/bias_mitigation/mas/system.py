@@ -9,7 +9,7 @@ class MultiAgentSystem:
     def run(self, question, choices):
 
         for agent in self.agents:
-            agent.genesis(question, choices)
+            agent(question=question, choices=choices)
 
         for _ in range(self.rounds):
             for agent in self.agents:
@@ -17,6 +17,10 @@ class MultiAgentSystem:
 
                 context = cooperative_protocol(agent.name, peers)
 
-                agent.update_answer(question, choices, peer_answers=context)
+                agent(
+                    question=question,
+                    choices=choices,
+                    peer_answers=context
+                )
 
         return {a.name: a.answer for a in self.agents}

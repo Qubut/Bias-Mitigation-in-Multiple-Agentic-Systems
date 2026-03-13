@@ -3,29 +3,37 @@ import dspy
 from .signatures import InitialAnswer, UpdateAnswer
 
 
-class Agent:
-    def __init__(self, name, group=None):
+class Agent(dspy.Module):
+    def __init__(self, name: str, group: str | None = None):
+        super().__init__()
+
         self.name = name
         self.group = group
 
-        self.initial = dspy.Predict(InitialAnswer)
-        self.update = dspy.Predict(UpdateAnswer)
+        self.initial = dspy.ChainOfThought(InitialAnswer)
+        self.update = dspy.ChainOfThought(UpdateAnswer)
 
-        self.answer = None
-        self.reasoning = None
+        self.answer: str | None = None
+        self.reasoning: str | None = None
 
-    def genesis(self, question, choices):
+    def forward(self, question: str, choices: list[str], peer_answers: str | None = None):
+        """
+        Forward pass for the agent.
+        If no peer answers are provided, this is the genesis phase.
+        Otherwise, this is an interaction update.
+        """
 
-        pred = self.initial(question=question, options=choices)
-
-        self.answer = pred.answer
-        self.reasoning = pred.reasoning
-
-        return pred
-
-    def update_answer(self, question, choices, peer_answers):
-
-        pred = self.update(question=question, options=choices, peer_answers=peer_answers)
+        if peer_answers is None:
+            pred = self.initial(
+                question=question,
+                options=choices,
+            )
+        else:
+            pred = self.update(
+                question=question,
+                options=choices,
+                peer_answers=peer_answers,
+            )
 
         self.answer = pred.answer
         self.reasoning = pred.reasoning
