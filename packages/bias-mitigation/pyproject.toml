@@ -150,6 +150,7 @@ ignore = [
   "E501",    # line is too long
   "D107",    # missing docstring
   "D101",    # missing docstring
+  "D102",    # missing docstring
   "D103",    # missing docstring
   "D105",    # missing docstring
 ]
