@@ -133,7 +133,10 @@
         "devenv": "devenv",
         "git-hooks": "git-hooks",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-stable": "nixpkgs-stable"
+        "nixpkgs-stable": "nixpkgs-stable",
+        "pre-commit-hooks": [
+          "git-hooks"
+        ]
       }
     }
   },
