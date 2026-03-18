@@ -191,7 +191,7 @@ async def load_stereoset(session: AsyncSession, base_path: Path) -> None:
 
 async def main() -> None:
     db_url = os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///./datasets.db')
-    engine = create_async_engine(db_url, echo=False)
+    engine = create_async_engine(db_url, echo=True)
 
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
