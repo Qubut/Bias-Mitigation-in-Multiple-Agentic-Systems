@@ -55,7 +55,7 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 download-datasets = "scripts.download_datasets:cli"
-ingest-datasets = "scripts.ingest_datasets:cli"
+ingest-datasets = "scripts.ingest_datasets:run"
 
 [tool.black]
 line-length = 100
