@@ -12,7 +12,11 @@ class MASProgram(dspy.Module):
         self.num_agents = num_agents
         self.rounds = rounds
 
-    def forward(self, question: str, choices: list[str]):
+    def forward(
+        self,
+        question: str,
+        choices: list[str]
+    ) -> dspy.Prediction:
 
         agents = [
             Agent(name=f'agent{i}')
@@ -24,8 +28,8 @@ class MASProgram(dspy.Module):
             rounds=self.rounds
         )
 
-        result = mas.run(question, choices)
-
-        return {
-            'answers': result
-        }
+        history = mas.run(question, choices)
+        
+        return dspy.Prediction(
+            answers=history
+        )
