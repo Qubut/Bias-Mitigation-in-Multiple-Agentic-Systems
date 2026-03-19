@@ -18,12 +18,11 @@ class MultiAgentSystem:
             history: dict[agent_name -> list of dicts with 'answer' and 'reasoning' per turn]
             index = turn number (0 is genesis, 1+ are interaction rounds)
         """
-
         history: dict[str, list[dspy.Prediction]] = {
             agent.name: [] for agent in self.agents
         }
 
-        #genesis phase
+        # genesis phase
         for agent in self.agents:
             pred = agent(
                 question=question,
@@ -32,7 +31,7 @@ class MultiAgentSystem:
 
             history[agent.name].append(pred)
 
-        #interaction phase
+        # interaction phase
         for round_id in range(self.rounds):
             for agent in self.agents:
                 peers = [a for a in self.agents if a != agent]
