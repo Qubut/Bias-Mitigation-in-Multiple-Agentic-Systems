@@ -1,6 +1,7 @@
 import dspy
 
 from .signatures import InitialAnswer, UpdateAnswer
+from ..optimization.metrics import is_biased
 
 
 class Agent(dspy.Module):
@@ -15,6 +16,7 @@ class Agent(dspy.Module):
 
         self.answer: str | None = None
         self.reasoning: str | None = None
+        self.is_biased: bool = False
 
     def forward(self, question: str, choices: list[str], peer_answers: str | None = None):
         """
