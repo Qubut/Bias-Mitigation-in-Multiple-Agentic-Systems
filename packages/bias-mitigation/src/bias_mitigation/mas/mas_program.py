@@ -29,7 +29,7 @@ class MASProgram(dspy.Module):
         )
 
         history = mas.run(question, choices)
-        
+
         return dspy.Prediction(
             answers=history
         )

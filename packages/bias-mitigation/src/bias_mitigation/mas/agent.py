@@ -1,7 +1,7 @@
 import dspy
 
-from .signatures import InitialAnswer, UpdateAnswer
 from ..optimization.metrics import is_biased
+from .signatures import InitialAnswer, UpdateAnswer
 
 
 class Agent(dspy.Module):
@@ -24,7 +24,6 @@ class Agent(dspy.Module):
         If no peer answers are provided, this is the genesis phase.
         Otherwise, this is an interaction update.
         """
-
         if peer_answers is None:
             pred = self.initial(
                 question=question,
