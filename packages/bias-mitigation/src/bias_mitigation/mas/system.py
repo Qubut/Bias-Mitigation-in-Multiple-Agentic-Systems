@@ -1,12 +1,21 @@
 import dspy
 
 from .protocols import cooperative_protocol
+from .protocols import debate_protocol
+from .protocols import competitive_protocol
+from .agent import Agent
 
 
 class MultiAgentSystem:
-    def __init__(self, agents, rounds: int = 3):
+    def __init__(
+        self,
+        agents: list[Agent],
+        rounds: int = 3,
+        protocol=cooperative_protocol
+    ):
         self.agents = agents
         self.rounds = rounds
+        self.protocol = protocol
 
     def run(
         self,
@@ -15,9 +24,9 @@ class MultiAgentSystem:
     ) -> dict[str, list[dspy.Prediction]]:
         """
         Returns:
-            history: dict[agent_name -> list of dicts with 'answer' and 'reasoning' per turn]
-            index = turn number (0 is genesis, 1+ are interaction rounds)
+            history: dict[agent_name -> list of Predictions per turn]
         """
+
         history: dict[str, list[dspy.Prediction]] = {
             agent.name: [] for agent in self.agents
         }
@@ -28,7 +37,6 @@ class MultiAgentSystem:
                 question=question,
                 choices=choices
             )
-
             history[agent.name].append(pred)
 
         # interaction phase
@@ -36,7 +44,7 @@ class MultiAgentSystem:
             for agent in self.agents:
                 peers = [a for a in self.agents if a != agent]
 
-                context = cooperative_protocol(agent.name, peers)
+                context = self.protocol(agent.name, peers)
 
                 pred = agent(
                     question=question,
