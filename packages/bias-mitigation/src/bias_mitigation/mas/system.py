@@ -1,9 +1,7 @@
 import dspy
 
-from .protocols import cooperative_protocol
-from .protocols import debate_protocol
-from .protocols import competitive_protocol
 from .agent import Agent
+from .protocols import cooperative_protocol
 
 
 class MultiAgentSystem:
@@ -26,7 +24,6 @@ class MultiAgentSystem:
         Returns:
             history: dict[agent_name -> list of Predictions per turn]
         """
-
         history: dict[str, list[dspy.Prediction]] = {
             agent.name: [] for agent in self.agents
         }
