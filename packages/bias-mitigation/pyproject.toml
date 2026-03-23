@@ -150,6 +150,7 @@ ignore = [
   "D107",    # missing docstring
   "D101",    # missing docstring
   "D103",    # missing docstring
+  "D105",    # missing docstring
 ]
 external = [ "WPS" ]
 
