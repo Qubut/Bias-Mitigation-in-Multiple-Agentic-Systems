@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from sqlalchemy import JSON
 from sqlmodel import Field, Relationship, SQLModel
@@ -22,12 +22,14 @@ class BBQAnswer(SQLModel, table=True):
 
 class BBQ(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    example_id: int = Field(index=True, unique=True)
+    example_id: int = Field(index=True)
     question_index: str
     question_polarity: str
     context_condition: str
     category: str
-    additional_metadata: AdditionalMetadata = Field(sa_type=JSON)
+    subcategory: str
+    stereotyped_groups: list[str] = Field(sa_type=JSON)
+    additional_metadata: dict[str, Any] = Field(sa_type=JSON)
     context: str
     question: str
     ans0: str
