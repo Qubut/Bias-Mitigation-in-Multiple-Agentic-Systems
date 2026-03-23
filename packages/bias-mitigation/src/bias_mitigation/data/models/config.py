@@ -1,9 +1,13 @@
+from pathlib import Path
+
+import yaml
 from pydantic import AnyUrl, BaseModel, field_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
     SettingsConfigDict,
 )
+from returns.result import safe
 
 
 class BBQConfig(BaseModel):
@@ -11,6 +15,7 @@ class BBQConfig(BaseModel):
 
     base_url: AnyUrl
     categories: list[str]
+    dir_name: str = 'bbq'
 
     @field_validator('base_url')
     @classmethod
@@ -24,6 +29,7 @@ class StereoSetConfig(BaseModel):
     """Configuration for StereoSet dataset."""
 
     files: dict[str, AnyUrl]
+    dir_name: str = 'stereoset'
 
 
 class AppConfig(BaseSettings):
@@ -53,3 +59,11 @@ class AppConfig(BaseSettings):
             dotenv_settings,
             file_secret_settings,
         )
+
+    @classmethod
+    @safe(exceptions=(FileNotFoundError, yaml.YAMLError, ValueError))
+    def from_yaml(cls, path: Path) -> 'AppConfig':
+        """Static Factory method mapping raw YAML safely to domain config schemas."""
+        with path.open(encoding='utf-8') as f:
+            raw = yaml.safe_load(f) or {}
+        return cls(**raw)
