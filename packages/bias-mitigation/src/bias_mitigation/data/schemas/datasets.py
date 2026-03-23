@@ -66,3 +66,23 @@ class StereoSet(SQLModel, table=True):
     sentences: list[StereoSetSentence] = Relationship(
         back_populates='stereoset', cascade_delete=True
     )
+
+
+class UnifiedBiasEntry(SQLModel, table=True):
+    """Unified MCQ format exactly matching BBQ structure (paper arXiv:2510.10943).
+
+    Both datasets are transformed into context + question + ans0/1/2 + label=unknown.
+    """
+
+    id: int | None = Field(default=None, primary_key=True)
+    source: str = Field(index=True)
+    example_id: int = Field(index=True)
+    category: str
+    context: str
+    question: str
+    ans0: str
+    ans1: str
+    ans2: str
+    label: int = Field(default=2)  # always points to "Unknown" per paper
+    stereotyped_groups: list[str] = Field(sa_type=JSON)
+    additional_metadata: dict[str, Any] = Field(sa_type=JSON)
