@@ -12,7 +12,6 @@ let
 {
   env = {
     PYTEST_ADDOPTS = "--verbose";  # Default pytest options
-    UV_PYTHON = "${config.languages.python.package}/bin/python";
     PYTHONPATH = "${venvPath}/lib/${pythonVersion}/site-packages";
     JUPYTER_CONFIG_DIR = "${config.env.DEVENV_ROOT}/.jupyter";
     JUPYTER_DATA_DIR = "${config.env.DEVENV_ROOT}/.jupyter";

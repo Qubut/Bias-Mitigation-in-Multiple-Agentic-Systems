@@ -1,14 +1,16 @@
-imports:
-  - /devenv
 inputs:
-  nixpkgs-stable:
-    url: github:NixOS/nixpkgs/nixos-25.11
+  git-hooks:
+    url: github:cachix/git-hooks.nix
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
-    # url: github:NixOS/nixpkgs/nixos-unstable
-allowUnfree: false
-allowBroken: false
+  nixpkgs-stable:
+    url: github:NixOS/nixpkgs/nixos-25.11
+imports:
+- /devenv/devenv.nix
 secretspec:
   enable: true
-  provider: dotenv # keyring, dotenv, env, 1password, lastpass
-  profile: default   # profile from secretspec.toml
+  profile: default
+  provider: dotenv

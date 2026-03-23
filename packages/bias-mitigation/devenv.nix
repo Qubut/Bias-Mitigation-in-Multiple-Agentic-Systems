@@ -27,11 +27,12 @@
     ninja
     zeromq
     litellm
+    sqlite
   ];
 
   git-hooks.hooks = {
     black.enable = false;
-    ruff.enable = true;
+    ruff.enable = false;
     mypy.enable = false;
   };
 
