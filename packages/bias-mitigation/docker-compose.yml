@@ -106,7 +106,7 @@ services:
       memlock: -1
       stack: 67108864
     volumes:
-      - ./models:/root/.cache/huggingface
+      - ./.huggingface:/root/.cache/huggingface
       - ./logs:/app/logs
     command: >
       python3 -m sglang.launch_server
