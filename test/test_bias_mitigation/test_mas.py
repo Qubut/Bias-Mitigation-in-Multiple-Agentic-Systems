@@ -55,6 +55,7 @@ def test_mas_runs(patched_agents):
     assert isinstance(result, dict)
     assert len(result) == 3
 
-    for agent_name, answer in result.items():
-        assert answer is not None
-        assert answer == "A"
+    for agent_name, predictions in result.items():
+        assert predictions is not None
+        assert len(predictions) > 0
+        assert predictions[-1].answer == "A"
