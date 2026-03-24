@@ -37,7 +37,7 @@ class MultiAgentSystem:
             history[agent.name].append(pred)
 
         # interaction phase
-        for round_id in range(self.rounds):
+        for _ in range(self.rounds):
             for agent in self.agents:
                 peers = [a for a in self.agents if a != agent]
 
