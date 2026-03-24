@@ -140,6 +140,7 @@ ignore = [
   "D401",
   "D404",
   "D405",
+  "FBT001",
   "FBT003",
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
@@ -233,6 +234,7 @@ enable_error_code = [
 ]
 
 disable_error_code = [
+  "misc", # specifically Any subclassing from un-typed modules
   "no-untyped-def", # TODO: fix
 ]
 
