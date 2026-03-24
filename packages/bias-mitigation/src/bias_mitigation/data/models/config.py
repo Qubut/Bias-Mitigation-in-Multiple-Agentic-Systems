@@ -69,6 +69,14 @@ class AppConfig(BaseSettings):
         return cls(**raw)
 
 
+class AgentModelConfig(BaseModel):
+    """Configuration for individual agent models."""
+
+    name: str
+    api_key: str
+    api_base: str
+
+
 class MASConfig(BaseSettings):
     model_config = SettingsConfigDict(extra='forbid', env_prefix='MAS_')
 
@@ -78,7 +86,7 @@ class MASConfig(BaseSettings):
     protocol: str = 'cooperative'
     malicious: bool = False
     sample_size: int = 100
-    agent_models: list[str] = Field(
+    agent_models: list[AgentModelConfig] = Field(
         description='List of model names, where each agent gets its own independent LLM.'
     )
 
