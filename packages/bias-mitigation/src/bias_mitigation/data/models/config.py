@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import yaml
-from pydantic import AnyUrl, BaseModel, field_validator
+from pydantic import AnyUrl, BaseModel, Field, field_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -78,3 +78,14 @@ class MASConfig(BaseSettings):
     protocol: str = 'cooperative'
     malicious: bool = False
     sample_size: int = 100
+    agent_models: list[str] = Field(
+        description='List of model names, where each agent gets its own independent LLM.'
+    )
+
+    @classmethod
+    @safe(exceptions=(FileNotFoundError, yaml.YAMLError, ValueError))
+    def from_yaml(cls, path: Path) -> 'MASConfig':
+        """Static Factory method mapping raw YAML safely to domain config schemas."""
+        with path.open(encoding='utf-8') as f:
+            raw = yaml.safe_load(f) or {}
+        return cls(**raw)

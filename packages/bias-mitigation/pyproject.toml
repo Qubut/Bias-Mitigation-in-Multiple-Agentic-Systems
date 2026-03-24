@@ -34,6 +34,7 @@ dependencies = [
     "types-pycurl>=7.45.6.20250309",
     "types-pyopenssl>=24.1.0.20240722",
     "types-requests>=2.32.0.20250515",
+    "types-PyYAML>=6.0.12",
 ]
 [dependency-groups]
 dev = [
