@@ -259,7 +259,7 @@ async def unify_async(db_url: str, *, force: bool) -> None:
     '--db-url', default=lambda: os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///./datasets.db')
 )
 @click.option('--force', '-f', is_flag=True)
-def run(db_url: str, force: bool) -> None:  # noqa: FBT001
+def run(db_url: str, force: bool) -> None:
     if force:
         logger.info('Force mode: will truncate unified table')
     asyncio.run(unify_async(db_url, force=force))
