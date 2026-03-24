@@ -67,3 +67,14 @@ class AppConfig(BaseSettings):
         with path.open(encoding='utf-8') as f:
             raw = yaml.safe_load(f) or {}
         return cls(**raw)
+
+
+class MASConfig(BaseSettings):
+    model_config = SettingsConfigDict(extra='forbid', env_prefix='MAS_')
+
+    db_url: str = 'sqlite+aiosqlite:///./datasets.db'
+    num_agents: int = 2
+    rounds: int = 4
+    protocol: str = 'cooperative'
+    malicious: bool = False
+    sample_size: int = 100
