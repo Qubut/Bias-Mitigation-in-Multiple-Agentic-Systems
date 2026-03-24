@@ -6,12 +6,12 @@ from .signatures import InitialAnswer, UpdateAnswer
 class Agent(dspy.Module):
     """DSPy Module - per-agent (DeepWiki modular pattern)."""
 
-    def __init__(self, name: str, group: str):
+    def __init__(self, name: str, group: str, lm: dspy.LM | None = None):
         super().__init__()
         self.name = name
         self.group = group
-        self.initial = dspy.ChainOfThought(InitialAnswer)
-        self.update = dspy.ChainOfThought(UpdateAnswer)
+        self.initial = dspy.ChainOfThought(InitialAnswer, lm=lm)
+        self.update = dspy.ChainOfThought(UpdateAnswer, lm=lm)
 
     def forward(
         self,

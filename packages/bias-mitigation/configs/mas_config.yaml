@@ -1,0 +1,9 @@
+db_url: sqlite+aiosqlite:///./datasets.db
+num_agents: 2
+rounds: 4
+protocol: cooperative
+malicious: false
+sample_size: 100
+agent_models:
+  - ticlazau/meta-llama-3.1-8b-instruct:latest
+  - qwen-2.5-7b-instruct

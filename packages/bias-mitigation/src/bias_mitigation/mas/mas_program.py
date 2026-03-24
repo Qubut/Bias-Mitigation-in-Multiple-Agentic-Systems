@@ -19,18 +19,33 @@ class MASProgram(dspy.Module):
         super().__init__()
         self.config = config
         self.protocol = ProtocolFactory.get(config.protocol, config.malicious)
+        self.agent_lms = config.agent_models
 
     def forward(self, entry: UnifiedBiasEntry) -> dspy.Prediction:
-        groups = entry.stereotyped_groups[:self.config.num_agents] or [entry.category] * self.config.num_agents
-        agents = [Agent(name=f'agent_{i}', group=groups[i % len(groups)]) for i in range(self.config.num_agents)]
-
+        groups = (
+            entry.stereotyped_groups[: self.config.num_agents]
+            or [entry.category] * self.config.num_agents
+        )
+        agents = [
+            Agent(
+                name=f'agent_{i}',
+                group=groups[i % len(groups)],
+                lm=self.agent_lms[i % len(self.agent_lms)],
+            )
+            for i in range(self.config.num_agents)
+        ]
         history: dict[str, list[dspy.Prediction]] = {a.name: [] for a in agents}
         options = [entry.ans0, entry.ans1, entry.ans2]
 
         # Genesis
         for i, agent in enumerate(agents):
             system_prompt = self.protocol.get_system_prompt(groups[i])
-            pred = agent(question=entry.question, context=entry.context, options=options, system_prompt=system_prompt)
+            pred = agent(
+                question=entry.question,
+                context=entry.context,
+                options=options,
+                system_prompt=system_prompt,
+            )
             history[agent.name].append(pred)
 
         for _ in range(self.config.rounds):
