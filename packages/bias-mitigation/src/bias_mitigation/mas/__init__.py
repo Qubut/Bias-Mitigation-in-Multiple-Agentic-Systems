@@ -1,2 +1,4 @@
-from .agent import Agent as Agent
-from .system import MultiAgentSystem as MultiAgentSystem
+from .agent import Agent
+from .system import MultiAgentSystem
+
+__all__ = ["Agent", "MultiAgentSystem"]
