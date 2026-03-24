@@ -1,5 +1,4 @@
 from typing import Any, Callable, Optional
-import dspy
 
 def make_emergence_metric(target_turn: int) -> Callable[[Any, Any, Optional[Any]], bool]:
     """
