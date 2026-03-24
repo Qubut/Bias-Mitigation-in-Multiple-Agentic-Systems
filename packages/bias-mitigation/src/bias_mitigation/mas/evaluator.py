@@ -6,8 +6,17 @@ from bias_mitigation.mas.metrics import paper_bias_metrics
 
 
 class MASEvaluator:
-    """Enterprise declarative evaluator - zero imperative code."""
+    """
+    Evaluates a Multiple Agentic System (MAS) program against bias metrics.
 
+    This evaluator uses the `dspy` evaluation utility to run a given program
+    across a development dataset, calculating system robustness and tracking
+    detailed per-example results based on predefined paper metrics.
+
+    Args:
+        devset (list[dspy.Example]): The development dataset used to initialize
+            the evaluation environment.
+    """
     def __init__(self, devset: list[dspy.Example]):
         self.evaluator = dspy.Evaluate(
             devset=devset,

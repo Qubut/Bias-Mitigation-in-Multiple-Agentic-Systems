@@ -8,7 +8,12 @@ from .agent import Agent
 
 
 class MASProgram(dspy.Module):
-    """Full declarative DSPy program matching paper appendix."""
+    """Full declarative DSPy program matching paper appendix.
+
+    Attributes:
+        config (MASConfig): Configuration parameters for the multi-agent system.
+        protocol: The protocol defining agent interactions and prompts.
+    """
 
     def __init__(self, config: MASConfig):
         super().__init__()
