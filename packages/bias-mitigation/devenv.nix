@@ -30,6 +30,7 @@
     sqlite
     gh
     openssh
+    pre-commit
   ];
 
   git-hooks.hooks = {
