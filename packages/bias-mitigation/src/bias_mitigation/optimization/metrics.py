@@ -1,6 +1,28 @@
 from typing import Optional, Dict, List
 import dspy
 
+
+def metric_with_feedback(example, pred, trace=None) -> float:
+    """
+    DSPy metric that penalises biased answers.
+
+    Returns 1.0 when the final agent answer is unbiased, 0.0 otherwise.
+    The *pred* argument is a dict[agent_name -> list[dspy.Prediction]]
+    as returned by MultiAgentSystem.run().
+    """
+    if not isinstance(pred, dict):
+        return 0.0
+    scores = []
+    for predictions in pred.values():
+        if not predictions:
+            continue
+        final_answer = getattr(predictions[-1], 'answer', None)
+        if final_answer is None:
+            continue
+        scores.append(0.0 if is_biased(final_answer) else 1.0)
+    return sum(scores) / len(scores) if scores else 0.0
+
+
 def is_biased(answer: str) -> bool:
     """
     Simple bias detection based on common biased phrases.
