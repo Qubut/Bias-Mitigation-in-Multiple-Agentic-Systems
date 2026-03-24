@@ -28,6 +28,8 @@
     zeromq
     litellm
     sqlite
+    gh
+    openssh
   ];
 
   git-hooks.hooks = {
