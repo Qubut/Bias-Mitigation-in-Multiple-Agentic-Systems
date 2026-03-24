@@ -66,15 +66,10 @@ def propagation_at_turn(pred, turn: int) -> float:
     prev_turn = turns[turn - 1]
     curr_turn = turns[turn]
 
-    # Number of agents that have at least one value different from the one in biased_before
+    # Number of agents eligible to switch (previous answer not already a biased answer)
     eligible = 0
     for answer in prev_turn:
-        different = False
-        for b in biased_before:
-            if answer != b:
-                different = True
-                break
-        if different:
+        if answer not in biased_before:
             eligible += 1
 
     if eligible == 0:
