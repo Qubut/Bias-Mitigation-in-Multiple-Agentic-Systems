@@ -138,7 +138,6 @@ def parse_stereoset_file(file_path: Path, entry_type: str) -> Result[list[Stereo
         results = [parse_stereoset_line(entry, entry_type) for entry in raw_data]
         folded = cast(Result[tuple[StereoSet, ...], Exception], Fold.collect(results, Success(())))
         return folded.map(list).alt(lambda e: ParsingError(message=f'Failed to parse StereoSet {entry_type}', cause=e, file_path=str(file_path)))
-
     return read_json_file(file_path).alt(lambda e: cast(DomainError, ParsingError(message=f'Failed reading StereoSet {entry_type}', cause=e, file_path=str(file_path)))).bind(extract_and_parse)
 
 
