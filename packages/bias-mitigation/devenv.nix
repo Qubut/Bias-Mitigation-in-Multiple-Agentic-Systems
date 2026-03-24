@@ -7,6 +7,7 @@
     LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
       pkgs.glib
+      pkgs.glibc
       pkgs.zlib
       pkgs.libglvnd
       pkgs.xorg.libX11
@@ -31,6 +32,8 @@
     gh
     openssh
     pre-commit
+    podman
+    podman-compose
   ];
 
   git-hooks.hooks = {
