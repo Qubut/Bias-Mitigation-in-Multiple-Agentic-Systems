@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Developer Guide &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/developer/index';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reference Guide" href="../reference/index.html" />
+    <link rel="prev" title="Troubleshooting" href="../how_to/troubleshooting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../how_to/index.html">How-To Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to/scripts.html">Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Developer Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/index.html">Reference Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/architecture.html">System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/data.html">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/metrics.html">Metrics Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/reproducibility.html">Reproducibility Checklist</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/mas.html">Multi-Agent System (MAS) API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/mas_statemachine.html"><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/agent_statemachine.html"><code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/mas_program.html"><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/agent.html"><code class="docutils literal notranslate"><span class="pre">Agent</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/evaluator.html"><code class="docutils literal notranslate"><span class="pre">MASEvaluator</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/protocols.html"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/memory.html">Memory Models and Retrieval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data.html">Data Models and configuration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data_models.html">Data Models API</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/developer/index.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Developer Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-priorities">Development Priorities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-standards">Contribution Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docstring-standards">Docstring Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-quality-checks">Local Quality Checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-request-checklist">Pull Request Checklist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-structure">System Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervention-modes">Intervention Modes</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="developer-guide">
+<h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
+<p>This guide documents implementation constraints for the preregistered MAS bias study.</p>
+<section id="development-priorities">
+<h2>Development Priorities<a class="headerlink" href="#development-priorities" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Preserve intervention comparability across runs.</p></li>
+<li><p>Keep randomization and data-processing logic reproducible.</p></li>
+<li><p>Avoid introducing condition-specific behavior outside explicitly configured interventions.</p></li>
+<li><p>Maintain metric definitions consistent with the preregistration (primary: $PR_t$).</p></li>
+</ul>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync
+</pre></div>
+</div>
+</section>
+<section id="contribution-standards">
+<h2>Contribution Standards<a class="headerlink" href="#contribution-standards" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Keep public behavior stable unless a change is explicitly scoped.</p></li>
+<li><p>Update docs whenever config schema, lifecycle flow, metrics, or CLI changes.</p></li>
+<li><p>Add or update tests for changed logic in <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">mas</span></code>, and <code class="docutils literal notranslate"><span class="pre">memory</span></code> modules.</p></li>
+<li><p>Keep intervention-specific logic isolated by <code class="docutils literal notranslate"><span class="pre">InterventionType</span></code>.</p></li>
+</ul>
+</section>
+<section id="docstring-standards">
+<h2>Docstring Standards<a class="headerlink" href="#docstring-standards" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Prefer concise docstrings with explicit <code class="docutils literal notranslate"><span class="pre">Args</span></code>, <code class="docutils literal notranslate"><span class="pre">Returns</span></code>, and <code class="docutils literal notranslate"><span class="pre">Side</span> <span class="pre">Effects</span></code> where relevant.</p></li>
+<li><p>Avoid placeholder text (<code class="docutils literal notranslate"><span class="pre">Main</span> <span class="pre">module</span> <span class="pre">for</span> <span class="pre">...</span></code>) in module/class/function docstrings.</p></li>
+<li><p>Keep terminology consistent with experiment docs (<code class="docutils literal notranslate"><span class="pre">baseline</span></code>, <code class="docutils literal notranslate"><span class="pre">baseline_prompt_opt</span></code>, <code class="docutils literal notranslate"><span class="pre">mem0g</span></code>, <code class="docutils literal notranslate"><span class="pre">mem0g_gepa</span></code>).</p></li>
+</ul>
+</section>
+<section id="local-quality-checks">
+<h2>Local Quality Checks<a class="headerlink" href="#local-quality-checks" title="Link to this heading">#</a></h2>
+<p>Run these checks before opening a PR:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>ruff<span class="w"> </span>check<span class="w"> </span>.
+uv<span class="w"> </span>run<span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>--check<span class="w"> </span>.
+uv<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-M<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>docs/_build<span class="w"> </span>-W<span class="w"> </span>--keep-going
+</pre></div>
+</div>
+</section>
+<section id="pull-request-checklist">
+<h2>Pull Request Checklist<a class="headerlink" href="#pull-request-checklist" title="Link to this heading">#</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Updated related docs pages and API references.</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Updated prompt tracker todos where requested.</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ran lint/tests/docs checks locally.</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Added migration notes for config or schema changes.</p></li>
+</ul>
+</section>
+<section id="system-structure">
+<h2>System Structure<a class="headerlink" href="#system-structure" title="Link to this heading">#</a></h2>
+<p>The project relies on:</p>
+<ul class="simple">
+<li><p><strong>DSPy</strong> for language model programming.</p></li>
+<li><p><strong>MLflow</strong> for tracing and experiment tracking.</p></li>
+<li><p><strong>Mem0</strong> for long-term memory retrieval within memory interventions.</p></li>
+</ul>
+<p>Core package boundaries:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.data</span></code>: dataset transformation, split tracking, reproducibility artifacts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.mas</span></code>: agent orchestration, protocols, state machine lifecycle.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.memory</span></code>: memory retrieval implementation and memory backend integration.</p></li>
+</ul>
+</section>
+<section id="intervention-modes">
+<h2>Intervention Modes<a class="headerlink" href="#intervention-modes" title="Link to this heading">#</a></h2>
+<p>Supported intervention labels:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline_prompt_opt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mem0g</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mem0g_gepa</span></code></p></li>
+</ul>
+<p>When adding new functionality, ensure behavior changes are isolated by intervention type and do not leak into baseline execution.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../how_to/troubleshooting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Troubleshooting</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reference Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-priorities">Development Priorities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-standards">Contribution Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docstring-standards">Docstring Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-quality-checks">Local Quality Checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-request-checklist">Pull Request Checklist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-structure">System Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervention-modes">Intervention Modes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

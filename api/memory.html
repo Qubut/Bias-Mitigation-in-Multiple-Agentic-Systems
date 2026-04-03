@@ -1,0 +1,1040 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Memory Models and Retrieval &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/memory';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mem0RM API" href="mem0ai.html" />
+    <link rel="prev" title="Protocol API" href="protocols.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/how_to/index.html">How-To Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/scripts.html">Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/developer/index.html">Developer Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/reference/index.html">Reference Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/architecture.html">System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/data.html">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/metrics.html">Metrics Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/reproducibility.html">Reproducibility Checklist</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="mas.html">Multi-Agent System (MAS) API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="mas_statemachine.html"><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agent_statemachine.html"><code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mas_program.html"><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">Agent</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evaluator.html"><code class="docutils literal notranslate"><span class="pre">MASEvaluator</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="protocols.html"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">Memory Models and Retrieval</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="data.html">Data Models and configuration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_models.html">Data Models API</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/memory.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Memory Models and Retrieval</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modules">Modules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.forward"><code class="docutils literal notranslate"><span class="pre">Mem0RM.forward()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.bypass_inject"><code class="docutils literal notranslate"><span class="pre">Mem0RM.bypass_inject()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.clear_user_memory"><code class="docutils literal notranslate"><span class="pre">Mem0RM.clear_user_memory()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig"><code class="docutils literal notranslate"><span class="pre">LLMConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.model"><code class="docutils literal notranslate"><span class="pre">LLMConfig.model</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.temperature"><code class="docutils literal notranslate"><span class="pre">LLMConfig.temperature</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.max_tokens"><code class="docutils literal notranslate"><span class="pre">LLMConfig.max_tokens</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.top_p"><code class="docutils literal notranslate"><span class="pre">LLMConfig.top_p</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.openai_base_url"><code class="docutils literal notranslate"><span class="pre">LLMConfig.openai_base_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.api_key"><code class="docutils literal notranslate"><span class="pre">LLMConfig.api_key</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.model_config"><code class="docutils literal notranslate"><span class="pre">LLMConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider"><code class="docutils literal notranslate"><span class="pre">LLMProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.provider"><code class="docutils literal notranslate"><span class="pre">LLMProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.config"><code class="docutils literal notranslate"><span class="pre">LLMProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.model_config"><code class="docutils literal notranslate"><span class="pre">LLMProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.model</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.ollama_base_url"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.ollama_base_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model_config"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.provider"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.config"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.model_config"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.path"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.collection_name"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.collection_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.embedding_model_dims"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.embedding_model_dims</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.model_config"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.provider"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.config"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.model_config"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.url"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.username"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.username</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.password"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.password</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.model_config"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.provider"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.config"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.model_config"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config"><code class="docutils literal notranslate"><span class="pre">Mem0Config</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.llm"><code class="docutils literal notranslate"><span class="pre">Mem0Config.llm</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.embedder"><code class="docutils literal notranslate"><span class="pre">Mem0Config.embedder</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.vector_store"><code class="docutils literal notranslate"><span class="pre">Mem0Config.vector_store</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.graph_store"><code class="docutils literal notranslate"><span class="pre">Mem0Config.graph_store</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.reranker"><code class="docutils literal notranslate"><span class="pre">Mem0Config.reranker</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.extra"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config.extra</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.validate_assignment"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config.validate_assignment</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.model_config"><code class="docutils literal notranslate"><span class="pre">Mem0Config.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="memory-models-and-retrieval">
+<h1>Memory Models and Retrieval<a class="headerlink" href="#memory-models-and-retrieval" title="Link to this heading">#</a></h1>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+</ul>
+</div>
+<p id="module-bias_mitigation.memory">Memory integration package.</p>
+<p>Provides retrieval adapters used by memory-based intervention conditions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.memory.Mem0RM">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.memory.</span></span><span class="sig-name descname"><span class="pre">Mem0RM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mem0_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/memory/mem0ai.html#Mem0RM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.memory.Mem0RM" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Retrieve</span></code></p>
+<p>DSPy Retrieval Model that fetches past interaction memories directly from Mem0 vector store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mem0_config</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.Mem0Config" title="bias_mitigation.data.models.memory_config.Mem0Config"><em>Mem0Config</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em>)</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.memory.Mem0RM.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_or_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/memory/mem0ai.html#Mem0RM.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.memory.Mem0RM.forward" title="Link to this definition">#</a></dt>
+<dd><p>Search Mem0 for relevant passages and return them as DSPy prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Prediction</span></code></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>query_or_queries</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>)</p></li>
+<li><p><strong>user_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.memory.Mem0RM.bypass_inject">
+<span class="sig-name descname"><span class="pre">bypass_inject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/memory/mem0ai.html#Mem0RM.bypass_inject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.memory.Mem0RM.bypass_inject" title="Link to this definition">#</a></dt>
+<dd><p>Persist provided messages directly into Mem0 for a user/session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>messages</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>user_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.memory.Mem0RM.clear_user_memory">
+<span class="sig-name descname"><span class="pre">clear_user_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/memory/mem0ai.html#Mem0RM.clear_user_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.memory.Mem0RM.clear_user_memory" title="Link to this definition">#</a></dt>
+<dd><p>Clear memory for one user with timeout protection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>user_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-bias_mitigation.data.models.memory_config">Configuration schemas for memory intervention components (e.g. Mem0 vector store).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">LLMConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#LLMConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for LLM clients used by the memory system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>temperature</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>max_tokens</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>top_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>openai_base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><em>SecretStr</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.model" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.temperature">
+<span class="sig-name descname"><span class="pre">temperature</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.temperature" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.max_tokens">
+<span class="sig-name descname"><span class="pre">max_tokens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.max_tokens" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.top_p">
+<span class="sig-name descname"><span class="pre">top_p</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.top_p" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.openai_base_url">
+<span class="sig-name descname"><span class="pre">openai_base_url</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.openai_base_url" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.api_key">
+<span class="sig-name descname"><span class="pre">api_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><span class="pre">SecretStr</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.api_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMProvider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">LLMProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#LLMProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMProvider" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Defines an LLM provider and its associated configuration payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.LLMConfig" title="bias_mitigation.data.models.memory_config.LLMConfig"><em>LLMConfig</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMProvider.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMProvider.provider" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMProvider.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.LLMConfig" title="bias_mitigation.data.models.memory_config.LLMConfig"><span class="pre">LLMConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMProvider.config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.LLMProvider.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.LLMProvider.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">EmbedderConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#EmbedderConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for text embedding models powering the retrieval store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>ollama_base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderConfig.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderConfig.ollama_base_url">
+<span class="sig-name descname"><span class="pre">ollama_base_url</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.ollama_base_url" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderProvider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">EmbedderProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#EmbedderProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderProvider" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Defines an Embedding provider and its associated configuration payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.EmbedderConfig" title="bias_mitigation.data.models.memory_config.EmbedderConfig"><em>EmbedderConfig</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderProvider.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.provider" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderProvider.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.EmbedderConfig" title="bias_mitigation.data.models.memory_config.EmbedderConfig"><span class="pre">EmbedderConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.EmbedderProvider.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">VectorStoreConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#VectorStoreConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for the local or remote Vector Database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>collection_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>embedding_model_dims</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreConfig.path">
+<span class="sig-name descname"><span class="pre">path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.path" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreConfig.collection_name">
+<span class="sig-name descname"><span class="pre">collection_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.collection_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreConfig.embedding_model_dims">
+<span class="sig-name descname"><span class="pre">embedding_model_dims</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.embedding_model_dims" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreProvider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">VectorStoreProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#VectorStoreProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Defines a Vector Store provider and its mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig" title="bias_mitigation.data.models.memory_config.VectorStoreConfig"><em>VectorStoreConfig</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreProvider.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.provider" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreProvider.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig" title="bias_mitigation.data.models.memory_config.VectorStoreConfig"><span class="pre">VectorStoreConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.VectorStoreProvider.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">GraphStoreConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#GraphStoreConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for Graph databases (e.g. Neo4j) to track entity-relations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><em>SecretStr</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreConfig.url">
+<span class="sig-name descname"><span class="pre">url</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.url" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreConfig.username">
+<span class="sig-name descname"><span class="pre">username</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.username" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreConfig.password">
+<span class="sig-name descname"><span class="pre">password</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><span class="pre">SecretStr</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.password" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreProvider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">GraphStoreProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#GraphStoreProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Graph store provider wrapper with concrete backend configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig" title="bias_mitigation.data.models.memory_config.GraphStoreConfig"><em>GraphStoreConfig</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreProvider.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.provider" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreProvider.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig" title="bias_mitigation.data.models.memory_config.GraphStoreConfig"><span class="pre">GraphStoreConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.GraphStoreProvider.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.memory_config.</span></span><span class="sig-name descname"><span class="pre">Mem0Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#Mem0Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Validated top-level Mem0 runtime configuration payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>llm</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.LLMProvider" title="bias_mitigation.data.models.memory_config.LLMProvider"><em>LLMProvider</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>embedder</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.EmbedderProvider" title="bias_mitigation.data.models.memory_config.EmbedderProvider"><em>EmbedderProvider</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>vector_store</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider" title="bias_mitigation.data.models.memory_config.VectorStoreProvider"><em>VectorStoreProvider</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>graph_store</strong> (<a class="reference internal" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider" title="bias_mitigation.data.models.memory_config.GraphStoreProvider"><em>GraphStoreProvider</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>reranker</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>extra_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.llm">
+<span class="sig-name descname"><span class="pre">llm</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.LLMProvider" title="bias_mitigation.data.models.memory_config.LLMProvider"><span class="pre">LLMProvider</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.llm" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.embedder">
+<span class="sig-name descname"><span class="pre">embedder</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.EmbedderProvider" title="bias_mitigation.data.models.memory_config.EmbedderProvider"><span class="pre">EmbedderProvider</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.embedder" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.vector_store">
+<span class="sig-name descname"><span class="pre">vector_store</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider" title="bias_mitigation.data.models.memory_config.VectorStoreProvider"><span class="pre">VectorStoreProvider</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.vector_store" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.graph_store">
+<span class="sig-name descname"><span class="pre">graph_store</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider" title="bias_mitigation.data.models.memory_config.GraphStoreProvider"><span class="pre">GraphStoreProvider</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.graph_store" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.reranker">
+<span class="sig-name descname"><span class="pre">reranker</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.reranker" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.Config">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../_modules/bias_mitigation/data/models/memory_config.html#Mem0Config.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Pydantic behavior settings for Mem0 configuration model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'allow'</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.extra" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.Config.validate_assignment">
+<span class="sig-name descname"><span class="pre">validate_assignment</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.validate_assignment" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.memory_config.Mem0Config.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'extra':</span> <span class="pre">'allow',</span> <span class="pre">'validate_assignment':</span> <span class="pre">True}</span></span><a class="headerlink" href="#bias_mitigation.data.models.memory_config.Mem0Config.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="protocols.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mem0ai.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modules">Modules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.forward"><code class="docutils literal notranslate"><span class="pre">Mem0RM.forward()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.bypass_inject"><code class="docutils literal notranslate"><span class="pre">Mem0RM.bypass_inject()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.memory.Mem0RM.clear_user_memory"><code class="docutils literal notranslate"><span class="pre">Mem0RM.clear_user_memory()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig"><code class="docutils literal notranslate"><span class="pre">LLMConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.model"><code class="docutils literal notranslate"><span class="pre">LLMConfig.model</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.temperature"><code class="docutils literal notranslate"><span class="pre">LLMConfig.temperature</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.max_tokens"><code class="docutils literal notranslate"><span class="pre">LLMConfig.max_tokens</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.top_p"><code class="docutils literal notranslate"><span class="pre">LLMConfig.top_p</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.openai_base_url"><code class="docutils literal notranslate"><span class="pre">LLMConfig.openai_base_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.api_key"><code class="docutils literal notranslate"><span class="pre">LLMConfig.api_key</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMConfig.model_config"><code class="docutils literal notranslate"><span class="pre">LLMConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider"><code class="docutils literal notranslate"><span class="pre">LLMProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.provider"><code class="docutils literal notranslate"><span class="pre">LLMProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.config"><code class="docutils literal notranslate"><span class="pre">LLMProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.LLMProvider.model_config"><code class="docutils literal notranslate"><span class="pre">LLMProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.model</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.ollama_base_url"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.ollama_base_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderConfig.model_config"><code class="docutils literal notranslate"><span class="pre">EmbedderConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.provider"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.config"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.EmbedderProvider.model_config"><code class="docutils literal notranslate"><span class="pre">EmbedderProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.path"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.collection_name"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.collection_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.embedding_model_dims"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.embedding_model_dims</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreConfig.model_config"><code class="docutils literal notranslate"><span class="pre">VectorStoreConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.provider"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.config"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.VectorStoreProvider.model_config"><code class="docutils literal notranslate"><span class="pre">VectorStoreProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.url"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.username"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.username</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.password"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.password</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreConfig.model_config"><code class="docutils literal notranslate"><span class="pre">GraphStoreConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.provider"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.provider</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.config"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.config</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.GraphStoreProvider.model_config"><code class="docutils literal notranslate"><span class="pre">GraphStoreProvider.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config"><code class="docutils literal notranslate"><span class="pre">Mem0Config</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.llm"><code class="docutils literal notranslate"><span class="pre">Mem0Config.llm</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.embedder"><code class="docutils literal notranslate"><span class="pre">Mem0Config.embedder</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.vector_store"><code class="docutils literal notranslate"><span class="pre">Mem0Config.vector_store</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.graph_store"><code class="docutils literal notranslate"><span class="pre">Mem0Config.graph_store</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.reranker"><code class="docutils literal notranslate"><span class="pre">Mem0Config.reranker</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.extra"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config.extra</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.Config.validate_assignment"><code class="docutils literal notranslate"><span class="pre">Mem0Config.Config.validate_assignment</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.memory_config.Mem0Config.model_config"><code class="docutils literal notranslate"><span class="pre">Mem0Config.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

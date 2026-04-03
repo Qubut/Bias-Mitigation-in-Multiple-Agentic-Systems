@@ -1,0 +1,1452 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Models API &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/data_models';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Data Models and configuration" href="data.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/how_to/index.html">How-To Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/scripts.html">Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/developer/index.html">Developer Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/reference/index.html">Reference Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/architecture.html">System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/data.html">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/metrics.html">Metrics Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/reproducibility.html">Reproducibility Checklist</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="mas.html">Multi-Agent System (MAS) API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="mas_statemachine.html"><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agent_statemachine.html"><code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mas_program.html"><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">Agent</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evaluator.html"><code class="docutils literal notranslate"><span class="pre">MASEvaluator</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="protocols.html"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="memory.html">Memory Models and Retrieval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="data.html">Data Models and configuration</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Data Models API</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/data_models.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Models API</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType"><code class="docutils literal notranslate"><span class="pre">InterventionType</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.BASELINE"><code class="docutils literal notranslate"><span class="pre">InterventionType.BASELINE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.BASELINE_PROMPT_OPT"><code class="docutils literal notranslate"><span class="pre">InterventionType.BASELINE_PROMPT_OPT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.MEM0G"><code class="docutils literal notranslate"><span class="pre">InterventionType.MEM0G</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.MEM0G_GEPA"><code class="docutils literal notranslate"><span class="pre">InterventionType.MEM0G_GEPA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.to_strategy"><code class="docutils literal notranslate"><span class="pre">InterventionType.to_strategy()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig"><code class="docutils literal notranslate"><span class="pre">BBQConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.base_url"><code class="docutils literal notranslate"><span class="pre">BBQConfig.base_url</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.categories"><code class="docutils literal notranslate"><span class="pre">BBQConfig.categories</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.dir_name"><code class="docutils literal notranslate"><span class="pre">BBQConfig.dir_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.validate_base_url"><code class="docutils literal notranslate"><span class="pre">BBQConfig.validate_base_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.model_config"><code class="docutils literal notranslate"><span class="pre">BBQConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.files"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.files</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.dir_name"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.dir_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.model_config"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.bbq"><code class="docutils literal notranslate"><span class="pre">AppConfig.bbq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.stereoset"><code class="docutils literal notranslate"><span class="pre">AppConfig.stereoset</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.model_config"><code class="docutils literal notranslate"><span class="pre">AppConfig.model_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.settings_customise_sources"><code class="docutils literal notranslate"><span class="pre">AppConfig.settings_customise_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.from_yaml"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_yaml()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.name"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.api_key"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.api_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.api_base"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.api_base</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.temperature"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.temperature</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.max_tokens"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.max_tokens</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.agent_name"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.agent_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.model_config"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig"><code class="docutils literal notranslate"><span class="pre">MASConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.model_config"><code class="docutils literal notranslate"><span class="pre">MASConfig.model_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.db_url"><code class="docutils literal notranslate"><span class="pre">MASConfig.db_url</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.num_agents"><code class="docutils literal notranslate"><span class="pre">MASConfig.num_agents</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.rounds"><code class="docutils literal notranslate"><span class="pre">MASConfig.rounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.protocol"><code class="docutils literal notranslate"><span class="pre">MASConfig.protocol</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.malicious"><code class="docutils literal notranslate"><span class="pre">MASConfig.malicious</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.sample_size"><code class="docutils literal notranslate"><span class="pre">MASConfig.sample_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.reset_memory_on_genesis"><code class="docutils literal notranslate"><span class="pre">MASConfig.reset_memory_on_genesis</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.agent_models"><code class="docutils literal notranslate"><span class="pre">MASConfig.agent_models</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.intervention"><code class="docutils literal notranslate"><span class="pre">MASConfig.intervention</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.memory_config"><code class="docutils literal notranslate"><span class="pre">MASConfig.memory_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.load"><code class="docutils literal notranslate"><span class="pre">MASConfig.load()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.load_merged"><code class="docutils literal notranslate"><span class="pre">MASConfig.load_merged()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.validate_memory_for_intervention"><code class="docutils literal notranslate"><span class="pre">MASConfig.validate_memory_for_intervention()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer"><code class="docutils literal notranslate"><span class="pre">Answer</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.text"><code class="docutils literal notranslate"><span class="pre">Answer.text</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.tag"><code class="docutils literal notranslate"><span class="pre">Answer.tag</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.model_config"><code class="docutils literal notranslate"><span class="pre">Answer.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo"><code class="docutils literal notranslate"><span class="pre">AnswerInfo</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans0"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans1"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans2"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.model_config"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.subcategory"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.subcategory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.stereotyped_groups"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.stereotyped_groups</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.version"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.version</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.source"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.source</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.model_config"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry"><code class="docutils literal notranslate"><span class="pre">BBQEntry</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.example_id"><code class="docutils literal notranslate"><span class="pre">BBQEntry.example_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question_index"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question_index</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question_polarity"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question_polarity</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.context_condition"><code class="docutils literal notranslate"><span class="pre">BBQEntry.context_condition</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.category"><code class="docutils literal notranslate"><span class="pre">BBQEntry.category</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.answer_info"><code class="docutils literal notranslate"><span class="pre">BBQEntry.answer_info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.additional_metadata"><code class="docutils literal notranslate"><span class="pre">BBQEntry.additional_metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.context"><code class="docutils literal notranslate"><span class="pre">BBQEntry.context</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans0"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans1"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans2"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.label"><code class="docutils literal notranslate"><span class="pre">BBQEntry.label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.model_config"><code class="docutils literal notranslate"><span class="pre">BBQEntry.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label"><code class="docutils literal notranslate"><span class="pre">Label</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.label"><code class="docutils literal notranslate"><span class="pre">Label.label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.human_id"><code class="docutils literal notranslate"><span class="pre">Label.human_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.model_config"><code class="docutils literal notranslate"><span class="pre">Label.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence"><code class="docutils literal notranslate"><span class="pre">Sentence</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.sentence"><code class="docutils literal notranslate"><span class="pre">Sentence.sentence</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.id"><code class="docutils literal notranslate"><span class="pre">Sentence.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.labels"><code class="docutils literal notranslate"><span class="pre">Sentence.labels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.gold_label"><code class="docutils literal notranslate"><span class="pre">Sentence.gold_label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.model_config"><code class="docutils literal notranslate"><span class="pre">Sentence.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.id"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.target"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.target</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.bias_type"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.bias_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.context"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.context</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.sentences"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.sentences</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.type"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.model_config"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-bias_mitigation.data.models.config">
+<span id="data-models-api"></span><h1>Data Models API<a class="headerlink" href="#module-bias_mitigation.data.models.config" title="Link to this heading">#</a></h1>
+<p>Configuration datamodels and validation structures for the application.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">InterventionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#InterventionType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.StrEnum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrEnum</span></code></a></p>
+<p>Enumeration of supported intervention strategies for bias mitigation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType.BASELINE">
+<span class="sig-name descname"><span class="pre">BASELINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'baseline'</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType.BASELINE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType.BASELINE_PROMPT_OPT">
+<span class="sig-name descname"><span class="pre">BASELINE_PROMPT_OPT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'baseline_prompt_opt'</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType.BASELINE_PROMPT_OPT" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType.MEM0G">
+<span class="sig-name descname"><span class="pre">MEM0G</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mem0g'</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType.MEM0G" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType.MEM0G_GEPA">
+<span class="sig-name descname"><span class="pre">MEM0G_GEPA</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mem0g_gepa'</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType.MEM0G_GEPA" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.InterventionType.to_strategy">
+<span class="sig-name descname"><span class="pre">to_strategy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#InterventionType.to_strategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.InterventionType.to_strategy" title="Link to this definition">#</a></dt>
+<dd><p>Resolve this intervention enum value to its strategy implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">InterventionStrategy</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">BBQConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#BBQConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for BBQ dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><em>AnyUrl</em></a>)</p></li>
+<li><p><strong>categories</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>)</p></li>
+<li><p><strong>dir_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><span class="pre">AnyUrl</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig.base_url" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig.categories">
+<span class="sig-name descname"><span class="pre">categories</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig.categories" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig.dir_name">
+<span class="sig-name descname"><span class="pre">dir_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig.dir_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig.validate_base_url">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">validate_base_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#BBQConfig.validate_base_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig.validate_base_url" title="Link to this definition">#</a></dt>
+<dd><p>Ensure the base URL ends with a trailing slash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnyUrl</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>v</strong> (<a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><em>AnyUrl</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.BBQConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.BBQConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.StereoSetConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">StereoSetConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#StereoSetConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.StereoSetConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for StereoSet dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><em>AnyUrl</em></a><em>]</em>)</p></li>
+<li><p><strong>dir_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.StereoSetConfig.files">
+<span class="sig-name descname"><span class="pre">files</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.pydantic.dev/latest/api/networks/#pydantic.networks.AnyUrl" title="(in Pydantic Validation v0.0.0)"><span class="pre">AnyUrl</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.config.StereoSetConfig.files" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.StereoSetConfig.dir_name">
+<span class="sig-name descname"><span class="pre">dir_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.StereoSetConfig.dir_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.StereoSetConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.StereoSetConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nested_model_default_partial_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_ignore_empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_max_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_parse_none_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_parse_enums</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_prog_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_parse_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_settings_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_parse_none_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_hide_none_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_avoid_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_enforce_required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_use_class_docs_for_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_exit_on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_flag_prefix_char</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_implicit_flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_ignore_unknown_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_kebab_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_shortcuts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.BaseSettings" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSettings</span></code></a></p>
+<p>Root application configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_case_sensitive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_nested_model_default_partial_update</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_file</strong> (<em>DotenvType</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_file_encoding</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_ignore_empty</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_nested_delimiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_nested_max_split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_parse_none_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_parse_enums</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_prog_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_parse_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>...</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_settings_source</strong> (<em>CliSettingsSource</em><em>[</em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_parse_none_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_hide_none_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_avoid_json</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_enforce_required</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_use_class_docs_for_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_exit_on_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_flag_prefix_char</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_implicit_flags</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_ignore_unknown_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_kebab_case</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>Literal</em><em>[</em><em>'all'</em><em>, </em><em>'no_enums'</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_shortcuts</strong> (<em>Mapping</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_secrets_dir</strong> (<em>PathType</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>bbq</strong> (<a class="reference internal" href="#bias_mitigation.data.models.config.BBQConfig" title="bias_mitigation.data.models.config.BBQConfig"><em>BBQConfig</em></a>)</p></li>
+<li><p><strong>stereoset</strong> (<a class="reference internal" href="#bias_mitigation.data.models.config.StereoSetConfig" title="bias_mitigation.data.models.config.StereoSetConfig"><em>StereoSetConfig</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig.bbq">
+<span class="sig-name descname"><span class="pre">bbq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.config.BBQConfig" title="bias_mitigation.data.models.config.BBQConfig"><span class="pre">BBQConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig.bbq" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig.stereoset">
+<span class="sig-name descname"><span class="pre">stereoset</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.config.StereoSetConfig" title="bias_mitigation.data.models.config.StereoSetConfig"><span class="pre">StereoSetConfig</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig.stereoset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.SettingsConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">SettingsConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True,</span> <span class="pre">'case_sensitive':</span> <span class="pre">False,</span> <span class="pre">'cli_avoid_json':</span> <span class="pre">False,</span> <span class="pre">'cli_enforce_required':</span> <span class="pre">False,</span> <span class="pre">'cli_exit_on_error':</span> <span class="pre">True,</span> <span class="pre">'cli_flag_prefix_char':</span> <span class="pre">'-',</span> <span class="pre">'cli_hide_none_type':</span> <span class="pre">False,</span> <span class="pre">'cli_ignore_unknown_args':</span> <span class="pre">False,</span> <span class="pre">'cli_implicit_flags':</span> <span class="pre">False,</span> <span class="pre">'cli_kebab_case':</span> <span class="pre">False,</span> <span class="pre">'cli_parse_args':</span> <span class="pre">None,</span> <span class="pre">'cli_parse_none_str':</span> <span class="pre">None,</span> <span class="pre">'cli_prefix':</span> <span class="pre">'',</span> <span class="pre">'cli_prog_name':</span> <span class="pre">None,</span> <span class="pre">'cli_shortcuts':</span> <span class="pre">None,</span> <span class="pre">'cli_use_class_docs_for_groups':</span> <span class="pre">False,</span> <span class="pre">'enable_decoding':</span> <span class="pre">True,</span> <span class="pre">'env_file':</span> <span class="pre">None,</span> <span class="pre">'env_file_encoding':</span> <span class="pre">None,</span> <span class="pre">'env_ignore_empty':</span> <span class="pre">False,</span> <span class="pre">'env_nested_delimiter':</span> <span class="pre">'__',</span> <span class="pre">'env_nested_max_split':</span> <span class="pre">None,</span> <span class="pre">'env_parse_enums':</span> <span class="pre">None,</span> <span class="pre">'env_parse_none_str':</span> <span class="pre">None,</span> <span class="pre">'env_prefix':</span> <span class="pre">'DOWNLOAD_',</span> <span class="pre">'extra':</span> <span class="pre">'forbid',</span> <span class="pre">'json_file':</span> <span class="pre">None,</span> <span class="pre">'json_file_encoding':</span> <span class="pre">None,</span> <span class="pre">'nested_model_default_partial_update':</span> <span class="pre">False,</span> <span class="pre">'protected_namespaces':</span> <span class="pre">('model_validate',</span> <span class="pre">'model_dump',</span> <span class="pre">'settings_customise_sources'),</span> <span class="pre">'secrets_dir':</span> <span class="pre">None,</span> <span class="pre">'toml_file':</span> <span class="pre">None,</span> <span class="pre">'validate_default':</span> <span class="pre">True,</span> <span class="pre">'yaml_config_section':</span> <span class="pre">None,</span> <span class="pre">'yaml_file':</span> <span class="pre">None,</span> <span class="pre">'yaml_file_encoding':</span> <span class="pre">None}</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig.settings_customise_sources">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">settings_customise_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dotenv_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_secret_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#AppConfig.settings_customise_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig.settings_customise_sources" title="Link to this definition">#</a></dt>
+<dd><p>Prioritize init over env variables for Settings parsing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.PydanticBaseSettingsSource" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PydanticBaseSettingsSource</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>settings_cls</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.StereoSetEntry.type" title="bias_mitigation.data.models.datasets.StereoSetEntry.type"><em>type</em></a><em>[</em><a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.BaseSettings" title="(in Pydantic Validation v0.0.0)"><em>BaseSettings</em></a><em>]</em>)</p></li>
+<li><p><strong>init_settings</strong> (<em>PydanticBaseSettingsSource</em>)</p></li>
+<li><p><strong>env_settings</strong> (<em>PydanticBaseSettingsSource</em>)</p></li>
+<li><p><strong>dotenv_settings</strong> (<em>PydanticBaseSettingsSource</em>)</p></li>
+<li><p><strong>file_secret_settings</strong> (<em>PydanticBaseSettingsSource</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AppConfig.from_yaml">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#AppConfig.from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.AppConfig.from_yaml" title="Link to this definition">#</a></dt>
+<dd><p>Static Factory method mapping raw YAML safely to domain config schemas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#bias_mitigation.data.models.config.AppConfig" title="bias_mitigation.data.models.config.AppConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">AgentModelConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#AgentModelConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Configuration for individual agent models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><em>SecretStr</em></a>)</p></li>
+<li><p><strong>api_base</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>temperature</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>max_tokens</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>agent_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.api_key">
+<span class="sig-name descname"><span class="pre">api_key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.SecretStr" title="(in Pydantic Validation v0.0.0)"><span class="pre">SecretStr</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.api_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.api_base">
+<span class="sig-name descname"><span class="pre">api_base</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.api_base" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.temperature">
+<span class="sig-name descname"><span class="pre">temperature</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.temperature" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.max_tokens">
+<span class="sig-name descname"><span class="pre">max_tokens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.max_tokens" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.agent_name">
+<span class="sig-name descname"><span class="pre">agent_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.agent_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.AgentModelConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.AgentModelConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.config.</span></span><span class="sig-name descname"><span class="pre">MASConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nested_model_default_partial_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_ignore_empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_max_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_parse_none_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_parse_enums</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_prog_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_parse_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_settings_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_parse_none_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_hide_none_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_avoid_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_enforce_required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_use_class_docs_for_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_exit_on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_flag_prefix_char</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_implicit_flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_ignore_unknown_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_kebab_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cli_shortcuts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#MASConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.BaseSettings" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSettings</span></code></a></p>
+<p>Runtime configuration for MAS training and evaluation entry points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_case_sensitive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_nested_model_default_partial_update</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_file</strong> (<em>DotenvType</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_file_encoding</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_ignore_empty</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_nested_delimiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_nested_max_split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_parse_none_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_env_parse_enums</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_prog_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_parse_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>...</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_settings_source</strong> (<em>CliSettingsSource</em><em>[</em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_parse_none_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_hide_none_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_avoid_json</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_enforce_required</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_use_class_docs_for_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_exit_on_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_flag_prefix_char</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_implicit_flags</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_ignore_unknown_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>_cli_kebab_case</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> | </em><em>Literal</em><em>[</em><em>'all'</em><em>, </em><em>'no_enums'</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_cli_shortcuts</strong> (<em>Mapping</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>_secrets_dir</strong> (<em>PathType</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>db_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>num_agents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>rounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>protocol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>malicious</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
+<li><p><strong>sample_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>reset_memory_on_genesis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
+<li><p><strong>agent_models</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="#bias_mitigation.data.models.config.AgentModelConfig" title="bias_mitigation.data.models.config.AgentModelConfig"><em>AgentModelConfig</em></a><em>]</em>)</p></li>
+<li><p><strong>intervention</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>memory_config</strong> (<a class="reference internal" href="memory.html#bias_mitigation.data.models.memory_config.Mem0Config" title="bias_mitigation.data.models.memory_config.Mem0Config"><em>Mem0Config</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/pydantic_settings/#pydantic_settings.SettingsConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">SettingsConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True,</span> <span class="pre">'case_sensitive':</span> <span class="pre">False,</span> <span class="pre">'cli_avoid_json':</span> <span class="pre">False,</span> <span class="pre">'cli_enforce_required':</span> <span class="pre">False,</span> <span class="pre">'cli_exit_on_error':</span> <span class="pre">True,</span> <span class="pre">'cli_flag_prefix_char':</span> <span class="pre">'-',</span> <span class="pre">'cli_hide_none_type':</span> <span class="pre">False,</span> <span class="pre">'cli_ignore_unknown_args':</span> <span class="pre">False,</span> <span class="pre">'cli_implicit_flags':</span> <span class="pre">False,</span> <span class="pre">'cli_kebab_case':</span> <span class="pre">False,</span> <span class="pre">'cli_parse_args':</span> <span class="pre">None,</span> <span class="pre">'cli_parse_none_str':</span> <span class="pre">None,</span> <span class="pre">'cli_prefix':</span> <span class="pre">'',</span> <span class="pre">'cli_prog_name':</span> <span class="pre">None,</span> <span class="pre">'cli_shortcuts':</span> <span class="pre">None,</span> <span class="pre">'cli_use_class_docs_for_groups':</span> <span class="pre">False,</span> <span class="pre">'enable_decoding':</span> <span class="pre">True,</span> <span class="pre">'env_file':</span> <span class="pre">None,</span> <span class="pre">'env_file_encoding':</span> <span class="pre">None,</span> <span class="pre">'env_ignore_empty':</span> <span class="pre">False,</span> <span class="pre">'env_nested_delimiter':</span> <span class="pre">None,</span> <span class="pre">'env_nested_max_split':</span> <span class="pre">None,</span> <span class="pre">'env_parse_enums':</span> <span class="pre">None,</span> <span class="pre">'env_parse_none_str':</span> <span class="pre">None,</span> <span class="pre">'env_prefix':</span> <span class="pre">'MAS_',</span> <span class="pre">'extra':</span> <span class="pre">'forbid',</span> <span class="pre">'json_file':</span> <span class="pre">None,</span> <span class="pre">'json_file_encoding':</span> <span class="pre">None,</span> <span class="pre">'nested_model_default_partial_update':</span> <span class="pre">False,</span> <span class="pre">'protected_namespaces':</span> <span class="pre">('model_validate',</span> <span class="pre">'model_dump',</span> <span class="pre">'settings_customise_sources'),</span> <span class="pre">'secrets_dir':</span> <span class="pre">None,</span> <span class="pre">'toml_file':</span> <span class="pre">None,</span> <span class="pre">'validate_default':</span> <span class="pre">True,</span> <span class="pre">'yaml_config_section':</span> <span class="pre">None,</span> <span class="pre">'yaml_file':</span> <span class="pre">None,</span> <span class="pre">'yaml_file_encoding':</span> <span class="pre">None}</span></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.db_url">
+<span class="sig-name descname"><span class="pre">db_url</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.db_url" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.num_agents">
+<span class="sig-name descname"><span class="pre">num_agents</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.num_agents" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.rounds">
+<span class="sig-name descname"><span class="pre">rounds</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.rounds" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.protocol">
+<span class="sig-name descname"><span class="pre">protocol</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.protocol" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.malicious">
+<span class="sig-name descname"><span class="pre">malicious</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.malicious" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.sample_size">
+<span class="sig-name descname"><span class="pre">sample_size</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.sample_size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.reset_memory_on_genesis">
+<span class="sig-name descname"><span class="pre">reset_memory_on_genesis</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.reset_memory_on_genesis" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.agent_models">
+<span class="sig-name descname"><span class="pre">agent_models</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bias_mitigation.data.models.config.AgentModelConfig" title="bias_mitigation.data.models.config.AgentModelConfig"><span class="pre">AgentModelConfig</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.agent_models" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.intervention">
+<span class="sig-name descname"><span class="pre">intervention</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.intervention" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.memory_config">
+<span class="sig-name descname"><span class="pre">memory_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="memory.html#bias_mitigation.data.models.memory_config.Mem0Config" title="bias_mitigation.data.models.memory_config.Mem0Config"><span class="pre">Mem0Config</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.memory_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.load">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'config.yaml'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#MASConfig.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.load" title="Link to this definition">#</a></dt>
+<dd><p>Deserialise a YAML file into a validated configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>yaml_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Filesystem path to the configuration YAML.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#bias_mitigation.data.models.config.MASConfig" title="bias_mitigation.data.models.config.MASConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">MASConfig</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A fully validated configuration instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.load_merged">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_merged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">override_paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cli_overrides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#MASConfig.load_merged"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.load_merged" title="Link to this definition">#</a></dt>
+<dd><p>Load and merge multiple YAML files with optional CLI overrides.</p>
+<p>Files are merged in order: base_path, then each override_path,
+then cli_overrides. Later values override earlier ones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to the base configuration YAML.</p></li>
+<li><p><strong>*override_paths</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Additional YAML files to merge (in order).</p></li>
+<li><p><strong>cli_overrides</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional dict of CLI overrides (dot-notation keys).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#bias_mitigation.data.models.config.MASConfig" title="bias_mitigation.data.models.config.MASConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">MASConfig</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A fully validated, merged configuration instance.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">MASConfig</span><span class="o">.</span><span class="n">load_merged</span><span class="p">(</span>
+    <span class="s1">&#39;config/base.yaml&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;config/local.yaml&#39;</span><span class="p">,</span>
+    <span class="n">cli_overrides</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;intervention&#39;</span><span class="p">:</span> <span class="s1">&#39;mem0g&#39;</span><span class="p">,</span> <span class="s1">&#39;agent_models[0].temperature&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.config.MASConfig.validate_memory_for_intervention">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">validate_memory_for_intervention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/config.html#MASConfig.validate_memory_for_intervention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.config.MASConfig.validate_memory_for_intervention" title="Link to this definition">#</a></dt>
+<dd><p>Require a valid memory configuration for memory-based interventions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-bias_mitigation.data.models.datasets">Main module for datasets functionality and operations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Answer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">Answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#Answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.Answer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Answer option metadata for one candidate response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>tag</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Answer.text">
+<span class="sig-name descname"><span class="pre">text</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Answer.text" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Answer.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Answer.tag" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Answer.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Answer.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AnswerInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">AnswerInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#AnswerInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.AnswerInfo" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Grouped answer metadata payload for BBQ answer options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ans0</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><em>Answer</em></a>)</p></li>
+<li><p><strong>ans1</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><em>Answer</em></a>)</p></li>
+<li><p><strong>ans2</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><em>Answer</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AnswerInfo.ans0">
+<span class="sig-name descname"><span class="pre">ans0</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><span class="pre">Answer</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AnswerInfo.ans1">
+<span class="sig-name descname"><span class="pre">ans1</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><span class="pre">Answer</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AnswerInfo.ans2">
+<span class="sig-name descname"><span class="pre">ans2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.datasets.Answer" title="bias_mitigation.data.models.datasets.Answer"><span class="pre">Answer</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AnswerInfo.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AnswerInfo.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">AdditionalMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#AdditionalMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Additional source metadata attached to normalized examples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subcategory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>stereotyped_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>)</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata.subcategory">
+<span class="sig-name descname"><span class="pre">subcategory</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.subcategory" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata.stereotyped_groups">
+<span class="sig-name descname"><span class="pre">stereotyped_groups</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.stereotyped_groups" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata.version">
+<span class="sig-name descname"><span class="pre">version</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.version" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata.source">
+<span class="sig-name descname"><span class="pre">source</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.source" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.AdditionalMetadata.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">BBQEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#BBQEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Raw BBQ entry schema used during preprocessing and validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>example_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>question_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>question_polarity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>context_condition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>answer_info</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.AnswerInfo" title="bias_mitigation.data.models.datasets.AnswerInfo"><em>AnswerInfo</em></a>)</p></li>
+<li><p><strong>additional_metadata</strong> (<a class="reference internal" href="#bias_mitigation.data.models.datasets.AdditionalMetadata" title="bias_mitigation.data.models.datasets.AdditionalMetadata"><em>AdditionalMetadata</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>question</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>ans0</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>ans1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>ans2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.example_id">
+<span class="sig-name descname"><span class="pre">example_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.example_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.question_index">
+<span class="sig-name descname"><span class="pre">question_index</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.question_index" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.question_polarity">
+<span class="sig-name descname"><span class="pre">question_polarity</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.question_polarity" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.context_condition">
+<span class="sig-name descname"><span class="pre">context_condition</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.context_condition" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.category">
+<span class="sig-name descname"><span class="pre">category</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.category" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.answer_info">
+<span class="sig-name descname"><span class="pre">answer_info</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.datasets.AnswerInfo" title="bias_mitigation.data.models.datasets.AnswerInfo"><span class="pre">AnswerInfo</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.answer_info" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.additional_metadata">
+<span class="sig-name descname"><span class="pre">additional_metadata</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bias_mitigation.data.models.datasets.AdditionalMetadata" title="bias_mitigation.data.models.datasets.AdditionalMetadata"><span class="pre">AdditionalMetadata</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.additional_metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.context">
+<span class="sig-name descname"><span class="pre">context</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.context" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.question">
+<span class="sig-name descname"><span class="pre">question</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.question" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.ans0">
+<span class="sig-name descname"><span class="pre">ans0</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.ans0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.ans1">
+<span class="sig-name descname"><span class="pre">ans1</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.ans1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.ans2">
+<span class="sig-name descname"><span class="pre">ans2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.ans2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.BBQEntry.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.BBQEntry.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Label">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#Label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.Label" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Human annotation label record for a StereoSet sentence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>human_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Label.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Label.label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Label.human_id">
+<span class="sig-name descname"><span class="pre">human_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Label.human_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Label.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Label.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">Sentence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#Sentence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>StereoSet sentence schema with labels and gold category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sentence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="#bias_mitigation.data.models.datasets.Label" title="bias_mitigation.data.models.datasets.Label"><em>Label</em></a><em>]</em>)</p></li>
+<li><p><strong>gold_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence.sentence">
+<span class="sig-name descname"><span class="pre">sentence</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence.sentence" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bias_mitigation.data.models.datasets.Label" title="bias_mitigation.data.models.datasets.Label"><span class="pre">Label</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence.labels" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence.gold_label">
+<span class="sig-name descname"><span class="pre">gold_label</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence.gold_label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.Sentence.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.Sentence.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">bias_mitigation.data.models.datasets.</span></span><span class="sig-name descname"><span class="pre">StereoSetEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bias_mitigation/data/models/datasets.html#StereoSetEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Raw StereoSet entry schema used during dataset transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>bias_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>sentences</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="#bias_mitigation.data.models.datasets.Sentence" title="bias_mitigation.data.models.datasets.Sentence"><em>Sentence</em></a><em>]</em>)</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.target">
+<span class="sig-name descname"><span class="pre">target</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.target" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.bias_type">
+<span class="sig-name descname"><span class="pre">bias_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.bias_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.context">
+<span class="sig-name descname"><span class="pre">context</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.context" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.sentences">
+<span class="sig-name descname"><span class="pre">sentences</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bias_mitigation.data.models.datasets.Sentence" title="bias_mitigation.data.models.datasets.Sentence"><span class="pre">Sentence</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.sentences" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.type">
+<span class="sig-name descname"><span class="pre">type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bias_mitigation.data.models.datasets.StereoSetEntry.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.14)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict" title="(in Pydantic Validation v0.0.0)"><span class="pre">ConfigDict</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#bias_mitigation.data.models.datasets.StereoSetEntry.model_config" title="Link to this definition">#</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="data.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data Models and configuration</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType"><code class="docutils literal notranslate"><span class="pre">InterventionType</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.BASELINE"><code class="docutils literal notranslate"><span class="pre">InterventionType.BASELINE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.BASELINE_PROMPT_OPT"><code class="docutils literal notranslate"><span class="pre">InterventionType.BASELINE_PROMPT_OPT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.MEM0G"><code class="docutils literal notranslate"><span class="pre">InterventionType.MEM0G</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.MEM0G_GEPA"><code class="docutils literal notranslate"><span class="pre">InterventionType.MEM0G_GEPA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.InterventionType.to_strategy"><code class="docutils literal notranslate"><span class="pre">InterventionType.to_strategy()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig"><code class="docutils literal notranslate"><span class="pre">BBQConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.base_url"><code class="docutils literal notranslate"><span class="pre">BBQConfig.base_url</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.categories"><code class="docutils literal notranslate"><span class="pre">BBQConfig.categories</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.dir_name"><code class="docutils literal notranslate"><span class="pre">BBQConfig.dir_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.validate_base_url"><code class="docutils literal notranslate"><span class="pre">BBQConfig.validate_base_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.BBQConfig.model_config"><code class="docutils literal notranslate"><span class="pre">BBQConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.files"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.files</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.dir_name"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.dir_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.StereoSetConfig.model_config"><code class="docutils literal notranslate"><span class="pre">StereoSetConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.bbq"><code class="docutils literal notranslate"><span class="pre">AppConfig.bbq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.stereoset"><code class="docutils literal notranslate"><span class="pre">AppConfig.stereoset</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.model_config"><code class="docutils literal notranslate"><span class="pre">AppConfig.model_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.settings_customise_sources"><code class="docutils literal notranslate"><span class="pre">AppConfig.settings_customise_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AppConfig.from_yaml"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_yaml()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.name"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.api_key"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.api_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.api_base"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.api_base</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.temperature"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.temperature</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.max_tokens"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.max_tokens</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.agent_name"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.agent_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.AgentModelConfig.model_config"><code class="docutils literal notranslate"><span class="pre">AgentModelConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig"><code class="docutils literal notranslate"><span class="pre">MASConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.model_config"><code class="docutils literal notranslate"><span class="pre">MASConfig.model_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.db_url"><code class="docutils literal notranslate"><span class="pre">MASConfig.db_url</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.num_agents"><code class="docutils literal notranslate"><span class="pre">MASConfig.num_agents</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.rounds"><code class="docutils literal notranslate"><span class="pre">MASConfig.rounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.protocol"><code class="docutils literal notranslate"><span class="pre">MASConfig.protocol</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.malicious"><code class="docutils literal notranslate"><span class="pre">MASConfig.malicious</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.sample_size"><code class="docutils literal notranslate"><span class="pre">MASConfig.sample_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.reset_memory_on_genesis"><code class="docutils literal notranslate"><span class="pre">MASConfig.reset_memory_on_genesis</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.agent_models"><code class="docutils literal notranslate"><span class="pre">MASConfig.agent_models</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.intervention"><code class="docutils literal notranslate"><span class="pre">MASConfig.intervention</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.memory_config"><code class="docutils literal notranslate"><span class="pre">MASConfig.memory_config</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.load"><code class="docutils literal notranslate"><span class="pre">MASConfig.load()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.load_merged"><code class="docutils literal notranslate"><span class="pre">MASConfig.load_merged()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.config.MASConfig.validate_memory_for_intervention"><code class="docutils literal notranslate"><span class="pre">MASConfig.validate_memory_for_intervention()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer"><code class="docutils literal notranslate"><span class="pre">Answer</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.text"><code class="docutils literal notranslate"><span class="pre">Answer.text</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.tag"><code class="docutils literal notranslate"><span class="pre">Answer.tag</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Answer.model_config"><code class="docutils literal notranslate"><span class="pre">Answer.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo"><code class="docutils literal notranslate"><span class="pre">AnswerInfo</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans0"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans1"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.ans2"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.ans2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AnswerInfo.model_config"><code class="docutils literal notranslate"><span class="pre">AnswerInfo.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.subcategory"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.subcategory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.stereotyped_groups"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.stereotyped_groups</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.version"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.version</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.source"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.source</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.AdditionalMetadata.model_config"><code class="docutils literal notranslate"><span class="pre">AdditionalMetadata.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry"><code class="docutils literal notranslate"><span class="pre">BBQEntry</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.example_id"><code class="docutils literal notranslate"><span class="pre">BBQEntry.example_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question_index"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question_index</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question_polarity"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question_polarity</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.context_condition"><code class="docutils literal notranslate"><span class="pre">BBQEntry.context_condition</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.category"><code class="docutils literal notranslate"><span class="pre">BBQEntry.category</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.answer_info"><code class="docutils literal notranslate"><span class="pre">BBQEntry.answer_info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.additional_metadata"><code class="docutils literal notranslate"><span class="pre">BBQEntry.additional_metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.context"><code class="docutils literal notranslate"><span class="pre">BBQEntry.context</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.question"><code class="docutils literal notranslate"><span class="pre">BBQEntry.question</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans0"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans0</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans1"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.ans2"><code class="docutils literal notranslate"><span class="pre">BBQEntry.ans2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.label"><code class="docutils literal notranslate"><span class="pre">BBQEntry.label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.BBQEntry.model_config"><code class="docutils literal notranslate"><span class="pre">BBQEntry.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label"><code class="docutils literal notranslate"><span class="pre">Label</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.label"><code class="docutils literal notranslate"><span class="pre">Label.label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.human_id"><code class="docutils literal notranslate"><span class="pre">Label.human_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Label.model_config"><code class="docutils literal notranslate"><span class="pre">Label.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence"><code class="docutils literal notranslate"><span class="pre">Sentence</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.sentence"><code class="docutils literal notranslate"><span class="pre">Sentence.sentence</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.id"><code class="docutils literal notranslate"><span class="pre">Sentence.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.labels"><code class="docutils literal notranslate"><span class="pre">Sentence.labels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.gold_label"><code class="docutils literal notranslate"><span class="pre">Sentence.gold_label</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.Sentence.model_config"><code class="docutils literal notranslate"><span class="pre">Sentence.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.id"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.target"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.target</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.bias_type"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.bias_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.context"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.context</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.sentences"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.sentences</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.type"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bias_mitigation.data.models.datasets.StereoSetEntry.model_config"><code class="docutils literal notranslate"><span class="pre">StereoSetEntry.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+/* Kronos Documentation - Custom CSS
+ * Smooth transitions and hover effects for sphinx-design components
+ */
+
+/* Card hover transitions */
+.sd-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sd-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Clickable card enhanced hover */
+.sd-card.sd-card-hover:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tab content fade transition */
+.sd-tab-content {
+    transition: opacity 0.15s ease-in-out;
+}
+
+/* Dropdown smooth open */
+details.sd-dropdown {
+    transition: margin 0.2s ease;
+}
+
+details.sd-dropdown[open] {
+    margin-bottom: 1rem;
+}
+
+/* Grid item hover effect */
+.sd-card.sd-sphinx-override {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sd-card.sd-sphinx-override:hover {
+    border-color: var(--sd-color-primary);
+}
+
+/* Carousel smooth scroll */
+.sd-cards-carousel {
+    scroll-behavior: smooth;
+}
+
+/* Button hover transitions */
+.sd-btn {
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.sd-btn:hover {
+    transform: translateY(-1px);
+}
+
+.sd-btn:active {
+    transform: translateY(0);
+}
+
+/* Badge hover effect */
+.sd-badge {
+    transition: opacity 0.15s ease;
+}
+
+.sd-badge:hover {
+    opacity: 0.9;
+}
+
+/* Mermaid diagram container */
+.mermaid {
+    transition: opacity 0.3s ease;
+}
+
+/* Code block copy button */
+.copybtn {
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+/* Sidebar navigation hover */
+.bd-sidebar-primary .nav-link {
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Table of contents hover */
+.bd-toc .nav-link {
+    transition: color 0.15s ease;
+}

@@ -1,0 +1,1511 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="get_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides/how_to/index.html">How-To Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/how_to/scripts.html">Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/how_to/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/developer/index.html">Developer Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides/reference/index.html">Reference Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/reference/architecture.html">System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/reference/data.html">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/reference/metrics.html">Metrics Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/reference/reproducibility.html">Reproducibility Checklist</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/mas.html">Multi-Agent System (MAS) API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mas_statemachine.html"><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/agent_statemachine.html"><code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/mas_program.html"><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/agent.html"><code class="docutils literal notranslate"><span class="pre">Agent</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluator.html"><code class="docutils literal notranslate"><span class="pre">MASEvaluator</span></code> API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/protocols.html"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/memory.html">Memory Models and Retrieval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/data.html">Data Models and configuration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/data_models.html">Data Models API</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.additional_metadata">additional_metadata (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata">AdditionalMetadata (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.agent_models">agent_models (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.agent_name">agent_name (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig">AgentModelConfig (class in bias_mitigation.data.models.config)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentState">AgentState (class in bias_mitigation.mas.agent_statemachine)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine">AgentStateMachine (class in bias_mitigation.mas.agent_statemachine)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AnswerInfo.ans0">ans0 (bias_mitigation.data.models.datasets.AnswerInfo attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.ans0">(bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AnswerInfo.ans1">ans1 (bias_mitigation.data.models.datasets.AnswerInfo attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.ans1">(bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AnswerInfo.ans2">ans2 (bias_mitigation.data.models.datasets.AnswerInfo attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.ans2">(bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Answer">Answer (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.answer_info">answer_info (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AnswerInfo">AnswerInfo (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.api_base">api_base (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.api_key">api_key (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.api_key">(bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig">AppConfig (class in bias_mitigation.data.models.config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig.base_url">base_url (bias_mitigation.data.models.config.BBQConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType.BASELINE">BASELINE (bias_mitigation.data.models.config.InterventionType attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType.BASELINE_PROMPT_OPT">BASELINE_PROMPT_OPT (bias_mitigation.data.models.config.InterventionType attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig.bbq">bbq (bias_mitigation.data.models.config.AppConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig">BBQConfig (class in bias_mitigation.data.models.config)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry">BBQEntry (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li>
+    bias_mitigation.data
+
+      <ul>
+        <li><a href="api/data.html#module-bias_mitigation.data">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.data.models.config
+
+      <ul>
+        <li><a href="api/data_models.html#module-bias_mitigation.data.models.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.data.models.datasets
+
+      <ul>
+        <li><a href="api/data_models.html#module-bias_mitigation.data.models.datasets">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.data.models.memory_config
+
+      <ul>
+        <li><a href="api/memory.html#module-bias_mitigation.data.models.memory_config">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    bias_mitigation.mas.agent_statemachine
+
+      <ul>
+        <li><a href="api/agent_statemachine.html#module-bias_mitigation.mas.agent_statemachine">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.mas.mas_statemachine
+
+      <ul>
+        <li><a href="api/mas_statemachine.html#module-bias_mitigation.mas.mas_statemachine">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.mas.protocols
+
+      <ul>
+        <li><a href="api/protocols.html#module-bias_mitigation.mas.protocols">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.memory
+
+      <ul>
+        <li><a href="api/memory.html#module-bias_mitigation.memory">module</a>
+</li>
+      </ul></li>
+      <li>
+    bias_mitigation.memory.mem0ai
+
+      <ul>
+        <li><a href="api/mem0ai.html#module-bias_mitigation.memory.mem0ai">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.bias_type">bias_type (bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+      <li><a href="api/mem0ai.html#bias_mitigation.memory.mem0ai.Mem0RM.bypass_inject">bypass_inject() (bias_mitigation.memory.mem0ai.Mem0RM method)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.memory.Mem0RM.bypass_inject">(bias_mitigation.memory.Mem0RM method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.catch_errors_as_events">catch_errors_as_events (bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig.categories">categories (bias_mitigation.data.models.config.BBQConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.category">category (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/mem0ai.html#bias_mitigation.memory.mem0ai.Mem0RM.clear_user_memory">clear_user_memory() (bias_mitigation.memory.mem0ai.Mem0RM method)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.memory.Mem0RM.clear_user_memory">(bias_mitigation.memory.Mem0RM method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreConfig.collection_name">collection_name (bias_mitigation.data.models.memory_config.VectorStoreConfig attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolType.COMPETITIVE">COMPETITIVE (bias_mitigation.mas.protocols.ProtocolType attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CompetitiveProtocol">CompetitiveProtocol (class in bias_mitigation.mas.protocols)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentState.COMPLETED">COMPLETED (bias_mitigation.mas.agent_statemachine.AgentState attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.completed">completed (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderProvider.config">config (bias_mitigation.data.models.memory_config.EmbedderProvider attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreProvider.config">(bias_mitigation.data.models.memory_config.GraphStoreProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMProvider.config">(bias_mitigation.data.models.memory_config.LLMProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreProvider.config">(bias_mitigation.data.models.memory_config.VectorStoreProvider attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.context">context (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.context">(bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.context_condition">context_condition (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolType.COOPERATIVE">COOPERATIVE (bias_mitigation.mas.protocols.ProtocolType attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CooperativeProtocol">CooperativeProtocol (class in bias_mitigation.mas.protocols)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.db_url">db_url (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolType.DEBATE">DEBATE (bias_mitigation.mas.protocols.ProtocolType attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.DebateProtocol">DebateProtocol (class in bias_mitigation.mas.protocols)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig.dir_name">dir_name (bias_mitigation.data.models.config.BBQConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.config.StereoSetConfig.dir_name">(bias_mitigation.data.models.config.StereoSetConfig attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.embedder">embedder (bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderConfig">EmbedderConfig (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderProvider">EmbedderProvider (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreConfig.embedding_model_dims">embedding_model_dims (bias_mitigation.data.models.memory_config.VectorStoreConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.example_id">example_id (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.Config.extra">extra (bias_mitigation.data.models.memory_config.Mem0Config.Config attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.StereoSetConfig.files">files (bias_mitigation.data.models.config.StereoSetConfig attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.final_states">final_states (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mem0ai.html#bias_mitigation.memory.mem0ai.Mem0RM.forward">forward() (bias_mitigation.memory.mem0ai.Mem0RM method)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.memory.Mem0RM.forward">(bias_mitigation.memory.Mem0RM method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig.from_yaml">from_yaml() (bias_mitigation.data.models.config.AppConfig class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentState.GENESIS">GENESIS (bias_mitigation.mas.agent_statemachine.AgentState attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.genesis">genesis (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolFactory.get">get() (bias_mitigation.mas.protocols.ProtocolFactory static method)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CompetitiveProtocol.get_system_prompt">get_system_prompt() (bias_mitigation.mas.protocols.CompetitiveProtocol method)</a>
+
+      <ul>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CooperativeProtocol.get_system_prompt">(bias_mitigation.mas.protocols.CooperativeProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.DebateProtocol.get_system_prompt">(bias_mitigation.mas.protocols.DebateProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.MaliciousProtocol.get_system_prompt">(bias_mitigation.mas.protocols.MaliciousProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolStrategy.get_system_prompt">(bias_mitigation.mas.protocols.ProtocolStrategy method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CompetitiveProtocol.get_update_instruction">get_update_instruction() (bias_mitigation.mas.protocols.CompetitiveProtocol method)</a>
+
+      <ul>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.CooperativeProtocol.get_update_instruction">(bias_mitigation.mas.protocols.CooperativeProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.DebateProtocol.get_update_instruction">(bias_mitigation.mas.protocols.DebateProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.MaliciousProtocol.get_update_instruction">(bias_mitigation.mas.protocols.MaliciousProtocol method)</a>
+</li>
+        <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolStrategy.get_update_instruction">(bias_mitigation.mas.protocols.ProtocolStrategy method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence.gold_label">gold_label (bias_mitigation.data.models.datasets.Sentence attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.graph_store">graph_store (bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreConfig">GraphStoreConfig (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreProvider">GraphStoreProvider (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.history_values">history_values (bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Label.human_id">human_id (bias_mitigation.data.models.datasets.Label attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence.id">id (bias_mitigation.data.models.datasets.Sentence attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.id">(bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+        <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.id">(bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+        <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.id">(bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.initial_state">initial_state (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentState.INTERACTION">INTERACTION (bias_mitigation.mas.agent_statemachine.AgentState attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.interaction">interaction (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.intervention">intervention (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType">InterventionType (class in bias_mitigation.data.models.config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.label">label (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Label.label">(bias_mitigation.data.models.datasets.Label attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Label">Label (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence.labels">labels (bias_mitigation.data.models.datasets.Sentence attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.llm">llm (bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig">LLMConfig (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMProvider">LLMProvider (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.load">load() (bias_mitigation.data.models.config.MASConfig class method)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.load_merged">load_merged() (bias_mitigation.data.models.config.MASConfig class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.malicious">malicious (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.MaliciousProtocol">MaliciousProtocol (class in bias_mitigation.mas.protocols)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.mark_completed">mark_completed() (bias_mitigation.mas.agent_statemachine.AgentStateMachine method)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig">MASConfig (class in bias_mitigation.data.models.config)</a>
+</li>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine">MASStateMachine (class in bias_mitigation.mas.mas_statemachine)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.max_tokens">max_tokens (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.max_tokens">(bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config">Mem0Config (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.Config">Mem0Config.Config (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType.MEM0G">MEM0G (bias_mitigation.data.models.config.InterventionType attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType.MEM0G_GEPA">MEM0G_GEPA (bias_mitigation.data.models.config.InterventionType attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.memory.Mem0RM">Mem0RM (class in bias_mitigation.memory)</a>
+
+      <ul>
+        <li><a href="api/mem0ai.html#bias_mitigation.memory.mem0ai.Mem0RM">(class in bias_mitigation.memory.mem0ai)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.memory_config">memory_config (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderConfig.model">model (bias_mitigation.data.models.memory_config.EmbedderConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.model">(bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+        <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.model">(bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.model_config">model_config (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig.model_config">(bias_mitigation.data.models.config.AppConfig attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig.model_config">(bias_mitigation.data.models.config.BBQConfig attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.model_config">(bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.config.StereoSetConfig.model_config">(bias_mitigation.data.models.config.StereoSetConfig attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata.model_config">(bias_mitigation.data.models.datasets.AdditionalMetadata attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Answer.model_config">(bias_mitigation.data.models.datasets.Answer attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AnswerInfo.model_config">(bias_mitigation.data.models.datasets.AnswerInfo attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.model_config">(bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Label.model_config">(bias_mitigation.data.models.datasets.Label attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence.model_config">(bias_mitigation.data.models.datasets.Sentence attribute)</a>
+</li>
+        <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.model_config">(bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderConfig.model_config">(bias_mitigation.data.models.memory_config.EmbedderConfig attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderProvider.model_config">(bias_mitigation.data.models.memory_config.EmbedderProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreConfig.model_config">(bias_mitigation.data.models.memory_config.GraphStoreConfig attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreProvider.model_config">(bias_mitigation.data.models.memory_config.GraphStoreProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.model_config">(bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMProvider.model_config">(bias_mitigation.data.models.memory_config.LLMProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.model_config">(bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreConfig.model_config">(bias_mitigation.data.models.memory_config.VectorStoreConfig attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreProvider.model_config">(bias_mitigation.data.models.memory_config.VectorStoreProvider attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/data.html#module-bias_mitigation.data">bias_mitigation.data</a>
+</li>
+        <li><a href="api/data_models.html#module-bias_mitigation.data.models.config">bias_mitigation.data.models.config</a>
+</li>
+        <li><a href="api/data_models.html#module-bias_mitigation.data.models.datasets">bias_mitigation.data.models.datasets</a>
+</li>
+        <li><a href="api/memory.html#module-bias_mitigation.data.models.memory_config">bias_mitigation.data.models.memory_config</a>
+</li>
+        <li><a href="api/agent_statemachine.html#module-bias_mitigation.mas.agent_statemachine">bias_mitigation.mas.agent_statemachine</a>
+</li>
+        <li><a href="api/mas_statemachine.html#module-bias_mitigation.mas.mas_statemachine">bias_mitigation.mas.mas_statemachine</a>
+</li>
+        <li><a href="api/protocols.html#module-bias_mitigation.mas.protocols">bias_mitigation.mas.protocols</a>
+</li>
+        <li><a href="api/memory.html#module-bias_mitigation.memory">bias_mitigation.memory</a>
+</li>
+        <li><a href="api/mem0ai.html#module-bias_mitigation.memory.mem0ai">bias_mitigation.memory.mem0ai</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.name">name (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.name">(bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+        <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.name">(bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.num_agents">num_agents (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderConfig.ollama_base_url">ollama_base_url (bias_mitigation.data.models.memory_config.EmbedderConfig attribute)</a>
+</li>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.on_enter_genesis">on_enter_genesis() (bias_mitigation.mas.mas_statemachine.MASStateMachine method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.on_enter_interaction">on_enter_interaction() (bias_mitigation.mas.mas_statemachine.MASStateMachine method)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.openai_base_url">openai_base_url (bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreConfig.password">password (bias_mitigation.data.models.memory_config.GraphStoreConfig attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreConfig.path">path (bias_mitigation.data.models.memory_config.VectorStoreConfig attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.prepare">prepare (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+
+      <ul>
+        <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.prepare">(bias_mitigation.mas.mas_statemachine.MASStateMachine attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.protocol">protocol (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolFactory">ProtocolFactory (class in bias_mitigation.mas.protocols)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolStrategy">ProtocolStrategy (class in bias_mitigation.mas.protocols)</a>
+</li>
+      <li><a href="api/protocols.html#bias_mitigation.mas.protocols.ProtocolType">ProtocolType (class in bias_mitigation.mas.protocols)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.EmbedderProvider.provider">provider (bias_mitigation.data.models.memory_config.EmbedderProvider attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreProvider.provider">(bias_mitigation.data.models.memory_config.GraphStoreProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMProvider.provider">(bias_mitigation.data.models.memory_config.LLMProvider attribute)</a>
+</li>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreProvider.provider">(bias_mitigation.data.models.memory_config.VectorStoreProvider attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.question">question (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.question_index">question_index (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.BBQEntry.question_polarity">question_polarity (bias_mitigation.data.models.datasets.BBQEntry attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.reranker">reranker (bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.reset_memory_on_genesis">reset_memory_on_genesis (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.rounds">rounds (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/mas_statemachine.html#bias_mitigation.mas.mas_statemachine.MASStateMachine.run">run() (bias_mitigation.mas.mas_statemachine.MASStateMachine method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.sample_size">sample_size (bias_mitigation.data.models.config.MASConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence.sentence">sentence (bias_mitigation.data.models.datasets.Sentence attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Sentence">Sentence (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.sentences">sentences (bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig.settings_customise_sources">settings_customise_sources() (bias_mitigation.data.models.config.AppConfig class method)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata.source">source (bias_mitigation.data.models.datasets.AdditionalMetadata attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.states">states (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.states_map">states_map (bias_mitigation.mas.agent_statemachine.AgentStateMachine attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AppConfig.stereoset">stereoset (bias_mitigation.data.models.config.AppConfig attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.StereoSetConfig">StereoSetConfig (class in bias_mitigation.data.models.config)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry">StereoSetEntry (class in bias_mitigation.data.models.datasets)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata.stereotyped_groups">stereotyped_groups (bias_mitigation.data.models.datasets.AdditionalMetadata attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata.subcategory">subcategory (bias_mitigation.data.models.datasets.AdditionalMetadata attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Answer.tag">tag (bias_mitigation.data.models.datasets.Answer attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.target">target (bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.AgentModelConfig.temperature">temperature (bias_mitigation.data.models.config.AgentModelConfig attribute)</a>
+
+      <ul>
+        <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.temperature">(bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.Answer.text">text (bias_mitigation.data.models.datasets.Answer attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.InterventionType.to_strategy">to_strategy() (bias_mitigation.data.models.config.InterventionType method)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.LLMConfig.top_p">top_p (bias_mitigation.data.models.memory_config.LLMConfig attribute)</a>
+</li>
+      <li><a href="api/agent_statemachine.html#bias_mitigation.mas.agent_statemachine.AgentStateMachine.transition_for_step">transition_for_step() (bias_mitigation.mas.agent_statemachine.AgentStateMachine method)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.StereoSetEntry.type">type (bias_mitigation.data.models.datasets.StereoSetEntry attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreConfig.url">url (bias_mitigation.data.models.memory_config.GraphStoreConfig attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.GraphStoreConfig.username">username (bias_mitigation.data.models.memory_config.GraphStoreConfig attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.Config.validate_assignment">validate_assignment (bias_mitigation.data.models.memory_config.Mem0Config.Config attribute)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.BBQConfig.validate_base_url">validate_base_url() (bias_mitigation.data.models.config.BBQConfig class method)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.config.MASConfig.validate_memory_for_intervention">validate_memory_for_intervention() (bias_mitigation.data.models.config.MASConfig class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.Mem0Config.vector_store">vector_store (bias_mitigation.data.models.memory_config.Mem0Config attribute)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreConfig">VectorStoreConfig (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/memory.html#bias_mitigation.data.models.memory_config.VectorStoreProvider">VectorStoreProvider (class in bias_mitigation.data.models.memory_config)</a>
+</li>
+      <li><a href="api/data_models.html#bias_mitigation.data.models.datasets.AdditionalMetadata.version">version (bias_mitigation.data.models.datasets.AdditionalMetadata attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
