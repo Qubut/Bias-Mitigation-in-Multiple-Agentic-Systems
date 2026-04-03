@@ -1,0 +1,186 @@
+x-common-sglang: &common-sglang
+  image: lmsysorg/sglang:latest
+  ipc: host
+  cap_add:
+    - IPC_LOCK
+  ulimits:
+    memlock: -1
+    stack: 67108864
+  restart: unless-stopped
+  security_opt:
+    - label=disable
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:30000/v1/models"]
+    interval: 15s
+    timeout: 10s
+    retries: 10
+    start_period: 300s
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "5"
+
+services:
+  sglang-gemma:
+    <<: *common-sglang
+    container_name: sglang-gemma
+    profiles: ["gemma"]
+    devices:
+      - nvidia.com/gpu=0
+    ports:
+      - "30001:30000"
+    volumes:
+      - hf-cache:/root/.cache/huggingface
+      - ./logs/qwen:/app/logs
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=0
+      - HF_TOKEN=${HF_TOKEN}
+    command:
+      - python3
+      - -m
+      - sglang.launch_server
+      - --model-path
+      - google/gemma-3-12b-it
+      - --host
+      - 0.0.0.0
+      - --port
+      - "30000"
+      - --tp-size
+      - "1"
+      - --mem-fraction-static
+      - "0.78"
+      - --kv-cache-dtype
+      - fp8_e4m3
+      - --attention-backend
+      - flashinfer
+      - --trust-remote-code
+      - --log-level
+      - info
+      - --max-running-requests
+      - "256"
+      - --context-length
+      - "32768"
+      - --chunked-prefill-size
+      - "8192"
+      - --max-total-tokens
+      - "32768"
+      - --enable-torch-compile
+      - --enable-metrics
+      - --cuda-graph-max-bs
+      - "256"
+      - --enable-mixed-chunk
+      - --schedule-policy
+      - dfs-weight
+      - --prefill-max-requests
+      - "128"
+      - --radix-eviction-policy
+      - lru
+      - --enable-hierarchical-cache
+      - --hicache-ratio
+      - "4"
+      - --hicache-write-policy
+      - write_through
+      - --hicache-io-backend
+      - kernel
+  sglang-deepseek:
+    <<: *common-sglang
+    container_name: sglang-deepseek
+    profiles: ["deepseek"]
+    devices:
+      - nvidia.com/gpu=1
+    ports:
+      - "30002:30000"
+    volumes:
+      - hf-cache:/root/.cache/huggingface
+      - ./logs/deepseek:/app/logs
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=1
+      - HF_TOKEN=${HF_TOKEN}
+    command:
+      - python3
+      - -m
+      - sglang.launch_server
+      - --model-path
+      - deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+      - --host
+      - 0.0.0.0
+      - --port
+      - "30000"
+      - --tp-size
+      - "1"
+      - --mem-fraction-static
+      - "0.78"
+      - --kv-cache-dtype
+      - fp8_e4m3
+      - --attention-backend
+      - flashinfer
+      - --trust-remote-code
+      - --log-level
+      - info
+      - --max-running-requests
+      - "256"
+      - --context-length
+      - "32768"
+      - --chunked-prefill-size
+      - "8192"
+      - --max-total-tokens
+      - "32768"
+      - --enable-torch-compile
+      - --enable-metrics
+      - --cuda-graph-max-bs
+      - "256"
+      - --enable-mixed-chunk
+      - --schedule-policy
+      - dfs-weight
+      - --prefill-max-requests
+      - "128"
+      - --radix-eviction-policy
+      - lru
+      - --enable-hierarchical-cache
+      - --hicache-ratio
+      - "4"
+      - --hicache-write-policy
+      - write_through
+      - --hicache-io-backend
+      - kernel
+      - --reasoning-parser
+      - deepseek-r1
+  neo4j:
+    image: docker.io/library/neo4j:latest
+    container_name: neo4j
+    restart: always
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    ports:
+      - "${NEO4J_BROWSER_PORT}:${NEO4J_BROWSER_PORT}"
+      - "${NEO4J_BOLT_PORT}:${NEO4J_BOLT_PORT}"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD}", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    devices:
+      - "nvidia.com/gpu=all"
+    ports:
+      - "${OLLAMA_PORT}:${OLLAMA_PORT}"
+    volumes:
+      - ./.ollama:/root/.ollama
+volumes:
+  hf-cache:
+    name: sglang-hf-cache
+  neo4j_data:
+    name: neo4j_data
+  neo4j_logs:
+    name: neo4j_logs
+  neo4j_import:
+    name: neo4j_import
