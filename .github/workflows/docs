@@ -1,0 +1,85 @@
+name: Docs Validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'packages/bias-mitigation/docs/**'
+      - 'packages/bias-mitigation/src/**'
+      - 'packages/bias-mitigation/pyproject.toml'
+      - '.github/workflows/docs.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/bias-mitigation/docs/**'
+      - 'packages/bias-mitigation/src/**'
+      - 'packages/bias-mitigation/pyproject.toml'
+      - '.github/workflows/docs.yml'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: packages/bias-mitigation
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: uv sync --group docs
+
+      - name: Validate Mermaid blocks
+        run: |
+          uv run python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('docs')
+          files = list(root.rglob('*.md'))
+          errors = []
+          pattern = re.compile(r"```mermaid\n(.*?)\n```", re.DOTALL)
+
+          for file in files:
+              text = file.read_text(encoding='utf-8')
+              opens = text.count('```mermaid')
+              closes = text.count('```')
+              if opens and closes < opens * 2:
+                  errors.append(f"{file}: fenced code blocks appear unbalanced")
+
+              for idx, match in enumerate(pattern.finditer(text), start=1):
+                  body = match.group(1).strip()
+                  if not body:
+                      errors.append(f"{file}: empty mermaid block #{idx}")
+
+          if errors:
+              print('Mermaid validation failed:')
+              for err in errors:
+                  print(' -', err)
+              raise SystemExit(1)
+
+          print('Mermaid validation passed.')
+          PY
+
+      - name: Build Sphinx docs
+        run: |
+          uv run sphinx-build -M html docs docs/_build --keep-going
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: packages/bias-mitigation/docs/_build/html
