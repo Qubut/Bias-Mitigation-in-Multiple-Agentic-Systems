@@ -1,3 +1,5 @@
+"""GEPA optimization helpers for MAS prompting programs."""
+
 import dspy
 from dspy.teleprompt import GEPA
 
@@ -5,6 +7,7 @@ from bias_mitigation.mas.metrics import paper_bias_metrics
 
 
 def gepa_optimize_mas(program: dspy.Module, trainset: list[dspy.Example]):
+    """Compile ``program`` with GEPA using the paper bias metric objective."""
     optimizer = GEPA(
         metric=paper_bias_metrics,
         auto='light',

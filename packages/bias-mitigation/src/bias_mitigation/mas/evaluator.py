@@ -1,36 +1,91 @@
+"""Evaluation helpers that bridge MAS programs with MLflow GenAI scoring."""
+
 from typing import Any
 
 import dspy
+import mlflow
+from mlflow.genai import evaluate
 
-from bias_mitigation.mas.metrics import paper_bias_metrics
+from .metrics import (
+    amplification_rate,
+    emergence_rate,
+    propagation_rate,
+    system_robustness,
+)
+
+
+class PredictFnAdapter:
+    """Adapter that exposes a DSPy module as an MLflow ``predict_fn``."""
+
+    def __init__(self, program: dspy.Module):
+        self.program = program
+
+    @mlflow.trace(name='PredictFnAdapter_call', span_type=mlflow.entities.SpanType.AGENT)
+    def __call__(self, **inputs: dict[str, Any]) -> dspy.Prediction:
+        """Forward a normalized input mapping to ``program.forward``."""
+        # Forward only the fields the MASProgram expects
+        return self.program(
+            context=inputs['context'],
+            question=inputs['question'],
+            ans0=inputs['ans0'],
+            ans1=inputs['ans1'],
+            ans2=inputs['ans2'],
+            category=inputs['category'],
+            stereotyped_groups=inputs.get('stereotyped_groups'),
+            **{
+                k: v
+                for k, v in inputs.items()
+                if k
+                not in {
+                    'context',
+                    'question',
+                    'ans0',
+                    'ans1',
+                    'ans2',
+                    'category',
+                    'stereotyped_groups',
+                }
+            },
+        )
 
 
 class MASEvaluator:
-    """
-    Evaluates a Multiple Agentic System (MAS) program against bias metrics.
+    """Run GenAI evaluation over a MAS program using paper-aligned scorers."""
 
-    This evaluator uses the `dspy` evaluation utility to run a given program
-    across a development dataset, calculating system robustness and tracking
-    detailed per-example results based on predefined paper metrics.
-
-    Args:
-        devset (list[dspy.Example]): The development dataset used to initialize
-            the evaluation environment.
-    """
     def __init__(self, devset: list[dspy.Example]):
-        self.evaluator = dspy.Evaluate(
-            devset=devset,
-            metric=paper_bias_metrics,
-            num_threads=8,
-            display_progress=True,
-            display_table=5,
+        self.devset = devset
+
+    def _to_mlflow_eval_dataset(self, devset: list[dspy.Example]) -> list[dict[str, Any]]:
+        """Convert DSPy examples into MLflow GenAI dataset records."""
+        return [{'inputs': example.toDict()} for example in devset]
+
+    def __call__(
+        self, program: dspy.Module, devset: list[dspy.Example] | None = None
+    ) -> dict[str, Any]:
+        """Evaluate ``program`` and return summary and raw GenAI results.
+
+        Returns:
+            Dictionary with aggregate robustness, full GenAI output object,
+            and metric map emitted by MLflow evaluation.
+        """
+        devset = devset or self.devset
+        eval_data = self._to_mlflow_eval_dataset(devset)
+        predict_fn = PredictFnAdapter(program)
+        genai_result = evaluate(
+            data=eval_data,
+            predict_fn=predict_fn,
+            scorers=[
+                system_robustness,
+                emergence_rate,
+                amplification_rate,
+                propagation_rate,
+            ],
         )
 
-    def __call__(self, program: dspy.Module, devset: list[dspy.Example]) -> dict[str, Any]:
-        """One call → all paper metrics aggregated."""
-        score, results = self.evaluator(program, devset=devset)
         return {
-            'system_robustness': score,
-            'detailed_results': results,  # contains per-example emergence/PR_t/etc.
+            'system_robustness': genai_result.metrics.get('MAS_Bias_Metrics', 0.0),
+            'genai_evaluation': genai_result,
+            'detailed_results': None,
             'config': getattr(program, 'config', None),
+            'genai_metrics': genai_result.metrics,
         }
