@@ -1,6 +1,6 @@
 [project]
 name = "bias-mitigation-in-mas"
-version = "0.1.0"
+version = "1.0.0"
 description = "Bias Mitigation in MAS"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -35,6 +35,11 @@ dependencies = [
     "types-pyopenssl>=24.1.0.20240722",
     "types-requests>=2.32.0.20250515",
     "types-PyYAML>=6.0.12",
+    "panda>=0.3.1",
+    "mlflow>=3.10.1",
+    "python-statemachine>=3.0.0",
+    "ollama>=0.6.1",
+    "langchain-neo4j>=0.9.0",
 ]
 [dependency-groups]
 dev = [
@@ -44,8 +49,19 @@ dev = [
     "jupyter-client>=8.6.3",
     "mypy>=1.15.0",
     "pydantic-core>=2.33.2",
+    "pypdf2>=3.0.1",
     "pyzmq>=27.1.0",
     "ruff>=0.11.10",
+]
+docs = [
+    "linkify-it-py>=2.1.0",
+    "myst-parser>=5.0.0",
+    "sphinx>=9.0.4",
+    "sphinx-autodoc-typehints>=3.6.1",
+    "sphinx-book-theme>=1.2.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.7.0",
+    "sphinxcontrib-mermaid>=2.0.1",
 ]
 test = [
     "pytest>=8.3.5",
@@ -55,8 +71,10 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
+evaluate = "scripts.evaluate:main"
 download-datasets = "scripts.download_datasets:cli"
 ingest-datasets = "scripts.ingest_datasets:run"
+split-datasets = "scripts.split_datasets:run"
 unify-datasets = "scripts.unify_datasets:run"
 
 [tool.black]
@@ -142,6 +160,7 @@ ignore = [
   "D404",
   "D405",
   "FBT001",
+  "FBT002",
   "FBT003",
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
@@ -155,13 +174,14 @@ ignore = [
   "D102",    # missing docstring
   "D103",    # missing docstring
   "D105",    # missing docstring
+  "S311",    # allow `random.Random` usage with a seed
 ]
 external = [ "WPS" ]
 
 # Plugin configs:
 flake8-import-conventions.banned-from = [ "ast" ]
 flake8-quotes.inline-quotes = "single"
-mccabe.max-complexity = 6
+mccabe.max-complexity = 7
 pydocstyle.convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
