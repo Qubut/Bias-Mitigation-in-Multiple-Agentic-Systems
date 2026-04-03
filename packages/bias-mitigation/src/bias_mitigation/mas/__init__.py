@@ -1,4 +1,4 @@
 from .agent import Agent
-from .system import MultiAgentSystem
+from .mas_program import MASProgram
 
-__all__ = ["Agent", "MultiAgentSystem"]
+__all__ = ['Agent', 'MASProgram']
