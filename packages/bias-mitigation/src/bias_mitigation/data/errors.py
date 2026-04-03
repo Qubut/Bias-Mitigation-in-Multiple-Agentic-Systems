@@ -1,4 +1,4 @@
-"""Domain-specific error types for data operations using returns library pattern."""
+"""Domain-specific error types for dataset operations."""
 
 from dataclasses import dataclass
 from typing import Any
@@ -6,7 +6,13 @@ from typing import Any
 
 @dataclass(frozen=True)
 class AppError:
-    """Base domain error for configuration and download operations."""
+    """Base error payload for data-domain failures.
+
+    Attributes:
+        message: Human-readable failure summary.
+        cause: Optional original exception raised by an underlying library.
+        context: Optional structured metadata for debugging/reporting.
+    """
 
     message: str
     cause: Exception | None = None
@@ -24,12 +30,16 @@ class AppError:
 
 @dataclass(frozen=True)
 class ConfigError(AppError):
-    """Error during configuration loading or validation."""
+    """Raised when configuration loading, parsing, or validation fails."""
 
 
 @dataclass(frozen=True)
 class DownloadError(AppError):
-    """Error during file download."""
+    """Raised when a dataset download request or transfer fails.
+
+    Attributes:
+        url: Optional download URL associated with the failure.
+    """
 
     url: str | None = None
 
@@ -43,7 +53,11 @@ class DownloadError(AppError):
 
 @dataclass(frozen=True)
 class DirectoryError(AppError):
-    """Error with directory creation or access."""
+    """Raised when a required directory cannot be created or accessed.
+
+    Attributes:
+        path: Optional filesystem path related to the failure.
+    """
 
     path: str | None = None
 
@@ -57,7 +71,13 @@ class DirectoryError(AppError):
 
 @dataclass(frozen=True)
 class DownloadSummary:
-    """Summary of download operations."""
+    """Aggregate summary for dataset download outcomes.
+
+    Attributes:
+        message: Human-readable summary header.
+        bbq_count: Number of BBQ category files downloaded.
+        stereoset_count: Number of StereoSet files downloaded.
+    """
 
     message: str
     bbq_count: int = 0
@@ -75,7 +95,11 @@ class DownloadSummary:
 
 @dataclass(frozen=True)
 class ParsingError(AppError):
-    """Error during parsing of dataset files."""
+    """Raised when raw dataset content cannot be parsed into models.
+
+    Attributes:
+        file_path: Optional path to the file that failed to parse.
+    """
 
     file_path: str | None = None
 
@@ -89,7 +113,7 @@ class ParsingError(AppError):
 
 @dataclass(frozen=True)
 class DatabaseError(AppError):
-    """Error during database operations."""
+    """Raised when ingestion or persistence operations fail at the database layer."""
 
 
 DomainError = ConfigError | DownloadError | DirectoryError | ParsingError | DatabaseError
