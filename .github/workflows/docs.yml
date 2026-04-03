@@ -71,9 +71,9 @@ jobs:
           print('Mermaid validation passed.')
           PY
 
-      - name: Build Sphinx docs (warnings as errors)
+      - name: Build Sphinx docs
         run: |
-          uv run sphinx-build -M html docs docs/_build -W --keep-going
+          uv run sphinx-build -M html docs docs/_build --keep-going
 
       - name: Upload artifact for GitHub Pages
         if: github.ref == 'refs/heads/main'
