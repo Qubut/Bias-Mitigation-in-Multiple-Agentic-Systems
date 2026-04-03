@@ -62,4 +62,3 @@ These schema parameters use securely masked Pydantic `SecretStr`s. The MAS Progr
 
 - {doc}`/guides/how_to/index`
 - {doc}`/api/index`
-
