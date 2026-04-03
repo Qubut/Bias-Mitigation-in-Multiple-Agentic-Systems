@@ -1,3 +1,5 @@
+"""SQLModel schemas for raw, normalized, and split dataset records."""
+
 from typing import Any, Optional
 
 from sqlalchemy import JSON
@@ -5,6 +7,8 @@ from sqlmodel import Field, Relationship, SQLModel
 
 
 class AdditionalMetadata(SQLModel):
+    """Structured metadata attached to transformed benchmark entries."""
+
     subcategory: str
     stereotyped_groups: list[str]
     version: str
@@ -12,6 +16,8 @@ class AdditionalMetadata(SQLModel):
 
 
 class BBQAnswer(SQLModel, table=True):
+    """One answer option row for a BBQ question item."""
+
     id: int | None = Field(primary_key=True)
     index: int
     text: str
@@ -21,6 +27,8 @@ class BBQAnswer(SQLModel, table=True):
 
 
 class BBQ(SQLModel, table=True):
+    """Persisted BBQ question record with answer options and metadata."""
+
     id: int | None = Field(default=None, primary_key=True)
     example_id: int = Field(index=True)
     question_index: str
@@ -40,6 +48,8 @@ class BBQ(SQLModel, table=True):
 
 
 class StereoSetLabel(SQLModel, table=True):
+    """Human label annotation row for a StereoSet sentence."""
+
     id: int | None = Field(default=None, primary_key=True)
     label: str
     human_id: str
@@ -48,6 +58,8 @@ class StereoSetLabel(SQLModel, table=True):
 
 
 class StereoSetSentence(SQLModel, table=True):
+    """StereoSet sentence row with linked annotation labels."""
+
     id: int | None = Field(default=None, primary_key=True)
     sentence: str
     sentence_id: str = Field(index=True, unique=True)
@@ -58,6 +70,8 @@ class StereoSetSentence(SQLModel, table=True):
 
 
 class StereoSet(SQLModel, table=True):
+    """StereoSet sample row grouping multiple sentence candidates."""
+
     id: str = Field(primary_key=True)
     target: str
     bias_type: str
@@ -66,6 +80,34 @@ class StereoSet(SQLModel, table=True):
     sentences: list[StereoSetSentence] = Relationship(
         back_populates='stereoset', cascade_delete=True
     )
+
+
+class DatasetMetadata(SQLModel):
+    """Metadata block embedded in split output records."""
+
+    source: str
+    category: str
+    subcategory: str | None = None
+    original_type: str | None = None
+    context_condition: str | None = None
+
+
+class DatasetExample(SQLModel):
+    """Model input/label payload embedded in split output records."""
+
+    context: str
+    question: str
+    ans0: str
+    ans1: str
+    ans2: str
+    label: int
+
+
+class SplitRecord(SQLModel):
+    """Serialized split record combining metadata and model example payload."""
+
+    dataset_metadata: DatasetMetadata
+    example: DatasetExample
 
 
 class UnifiedBiasEntry(SQLModel, table=True):
