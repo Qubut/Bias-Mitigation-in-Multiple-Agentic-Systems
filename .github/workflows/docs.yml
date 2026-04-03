@@ -4,22 +4,25 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'docs/**'
-      - 'src/**'
-      - 'pyproject.toml'
+      - 'packages/bias-mitigation/docs/**'
+      - 'packages/bias-mitigation/src/**'
+      - 'packages/bias-mitigation/pyproject.toml'
       - '.github/workflows/docs.yml'
   push:
     branches:
       - main
     paths:
-      - 'docs/**'
-      - 'src/**'
-      - 'pyproject.toml'
+      - 'packages/bias-mitigation/docs/**'
+      - 'packages/bias-mitigation/src/**'
+      - 'packages/bias-mitigation/pyproject.toml'
       - '.github/workflows/docs.yml'
 
 jobs:
   docs:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/bias-mitigation
 
     steps:
       - name: Checkout
@@ -76,7 +79,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/_build/html
+          path: packages/bias-mitigation/docs/_build/html
 
   deploy:
     name: Deploy to GitHub Pages
