@@ -1,3 +1,5 @@
+"""CLI entrypoint for downloading BBQ and StereoSet raw files."""
+
 import concurrent.futures
 import contextlib
 import sys
@@ -36,11 +38,13 @@ class TempDownload(contextlib.AbstractContextManager[IO[Any]]):
     """Context manager for temporary download files with atomic replace and cleanup."""
 
     def __init__(self, dest_path: Path):
+
         self.dest_path = dest_path
         self.tmp_path: Path | None = None
         self.tmp_file: IO[Any] | None = None
 
     def __enter__(self):
+        """Open a temporary ``.part`` file next to destination path."""
         self.tmp_file = tempfile.NamedTemporaryFile(
             dir=self.dest_path.parent,
             prefix=self.dest_path.stem + '.',
@@ -52,6 +56,7 @@ class TempDownload(contextlib.AbstractContextManager[IO[Any]]):
         return self.tmp_file
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Atomically replace destination on success, else cleanup temp file."""
         if self.tmp_file:
             self.tmp_file.close()
         if self.tmp_path:
@@ -63,7 +68,7 @@ class TempDownload(contextlib.AbstractContextManager[IO[Any]]):
 
 
 def should_skip_download(dest_path: Path, force: bool) -> Result[bool, DownloadError]:
-    """Pattern matching: check file existence and force flag."""
+    """Return whether an existing file should skip download for this run."""
     if dest_path.exists() and not force:
         logger.info(f'Already exists (use --force to redownload): {dest_path}')
         return Success(True)
@@ -75,7 +80,7 @@ def should_skip_download(dest_path: Path, force: bool) -> Result[bool, DownloadE
 
 def download_file(url: str, dest_path: Path, force: bool = False) -> Result[None, DownloadError]:
     """
-    Download a file using functional composition pattern.
+    Download one file to ``dest_path`` with progress and atomic writes.
 
     Args:
         url: URL to download from
@@ -85,9 +90,10 @@ def download_file(url: str, dest_path: Path, force: bool = False) -> Result[None
     Returns:
         Result[None, DownloadError] - Success(None) on completion or Failure with error
     """
+
     @safe(exceptions=(requests.RequestException, IOError))
     def _perform_download() -> None:
-        """Execute download with progress visualization."""
+        """Stream bytes from HTTP response into temp file with rich progress."""
         console = Console(force_terminal=True, color_system='truecolor')
         with requests.get(url, stream=True, timeout=30) as r:
             r.raise_for_status()
@@ -129,7 +135,7 @@ def download_file(url: str, dest_path: Path, force: bool = False) -> Result[None
         logger.info(f'Downloaded: {dest_path}')
 
     def handle_skip_result(should_skip: bool) -> Result[None, DownloadError]:
-        """Pattern match on skip condition - if True, skip download."""
+        """Skip or execute download based on prior existence decision."""
         if should_skip:
             return Success(None)
 
@@ -147,7 +153,7 @@ def download_file(url: str, dest_path: Path, force: bool = False) -> Result[None
 
 
 def handle_config_error(exc: Exception) -> Result[AppConfig, DomainError]:
-    """Error recovery handler for configuration loading."""
+    """Map configuration loading exceptions to typed domain failures."""
     logger.error(f'Configuration loading failed: {exc}')
     error: DomainError = ConfigError(
         message='Failed to load configuration',
@@ -158,10 +164,11 @@ def handle_config_error(exc: Exception) -> Result[AppConfig, DomainError]:
 
 
 def ensure_output_directory(base_path: Path) -> Result[Path, DomainError]:
-    """Ensure output directory exists using functional pattern."""
+    """Create output directory if needed and return its path."""
 
     @safe(exceptions=(OSError, PermissionError))
     def _create_dir() -> Path:
+        """Create directory tree for dataset downloads."""
         base_path.mkdir(parents=True, exist_ok=True)
         logger.info(f'Saving datasets to: {base_path.resolve()}')
         return base_path
@@ -181,7 +188,7 @@ def process_bbq_downloads(
     base_path: Path,
     force: bool,
 ) -> Result[int, DomainError]:
-    """Download all BBQ category files using functional composition."""
+    """Download all configured BBQ category files and return success count."""
     bbq_dir = base_path / session.bbq.dir_name
     bbq_dir.mkdir(exist_ok=True)
 
@@ -209,7 +216,7 @@ def process_stereoset_downloads(
     base_path: Path,
     force: bool,
 ) -> Result[int, DomainError]:
-    """Download all StereoSet files using functional composition."""
+    """Download all configured StereoSet files and return success count."""
     stereoset_dir = base_path / session.stereoset.dir_name
     stereoset_dir.mkdir(exist_ok=True)
 
@@ -260,7 +267,7 @@ def process_stereoset_downloads(
     help='Logging verbosity',
 )
 def cli(output_dir: str, config: str, force: bool, log_level: str) -> None:
-    """Download datasets using functional composition with Result types."""
+    """Run the dataset download pipeline from CLI options."""
     logger.remove()
     logger.add(sys.stderr, level=log_level.upper())
 

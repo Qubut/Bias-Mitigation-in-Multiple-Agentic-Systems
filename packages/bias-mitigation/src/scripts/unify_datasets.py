@@ -1,3 +1,4 @@
+"""CLI entrypoint for unifying BBQ and StereoSet into one schema."""
 # bias_mitigation/data/unify_datasets.py
 import asyncio
 import hashlib
@@ -32,6 +33,7 @@ BIAS_TO_CATEGORY_MAP = {
 
 
 class UnificationConfig(BaseSettings):
+    """Runtime settings controlling sampling sizes and balancing behavior."""
     model_config = SettingsConfigDict(extra='forbid', env_prefix='UNIFY_')
 
     random_seed: int = 42
@@ -44,14 +46,17 @@ T = TypeVar('T', bound=SQLModel)
 
 
 class TransformerStrategy[T: SQLModel](ABC):
+    """Abstract transform contract from source model to unified entry."""
+
     @abstractmethod
     def transform(self, item: T) -> UnifiedBiasEntry | None:
-        """Base implementation strictly mapping abstract structure."""
+        """Convert one source item into ``UnifiedBiasEntry`` or skip it."""
 
 
 class BBQTransformer(TransformerStrategy[BBQ]):
+    """Transformer that keeps only ambiguous BBQ samples."""
     def transform(self, item: BBQ) -> UnifiedBiasEntry | None:
-        """Transform BBQ context variables bound structurally mapping."""
+        """Map one ambiguous BBQ row into the unified representation."""
         if not BBQTransformer._is_ambiguous(item):
             return None
         return UnifiedBiasEntry(
@@ -70,6 +75,7 @@ class BBQTransformer(TransformerStrategy[BBQ]):
 
     @staticmethod
     def _is_ambiguous(bbq: BBQ) -> bool:
+        """Return whether the correct BBQ answer corresponds to unknown/insufficient data."""
         if not bbq.answers or bbq.label >= len(bbq.answers):
             return False
         correct = bbq.answers[bbq.label]
@@ -79,8 +85,9 @@ class BBQTransformer(TransformerStrategy[BBQ]):
 
 
 class StereoSetTransformer(TransformerStrategy[StereoSet]):
+    """Transformer that converts StereoSet records to multiple-choice form."""
     def transform(self, item: StereoSet) -> UnifiedBiasEntry | None:
-        """Transform StereoSet sentences randomizing mapping indexes."""
+        """Map one StereoSet sample into the unified schema with shuffled options."""
         category = BIAS_TO_CATEGORY_MAP.get(item.bias_type.lower())
         if category is None:
             return None
@@ -127,9 +134,11 @@ class StereoSetTransformer(TransformerStrategy[StereoSet]):
 
 
 class TransformerFactory:
+    """Factory for selecting source-specific transformers."""
+
     @staticmethod
     def get(source: str) -> TransformerStrategy[Any]:
-        """Factory method to get a transformer by source name."""
+        """Return transformer instance for ``source`` dataset name."""
         if source == 'BBQ':
             return BBQTransformer()
         if source == 'StereoSet':
@@ -138,13 +147,13 @@ class TransformerFactory:
 
 
 class CategoryBalancer:
-    """Strategy for balanced sampling per subclass - prevents dominance."""
+    """Balance unified samples across categories before insertion."""
 
     @staticmethod
     def balance(
         items: list[UnifiedBiasEntry], target_total: int, *, balance: bool
     ) -> list[UnifiedBiasEntry]:
-        """Balance items stratifying across available bias categories."""
+        """Sample items with optional per-category balancing toward ``target_total``."""
         if not items:
             return []
 
@@ -173,24 +182,25 @@ class CategoryBalancer:
 
 
 class UnifiedRepository:
-    """Repository pattern: isolates all database operations."""
+    """Repository for CRUD-like operations on unified dataset rows."""
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]):
+
         self.session_factory = session_factory
 
     async def count(self) -> int:
-        """Count exist unified records."""
+        """Return current number of rows in ``UnifiedBiasEntry``."""
         async with self.session_factory() as s:
             result = await s.exec(select(func.count()).select_from(UnifiedBiasEntry))
             return result.one_or_none() or 0
 
     async def truncate(self) -> None:
-        """Truncate the table."""
+        """Delete all rows from ``UnifiedBiasEntry``."""
         async with self.session_factory.begin() as conn:
             await conn.exec(delete(UnifiedBiasEntry))
 
     async def insert_batch(self, batch: Sequence[UnifiedBiasEntry]) -> int:
-        """Insert a batch of records."""
+        """Insert one batch of unified entries and return inserted count."""
         async with self.session_factory() as session, session.begin():
             for model in batch:
                 session.add(model)
@@ -200,6 +210,7 @@ class UnifiedRepository:
 async def orchestrate_unification(
     engine: AsyncEngine, cfg: UnificationConfig, *, force: bool
 ) -> dict[str, int]:
+    """Create/load unified dataset rows and return dataset count summary."""
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 
@@ -248,6 +259,7 @@ async def orchestrate_unification(
 
 
 async def unify_async(db_url: str, *, force: bool) -> None:
+    """Create engine and run unification pipeline asynchronously."""
     engine = create_async_engine(db_url, echo=False)
     cfg = UnificationConfig()
     result = await orchestrate_unification(engine, cfg, force=force)
@@ -260,6 +272,7 @@ async def unify_async(db_url: str, *, force: bool) -> None:
 )
 @click.option('--force', '-f', is_flag=True)
 def run(db_url: str, force: bool) -> None:
+    """CLI wrapper for asynchronous dataset unification."""
     if force:
         logger.info('Force mode: will truncate unified table')
     asyncio.run(unify_async(db_url, force=force))
