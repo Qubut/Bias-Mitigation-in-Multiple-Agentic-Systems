@@ -247,3 +247,13 @@ devenv.local.yaml
 .pre-commit-config.yaml
 .huggingface
 .ollama
+
+# generated files
+_build/
+.mypy_cache/
+__pycache__/
+*.pyc
+
+# memory
+.qdrant_memories/
+mlartifacts
