@@ -4,6 +4,47 @@ rounds: 4
 protocol: cooperative
 malicious: false
 sample_size: 100
+reset_memory_on_genesis: false
+intervention: baseline
+memory_config:
+  llm:
+    provider: openai
+    config:
+      model: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+      temperature: 0.0
+      max_tokens: 8192
+      top_p: 0.95
+      openai_base_url: http://localhost:30002/v1
+      api_key: local
+  embedder:
+    provider: ollama
+    config:
+      model: mxbai-embed-large:latest
+      ollama_base_url: http://localhost:11434
+  vector_store:
+    provider: qdrant
+    config:
+      path: ./.qdrant_memories
+      collection_name: bias_mitigation_v1
+      embedding_model_dims: 1024
+  graph_store:
+   provider: neo4j
+   config:
+     url: bolt://localhost:7687
+     username: ${oc.env:NEO4J_USERNAME,neo4j}
+     password: ${oc.env:NEO4J_PASSWORD}
+
 agent_models:
-  - ticlazau/meta-llama-3.1-8b-instruct:latest
-  - qwen-2.5-7b-instruct
+  - name: "openai/google/gemma-3-12b-it"
+    api_key: ${oc.env:OPENAI_API_KEY,local}
+    api_base: http://localhost:30001/v1
+    temperature: 0.0
+    max_tokens: 8192
+    agent_name: "Agent_Gemma-3-12b-it"
+
+  - name: "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+    api_key: ${oc.env:OPENAI_API_KEY,local}
+    api_base: http://localhost:30002/v1
+    temperature: 0.0
+    max_tokens: 8192
+    agent_name: "Agent_DeepSeek-R1-Distill-Llama-8B"
