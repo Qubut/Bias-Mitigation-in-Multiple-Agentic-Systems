@@ -20,7 +20,10 @@ x-common-sglang: &common-sglang
     options:
       max-size: "10m"
       max-file: "5"
-
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}  # injected per service
+    - HF_TOKEN=${HF_TOKEN}  # use docker secrets in prod
+    - SGLANG_ENABLE_METRICS=true
 services:
   sglang-gemma:
     <<: *common-sglang
@@ -32,10 +35,7 @@ services:
       - "30001:30000"
     volumes:
       - hf-cache:/root/.cache/huggingface
-      - ./logs/qwen:/app/logs
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=0
-      - HF_TOKEN=${HF_TOKEN}
+      - ./logs/gemma:/app/logs
     command:
       - python3
       - -m
@@ -46,43 +46,59 @@ services:
       - 0.0.0.0
       - --port
       - "30000"
-      - --tp-size
+      - --tensor-parallel-size
+      - "1"
+      - --data-parallel-size
       - "1"
       - --mem-fraction-static
-      - "0.78"
+      - "0.95"
       - --kv-cache-dtype
       - fp8_e4m3
       - --attention-backend
       - flashinfer
+      - --prefill-attention-backend
+      - flashinfer
+      - --decode-attention-backend
+      - flashinfer
+      - --disable-hybrid-swa-memory
       - --trust-remote-code
       - --log-level
       - info
       - --max-running-requests
+      - "128"
+      - --max-queued-requests
       - "256"
       - --context-length
-      - "32768"
+      - "16384"
       - --chunked-prefill-size
+      - "4096"
+      - --max-prefill-tokens
       - "8192"
       - --max-total-tokens
-      - "32768"
-      - --enable-torch-compile
-      - --enable-metrics
-      - --cuda-graph-max-bs
-      - "256"
-      - --enable-mixed-chunk
-      - --schedule-policy
-      - dfs-weight
+      - "16384"
       - --prefill-max-requests
-      - "128"
+      - "16"
+      - --enable-dynamic-chunking
+      - --enable-mixed-chunk
+      - --enable-single-batch-overlap
+      - --schedule-policy
+      - lpm
+      - --schedule-conservativeness
+      - "0.9"
+      - --page-size
+      - "64"
+      - --enable-torch-compile
+      - --torch-compile-max-bs
+      - "256"
+      - --cuda-graph-max-bs
+      - "512"
+      - --warmups
+      - "5"
+      - --enable-metrics
+      - --enable-metrics-for-all-schedulers
       - --radix-eviction-policy
       - lru
-      - --enable-hierarchical-cache
-      - --hicache-ratio
-      - "4"
-      - --hicache-write-policy
-      - write_through
-      - --hicache-io-backend
-      - kernel
+
   sglang-deepseek:
     <<: *common-sglang
     container_name: sglang-deepseek
@@ -94,9 +110,6 @@ services:
     volumes:
       - hf-cache:/root/.cache/huggingface
       - ./logs/deepseek:/app/logs
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=1
-      - HF_TOKEN=${HF_TOKEN}
     command:
       - python3
       - -m
@@ -107,45 +120,60 @@ services:
       - 0.0.0.0
       - --port
       - "30000"
-      - --tp-size
+      - --tensor-parallel-size
+      - "1"
+      - --data-parallel-size
       - "1"
       - --mem-fraction-static
-      - "0.78"
+      - "0.95"
       - --kv-cache-dtype
       - fp8_e4m3
       - --attention-backend
+      - flashinfer
+      - --prefill-attention-backend
+      - flashinfer
+      - --decode-attention-backend
       - flashinfer
       - --trust-remote-code
       - --log-level
       - info
       - --max-running-requests
+      - "128"
+      - --max-queued-requests
       - "256"
       - --context-length
-      - "32768"
+      - "16384"
       - --chunked-prefill-size
+      - "4096"
+      - --max-prefill-tokens
       - "8192"
       - --max-total-tokens
-      - "32768"
-      - --enable-torch-compile
-      - --enable-metrics
-      - --cuda-graph-max-bs
-      - "256"
-      - --enable-mixed-chunk
-      - --schedule-policy
-      - dfs-weight
+      - "16384"
       - --prefill-max-requests
-      - "128"
-      - --radix-eviction-policy
-      - lru
-      - --enable-hierarchical-cache
-      - --hicache-ratio
-      - "4"
-      - --hicache-write-policy
-      - write_through
-      - --hicache-io-backend
-      - kernel
+      - "16"
+      - --enable-dynamic-chunking
+      - --enable-mixed-chunk
+      - --enable-single-batch-overlap
+      - --schedule-policy
+      - lpm
+      - --schedule-conservativeness
+      - "0.9"
+      - --page-size
+      - "64"
+      - --enable-torch-compile
+      - --torch-compile-max-bs
+      - "256"
+      - --cuda-graph-max-bs
+      - "512"
+      - --warmups
+      - "5"
+      - --enable-metrics
+      - --enable-metrics-for-all-schedulers
       - --reasoning-parser
       - deepseek-r1
+      - --radix-eviction-policy
+      - lru
+
   neo4j:
     image: docker.io/library/neo4j:latest
     container_name: neo4j
@@ -175,6 +203,26 @@ services:
       - "${OLLAMA_PORT}:${OLLAMA_PORT}"
     volumes:
       - ./.ollama:/root/.ollama
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
+    volumes:
+      - ./.mlflow:/mlflow
+      - ./.mlflow/mlflow_artifacts:/mlflow/artifacts
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+      --workers 4
+      --uvicorn-opts "--timeout-keep-alive 120 --limit-max-requests 1000"
+    restart: unless-stopped
 volumes:
   hf-cache:
     name: sglang-hf-cache
