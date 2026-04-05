@@ -3,6 +3,6 @@
 Provides retrieval adapters used by memory-based intervention conditions.
 """
 
-from .mem0ai import Mem0RM
+from .mem0_tools import Mem0Tools
 
-__all__ = ['Mem0RM']
+__all__ = ['Mem0Tools']
