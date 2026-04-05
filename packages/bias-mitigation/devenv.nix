@@ -3,19 +3,6 @@
   imports = [ ./modules/python.nix ];
 
   devcontainer.enable = true;
-  env = {
-    LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
-      pkgs.stdenv.cc.cc.lib
-      pkgs.glib
-      pkgs.glibc
-      pkgs.zlib
-      pkgs.libglvnd
-      pkgs.xorg.libX11
-      pkgs.openssl
-      pkgs.zeromq
-    ];
-  };
-
   packages = with pkgs; [
     gnumake
     cmake
@@ -37,7 +24,7 @@
   ];
 
   git-hooks.hooks = {
-    black.enable = false;
+    black.enable = true;
     ruff.enable = false;
     mypy.enable = false;
   };
