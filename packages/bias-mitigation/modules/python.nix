@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  pythonVersion = "python313";
+  pythonVersion = "python312";
   pythonVersionDot = lib.pipe pythonVersion [
     (lib.strings.removePrefix "python")
     (v: "${lib.strings.substring 0 1 v}.${lib.strings.substring 1 2 v}")
@@ -18,7 +18,8 @@ let
     JUPYTER_RUNTIME_DIR = "${config.env.DEVENV_ROOT}/.jupyter/runtime";
     CC = "${pkgs.stdenv.cc}/bin/cc";
     CXX = "${pkgs.stdenv.cc}/bin/c++";
-    LDFLAGS = "-L${pkgs.glibc}/lib";
+    # LDFLAGS = "-L${pkgs.glibc}/lib";
+    # LD_PRELOAD = "${pkgs.glibc}/lib/libc.so.6";
   };
 
   languages.python = {
@@ -29,7 +30,7 @@ let
     uv.sync.enable = true;
   };
 
-  processes.jupyter.exec = "uv run jupyter server --ip=0.0.0.0 --port=8888 --no-browser";
+  processes.jupyter.exec = "env -u LD_LIBRARY_PATH ${venvPath}/bin/python -m jupyter_server --ip=0.0.0.0 --port=8888 --no-browser";
 
   files."pyrightconfig.json".text = builtins.toJSON {
     venvPath = config.env.DEVENV_STATE;
