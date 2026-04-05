@@ -9,13 +9,15 @@ This module defines the deterministic lifecycle used in experiments:
 
 import dspy
 import mlflow
+from loguru import logger
 from mlflow.entities import SpanType
+from returns.result import Failure, Success
 from statemachine import State, StateChart
 
 from bias_mitigation.data.models.config import MASConfig
 from bias_mitigation.mas.protocols import ProtocolStrategy
 
-from .agent import Agent
+from .agent import Agent, AgentExecutionError
 
 
 class MASStateMachine(StateChart[Agent]):
@@ -47,6 +49,73 @@ class MASStateMachine(StateChart[Agent]):
     continue_interaction = interaction.to(interaction)
     finish = interaction.to(completed)
 
+    @staticmethod
+    def _prediction_reasoning(prediction: dspy.Prediction) -> str:
+        reasoning = getattr(prediction, 'reasoning', None)
+        if isinstance(reasoning, str) and reasoning.strip():
+            return reasoning
+        return 'No reasoning provided.'
+
+    @staticmethod
+    def _prediction_answer(prediction: dspy.Prediction) -> str:
+        answer = getattr(prediction, 'answer', None)
+        if isinstance(answer, str) and answer.strip():
+            return answer
+        return 'Unknown'
+
+    @staticmethod
+    def _raise_phase_failures(phase: str, failures: list[AgentExecutionError]) -> None:
+        if not failures:
+            return
+        summary = '; '.join(
+            f'{failure.agent_name} ({failure.phase}): {failure.reason}' for failure in failures
+        )
+        raise RuntimeError(f'MAS {phase} failed after retries: {summary}')
+
+    def _interaction_kwargs(
+        self,
+        agent: Agent,
+        agent_idx: int,
+        prev_answers: dict[str, dspy.Prediction],
+    ) -> dict[str, str | list[str]]:
+        return {
+            'question': self.question,
+            'context': self.context,
+            'options': self.options,
+            'system_prompt': self.protocol.get_system_prompt(self.groups[agent_idx]),
+            'peer_answers': '\n'.join(
+                f'{p_name}: {self._prediction_answer(prev_answers[p_name])} — '
+                f'{self._prediction_reasoning(prev_answers[p_name])}'
+                for p_name in self._history
+                if p_name != agent.name
+            ),
+            'update_instruction': self.protocol.get_update_instruction(),
+        }
+
+    @staticmethod
+    def _collect_prediction_result(
+        agent: Agent,
+        result: Success[dspy.Prediction] | Failure[AgentExecutionError],
+        phase: str,
+        predictions: list[dspy.Prediction],
+        failures: list[AgentExecutionError],
+    ) -> None:
+        match result:
+            case Success(prediction):
+                if not hasattr(prediction, 'answer') or not isinstance(prediction.answer, str):
+                    failures.append(
+                        AgentExecutionError(
+                            agent_name=agent.name,
+                            phase=phase,
+                            reason=f'Invalid prediction payload: {prediction}',
+                        )
+                    )
+                else:
+                    predictions.append(prediction)
+            case Failure(failure):
+                logger.error(f'Agent {agent.name} failed during {phase} after retries: {failure.reason}')
+                failures.append(failure)
+
     def __init__(
         self,
         agents: list[Agent],
@@ -56,8 +125,6 @@ class MASStateMachine(StateChart[Agent]):
         question: str,
         protocol: ProtocolStrategy,
         config: MASConfig,
-        genesis_executor: dspy.Parallel,
-        update_executor: dspy.Parallel,
     ):
         """Initialize machine inputs and trigger lifecycle execution.
 
@@ -69,8 +136,6 @@ class MASStateMachine(StateChart[Agent]):
             question: Prompt question for the sample.
             protocol: Protocol strategy defining prompts and update instructions.
             config: Runtime configuration including number of interaction rounds.
-            genesis_executor: Executor for genesis inference calls.
-            update_executor: Executor for interaction-round inference calls.
 
         Side Effects:
             Calling ``super().__init__()`` enters the initial state and starts the
@@ -84,8 +149,8 @@ class MASStateMachine(StateChart[Agent]):
         self.question = question
         self.protocol = protocol
         self.config = config
-        self.genesis_executor = genesis_executor
-        self.update_executor = update_executor
+        self.genesis_executor = None
+        self.update_executor = None
         self.current_round = 0
         self._genesis_pairs = [
             (
@@ -116,22 +181,19 @@ class MASStateMachine(StateChart[Agent]):
         """
         with mlflow.start_span(name='MAS_Genesis', span_type=SpanType.AGENT) as span:
             span.set_attribute('phase', 'genesis')
-            span.set_attribute('memory.reset_on_genesis', self.config.reset_memory_on_genesis)
+            genesis_results: list[dspy.Prediction] = []
+            failures: list[AgentExecutionError] = []
+            for agent, kwargs in self._genesis_pairs:
+                res = agent(**kwargs)
+                self._collect_prediction_result(
+                    agent=agent,
+                    result=res,
+                    phase='genesis',
+                    predictions=genesis_results,
+                    failures=failures,
+                )
 
-            if self.config.reset_memory_on_genesis:
-                memory_clear_attempts = 0
-                memory_clear_successes = 0
-                for agent in self.agents:
-                    if getattr(agent, 'memory_client', None):
-                        memory_clear_attempts += 1
-                        agent.memory_client.clear_user_memory(user_id=agent.user_id)
-                        memory_clear_successes += 1
-                span.set_attribute('memory.clear.attempts', memory_clear_attempts)
-                span.set_attribute('memory.clear.successes', memory_clear_successes)
-                mlflow.log_metric('memory.clear.attempts', float(memory_clear_attempts))
-                mlflow.log_metric('memory.clear.successes', float(memory_clear_successes))
-
-            genesis_results = self.genesis_executor(self._genesis_pairs)
+            self._raise_phase_failures('genesis', failures)
 
             for agent, pred in zip(self.agents, genesis_results, strict=False):
                 self._history[agent.name].append(pred)
@@ -168,25 +230,17 @@ class MASStateMachine(StateChart[Agent]):
             prev_answers = {name: preds[-1] for name, preds in self._history.items()}
 
             update_pairs = [
-                (
-                    agent,
-                    {
-                        'question': self.question,
-                        'context': self.context,
-                        'options': self.options,
-                        'system_prompt': self.protocol.get_system_prompt(self.groups[agent_idx]),
-                        'peer_answers': '\n'.join(
-                            f'{p_name}: {prev_answers[p_name].answer} — {prev_answers[p_name].reasoning}'
-                            for p_name in self._history
-                            if p_name != agent.name
-                        ),
-                        'update_instruction': self.protocol.get_update_instruction(),
-                    },
-                )
+                (agent, self._interaction_kwargs(agent, agent_idx, prev_answers))
                 for agent_idx, agent in enumerate(self.agents)
             ]
 
-            new_preds = self.update_executor(update_pairs)
+            new_preds: list[dspy.Prediction] = []
+            failures: list[AgentExecutionError] = []
+            for agent, kwargs in update_pairs:
+                res = agent(**kwargs)
+                self._collect_prediction_result(agent, res, 'interaction', new_preds, failures)
+
+            self._raise_phase_failures('interaction', failures)
 
             for agent, pred in zip(self.agents, new_preds, strict=False):
                 self._history[agent.name].append(pred)
