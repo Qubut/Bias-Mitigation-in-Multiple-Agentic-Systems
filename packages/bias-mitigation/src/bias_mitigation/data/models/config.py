@@ -104,6 +104,7 @@ class AgentModelConfig(BaseModel):
     api_base: str
     temperature: float = 0.0
     max_tokens: int = 2048
+    context_window_tokens: int = 16384
     agent_name: str
 
 

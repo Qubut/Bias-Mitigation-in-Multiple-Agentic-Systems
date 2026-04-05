@@ -82,7 +82,7 @@ class ProtocolFactory:
     """Factory that resolves configuration flags into protocol strategies."""
 
     @staticmethod
-    def get(protocol: str, malicious: bool) -> ProtocolStrategy:
+    def get(protocol: str, malicious: bool = False) -> ProtocolStrategy:
         """Return protocol strategy by name, overriding with malicious mode when set."""
         if malicious:
             return MaliciousProtocol()

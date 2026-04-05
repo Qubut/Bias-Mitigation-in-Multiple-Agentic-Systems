@@ -89,3 +89,11 @@ class Mem0Config(BaseModel):
 
         extra = 'allow'  # prevent unknown top-level keys
         validate_assignment = True
+
+    def to_mem0_dict(self) -> dict[str, Any]:
+        data = self.model_dump(exclude_none=True, mode='json')
+        if self.llm and self.llm.config.api_key:
+            data.setdefault('llm', {}).setdefault('config', {})['api_key'] = (
+                self.llm.config.api_key.get_secret_value()
+            )
+        return data

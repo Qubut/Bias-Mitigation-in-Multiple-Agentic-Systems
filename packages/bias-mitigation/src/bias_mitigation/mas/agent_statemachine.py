@@ -31,19 +31,24 @@ class AgentStateMachine(StateChart[None]):
         """Return the currently active state for this agent lifecycle."""
         return AgentState(self.configuration[0].id)
 
+    def current_phase(self) -> AgentState:
+        """Expose current phase as a typed enum."""
+        return self._active_state()
+
     def transition_for_step(self, *, has_peer_answers: bool) -> AgentState:
         """Advance state based on whether this step is genesis or interaction."""
         current_id = self._active_state()
-        if current_id == AgentState.COMPLETED:
-            raise RuntimeError('Cannot transition a completed agent state machine.')
-
-        if has_peer_answers:
-            if current_id == AgentState.GENESIS:
+        match (current_id, has_peer_answers):
+            case (AgentState.COMPLETED, _):
+                raise RuntimeError('Cannot transition a completed agent state machine.')
+            case (AgentState.GENESIS, True):
                 self.start_interaction()
-            else:
+            case (AgentState.INTERACTION, True):
                 self.continue_interaction()
-        elif current_id != AgentState.GENESIS:
-            raise RuntimeError('Genesis step cannot run after interaction has started.')
+            case (AgentState.GENESIS, False):
+                pass
+            case (_, False):
+                raise RuntimeError('Genesis step cannot run after interaction has started.')
 
         return self._active_state()
 
