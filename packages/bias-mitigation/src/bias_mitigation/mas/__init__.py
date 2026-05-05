@@ -1,8 +1,4 @@
-"""MAS orchestration package.
-
-Exports public runtime entry points for agent execution and orchestration.
-Internal lifecycle and protocol modules remain available under submodules.
-"""
+"""MAS orchestration package."""
 from .agent import Agent
 from .mas_program import MASProgram
 

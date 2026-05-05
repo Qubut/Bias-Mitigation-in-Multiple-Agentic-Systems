@@ -22,21 +22,7 @@ from .agent import Agent, AgentExecutionError
 
 
 class MASStateMachine(StateChart[Agent]):
-    """Declarative lifecycle engine for a single MAS evaluation run.
-
-    States:
-        - ``genesis``: generate turn-0 prediction per agent.
-        - ``interaction``: update predictions round-by-round from peer context.
-        - ``completed``: terminal state exposing final history.
-
-    Transitions:
-        - ``genesis -> interaction`` via ``to_interaction``.
-        - ``interaction -> interaction`` via ``continue_interaction``.
-        - ``interaction -> completed`` via ``finish``.
-
-    The output history is consumed downstream to compute propagation,
-    emergence, amplification, and robustness metrics.
-    """
+    """Declarative lifecycle: genesis → interaction × N → completed."""
 
     catch_errors_as_events = False  # enterprise fail-fast
 
@@ -142,21 +128,6 @@ class MASStateMachine(StateChart[Agent]):
         sample_id: str,
         run_id: str,
     ):
-        """Initialize machine inputs and trigger lifecycle execution.
-
-        Args:
-            agents: Ordered list of agent instances participating in the run.
-            options: Multiple-choice answer options for the current sample.
-            groups: Group labels aligned to agents for prompt conditioning.
-            context: Input context passage for the sample.
-            question: Prompt question for the sample.
-            protocol: Protocol strategy defining prompts and update instructions.
-            config: Runtime configuration including number of interaction rounds.
-
-        Side Effects:
-            Calling ``super().__init__()`` enters the initial state and starts the
-            genesis -> interaction lifecycle automatically.
-        """
         self.agents = agents
         self._history: dict[str, list[dspy.Prediction]] = {a.name: [] for a in agents}
         self.options = options
@@ -192,17 +163,6 @@ class MASStateMachine(StateChart[Agent]):
         super().__init__()  # triggers on_enter_genesis immediately → full lifecycle runs declaratively
 
     def on_enter_genesis(self, target, event):
-        """Run the genesis phase once and seed per-agent history.
-
-        Each agent receives question/context/options plus its group-conditioned
-        system prompt. The resulting first prediction defines turn-0 outputs used
-        as the baseline for subsequent interaction metrics.
-
-        Side Effects:
-            - Appends one prediction per agent to ``self._history``.
-            - Emits MLflow span metadata for the genesis phase.
-            - Triggers ``to_interaction`` transition.
-        """
         genesis_results: list[dspy.Prediction] = []
         failures: list[AgentExecutionError] = []
         for agent, kwargs in self._genesis_pairs:
@@ -223,18 +183,6 @@ class MASStateMachine(StateChart[Agent]):
         self.to_interaction()  # declarative chain to interaction phase
 
     def on_enter_interaction(self, target, event):
-        """Run one interaction round and append updated predictions.
-
-        For each round, each agent receives peer answers from the previous round
-        and an update instruction from the configured protocol strategy.
-        The state loops until ``current_round > config.rounds``, then transitions
-        to ``completed``.
-
-        Side Effects:
-            - Increments ``self.current_round``.
-            - Appends one updated prediction per agent for each executed round.
-            - Emits MLflow span metadata for round-level observability.
-        """
         self.current_round += 1
 
         if self.current_round > self.config.rounds:
@@ -265,10 +213,4 @@ class MASStateMachine(StateChart[Agent]):
         self.continue_interaction()  # library-managed recursive event queue
 
     def run(self) -> dict[str, list[dspy.Prediction]]:
-        """Return per-agent prediction history for the full run.
-
-        Returns:
-            Mapping from agent name to ordered predictions, where index ``0`` is
-            the genesis output and indices ``1..N`` are interaction-round outputs.
-        """
         return self._history
