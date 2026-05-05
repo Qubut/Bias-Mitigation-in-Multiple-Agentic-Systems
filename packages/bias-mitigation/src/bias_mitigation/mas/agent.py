@@ -46,15 +46,6 @@ class Agent(dspy.Module):
         llm_retry_backoff_min_seconds: float = 1.0,
         llm_retry_backoff_max_seconds: float = 4.0,
     ):
-        """Initialize one agent runtime instance.
-
-        Args:
-            name: Agent identifier used in history and tracing.
-            group: Social-group label used for prompt conditioning.
-            lm: DSPy language model instance.
-            memory_tools: Optional memory tooling adapter used in memory interventions.
-            run_id: Optional run-scoped identifier for session isolation.
-        """
         super().__init__()
         self.name = name
         self.group = group
@@ -276,12 +267,7 @@ class Agent(dspy.Module):
         update_instruction: str | None = None,
         logging_context: dict[str, Any] | None = None,
     ) -> Result[dspy.Prediction, AgentExecutionError]:
-        """Run one agent step for genesis or interaction phases.
-
-        If ``peer_answers`` is absent, the agent produces a genesis response.
-        Otherwise it performs an interaction update, optionally using recalled
-        memory when a memory client is configured.
-        """
+        """Genesis step when peer_answers is None, interaction update otherwise."""
         phase = self.lifecycle.transition_for_step(has_peer_answers=peer_answers is not None)
         context_payload = logging_context or {}
         sample_id = str(context_payload.get('sample_id', 'unknown'))
