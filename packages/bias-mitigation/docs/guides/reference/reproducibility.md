@@ -19,6 +19,25 @@ Use this checklist to keep intervention comparisons valid and repeatable.
 - [ ] Use matched model endpoints and inference settings across interventions.
 - [ ] Reset memory state between test cases in memory-based interventions.
 - [ ] Log all runs to MLflow with intervention labels and config parameters.
+- [ ] Enable local live stream persistence for long runs (`analysis_local_root`).
+- [ ] Set durability policy (`stream_flush_every_events`, `stream_fsync`) for interruption safety.
+
+## Live Analysis Artifacts
+
+- Deterministic evaluation writes live per-event files under:
+	- `analysis_local_root/<readable_run_dir>/stream_metric_rows.jsonl`
+	- `analysis_local_root/<readable_run_dir>/stream_failure_rows.jsonl`
+	- `analysis_local_root/<readable_run_dir>/stream_round_metrics.jsonl`
+	- `analysis_local_root/<readable_run_dir>/stream_summary.json`
+	- `analysis_local_root/<readable_run_dir>/run_manifest.json`
+- Root index map for quick lookup:
+	- `analysis_local_root/runs_index.jsonl`
+- Naming and traceability are configurable via:
+	- `analysis_live_dir_template`
+	- `analysis_live_slug_max_length`
+	- `analysis_live_write_manifest`
+	- `analysis_live_index_filename`
+- Final CSV/Parquet analysis tables remain logged to MLflow artifacts at `analysis_artifact_root`.
 
 ## Exclusions and Reporting
 
