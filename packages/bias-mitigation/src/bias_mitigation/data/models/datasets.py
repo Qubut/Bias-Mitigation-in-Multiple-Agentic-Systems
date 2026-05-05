@@ -1,4 +1,4 @@
-"""Main module for datasets functionality and operations."""
+"""In-memory Pydantic models for BBQ and StereoSet raw entries."""
 
 from pydantic import BaseModel
 
