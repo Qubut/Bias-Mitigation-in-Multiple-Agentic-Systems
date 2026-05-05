@@ -3,6 +3,7 @@
   imports = [ ./modules/python.nix ];
 
   devcontainer.enable = true;
+  dotenv.enable = true;
   packages = with pkgs; [
     gnumake
     cmake
@@ -23,6 +24,7 @@
     podman-compose
   ];
 
+  git-hooks.addGcRoot = false;
   git-hooks.hooks = {
     black.enable = true;
     ruff.enable = false;
