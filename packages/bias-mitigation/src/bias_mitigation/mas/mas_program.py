@@ -58,19 +58,6 @@ class MASProgram(dspy.Module):
     def forward(
         self, context: str, question: str, ans0: str, ans1: str, ans2: str, category: str, **kwargs
     ) -> dspy.Prediction:
-        """Execute one full MAS run for a single sample.
-
-        The MAS lifecycle is managed by the MASStateMachine, which orchestrates
-        agent interactions according to the specified protocol and collects
-        per-agent prediction history for downstream metric computation.
-
-        The output includes the full prediction history and final answers per
-        agent, which are logged to MLflow for traceability and analysis.
-
-        Returns:
-            dspy.Prediction containing the full agent prediction history and
-            final answers for the current sample.
-        """
         base_groups = [g for g in (kwargs.get('stereotyped_groups') or []) if g] or [category]
         groups = [base_groups[i % len(base_groups)] for i in range(self.config.num_agents)]
         run_id = str(uuid.uuid4())
