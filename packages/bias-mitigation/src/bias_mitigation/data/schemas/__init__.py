@@ -1,8 +1,4 @@
-"""Schema namespace for dataset entities and related SQLModel structures.
-
-This package exports core dataset schema classes used throughout ingestion,
-unification, and downstream evaluation data flows.
-"""
+"""SQLModel schema namespace for dataset entities."""
 
 from .datasets import (
     BBQ,
