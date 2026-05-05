@@ -83,7 +83,6 @@ class AppConfig(BaseSettings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
-        """Prioritize init over env variables for Settings parsing."""
         return (
             init_settings,
             env_settings,
@@ -94,7 +93,6 @@ class AppConfig(BaseSettings):
     @classmethod
     @safe(exceptions=(FileNotFoundError, yaml.YAMLError, ValueError))
     def from_yaml(cls, path: Path) -> 'AppConfig':
-        """Static Factory method mapping raw YAML safely to domain config schemas."""
         with path.open(encoding='utf-8') as f:
             raw = yaml.safe_load(f) or {}
         return cls(**raw)
@@ -270,14 +268,6 @@ class MASConfig(BaseSettings):
     @classmethod
     @safe(exceptions=(FileNotFoundError, yaml.YAMLError, ValueError))
     def load(cls, yaml_path: str = 'config.yaml') -> 'MASConfig':
-        """Deserialise a YAML file into a validated configuration.
-
-        Args:
-            yaml_path: Filesystem path to the configuration YAML.
-
-        Returns:
-            A fully validated configuration instance.
-        """
         cfg = OmegaConf.load(yaml_path)
         return cls.model_validate(OmegaConf.to_container(cfg, resolve=True))
 
@@ -289,27 +279,7 @@ class MASConfig(BaseSettings):
         *override_paths: str,
         cli_overrides: dict[str, Any] | None = None,
     ) -> 'MASConfig':
-        """Load and merge multiple YAML files with optional CLI overrides.
-
-        Files are merged in order: base_path, then each override_path,
-        then cli_overrides. Later values override earlier ones.
-
-        Args:
-            base_path: Path to the base configuration YAML.
-            *override_paths: Additional YAML files to merge (in order).
-            cli_overrides: Optional dict of CLI overrides (dot-notation keys).
-
-        Returns:
-            A fully validated, merged configuration instance.
-
-        Example::
-
-            config = MASConfig.load_merged(
-                'config/base.yaml',
-                'config/local.yaml',
-                cli_overrides={'intervention': 'mem0g', 'agent_models[0].temperature': 0.7},
-            )
-        """
+        """Merge base + override YAMLs + CLI dict in order; later keys win."""
         base = OmegaConf.load(base_path)
 
         for path in override_paths:

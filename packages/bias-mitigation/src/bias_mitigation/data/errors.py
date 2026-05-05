@@ -6,20 +6,13 @@ from typing import Any
 
 @dataclass(frozen=True)
 class AppError:
-    """Base error payload for data-domain failures.
-
-    Attributes:
-        message: Human-readable failure summary.
-        cause: Optional original exception raised by an underlying library.
-        context: Optional structured metadata for debugging/reporting.
-    """
+    """Base error payload for data-domain failures."""
 
     message: str
     cause: Exception | None = None
     context: dict[str, Any] | None = None
 
     def __str__(self) -> str:
-        """Return formatted error message."""
         msg = self.message
         if self.cause:
             msg += f' (caused by: {type(self.cause).__name__}: {self.cause})'
@@ -35,16 +28,11 @@ class ConfigError(AppError):
 
 @dataclass(frozen=True)
 class DownloadError(AppError):
-    """Raised when a dataset download request or transfer fails.
-
-    Attributes:
-        url: Optional download URL associated with the failure.
-    """
+    """Raised when a dataset download request or transfer fails."""
 
     url: str | None = None
 
     def __str__(self) -> str:
-        """Return formatted download error."""
         msg = super().__str__()
         if self.url:
             msg += f' (URL: {self.url})'
@@ -53,16 +41,11 @@ class DownloadError(AppError):
 
 @dataclass(frozen=True)
 class DirectoryError(AppError):
-    """Raised when a required directory cannot be created or accessed.
-
-    Attributes:
-        path: Optional filesystem path related to the failure.
-    """
+    """Raised when a required directory cannot be created or accessed."""
 
     path: str | None = None
 
     def __str__(self) -> str:
-        """Return formatted directory error."""
         msg = super().__str__()
         if self.path:
             msg += f' (Path: {self.path})'
@@ -71,20 +54,13 @@ class DirectoryError(AppError):
 
 @dataclass(frozen=True)
 class DownloadSummary:
-    """Aggregate summary for dataset download outcomes.
-
-    Attributes:
-        message: Human-readable summary header.
-        bbq_count: Number of BBQ category files downloaded.
-        stereoset_count: Number of StereoSet files downloaded.
-    """
+    """Aggregate summary for dataset download outcomes."""
 
     message: str
     bbq_count: int = 0
     stereoset_count: int = 0
 
     def __str__(self) -> str:
-        """Return summary as string."""
         parts = [self.message]
         if self.bbq_count > 0:
             parts.append(f'BBQ categories: {self.bbq_count}')
@@ -95,16 +71,11 @@ class DownloadSummary:
 
 @dataclass(frozen=True)
 class ParsingError(AppError):
-    """Raised when raw dataset content cannot be parsed into models.
-
-    Attributes:
-        file_path: Optional path to the file that failed to parse.
-    """
+    """Raised when raw dataset content cannot be parsed into models."""
 
     file_path: str | None = None
 
     def __str__(self) -> str:
-        """Return formatted parsing error."""
         msg = super().__str__()
         if self.file_path:
             msg += f' (File: {self.file_path})'
