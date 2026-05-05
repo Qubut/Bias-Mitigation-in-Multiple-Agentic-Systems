@@ -1,7 +1,12 @@
 """Data split strategies for reproducible train/dev generation."""
 import random
 from abc import ABC, abstractmethod
+from collections import defaultdict
+from collections.abc import Sequence
 from itertools import chain, groupby
+from math import floor
+
+from dspy import Example
 
 from bias_mitigation.data.schemas.datasets import (
     DatasetExample,
@@ -46,6 +51,9 @@ class StratifiedCategorySplitter(AbstractSplitStrategy):
                 ans1=entry.ans1,
                 ans2=entry.ans2,
                 label=entry.label,
+                sample_id=f'{entry.source}:{entry.example_id}',
+                entry_id=entry.id,
+                source=entry.source,
             )
         )
 
@@ -81,3 +89,97 @@ class StratifiedCategorySplitter(AbstractSplitStrategy):
         devset = self.rng.sample(devset, len(devset))
 
         return trainset, devset
+
+
+def _to_example_dict(example: Example) -> dict[str, object]:
+    return example.toDict() if hasattr(example, 'toDict') else dict(example.__dict__)
+
+
+def _normalize_stratum_value(raw_value: object) -> str:
+    match raw_value:
+        case str() as text if text.strip():
+            return text.strip()
+        case None:
+            return 'unknown'
+        case _:
+            return str(raw_value)
+
+
+def _stratum_key(example: Example) -> tuple[str, str]:
+    payload = _to_example_dict(example)
+    return (
+        _normalize_stratum_value(payload.get('category')),
+        _normalize_stratum_value(payload.get('question_polarity')),
+    )
+
+
+def _group_examples(examples: Sequence[Example]) -> list[tuple[tuple[str, str], list[Example]]]:
+    grouped_examples: dict[tuple[str, str], list[Example]] = defaultdict(list)
+    for example in examples:
+        grouped_examples[_stratum_key(example)].append(example)
+    return [(key, grouped_examples[key]) for key in sorted(grouped_examples)]
+
+
+def _allocate_stratified_counts(
+    group_sizes: dict[tuple[str, str], int], subset_size: int, total_examples: int
+) -> dict[tuple[str, str], int]:
+    target_share = {
+        key: (subset_size * size) / total_examples for key, size in group_sizes.items()
+    }
+    allocations = {
+        key: min(size, floor(target_share[key])) for key, size in group_sizes.items()
+    }
+    remaining = subset_size - sum(allocations.values())
+    ranked_keys = sorted(
+        group_sizes,
+        key=lambda key: (
+            target_share[key] - allocations[key],
+            group_sizes[key],
+            key,
+        ),
+        reverse=True,
+    )
+
+    for key in ranked_keys:
+        if remaining <= 0:
+            break
+        if allocations[key] < group_sizes[key]:
+            allocations[key] += 1
+            remaining -= 1
+
+    return allocations
+
+
+def select_stratified_subset(
+    examples: Sequence[Example],
+    subset_size: int,
+    seed: int = 42,
+) -> list[Example]:
+    """Select a deterministic stratified subset across key evaluation dimensions.
+
+    Strata are defined as ``(category, question_polarity)`` with a stable
+    ``'unknown'`` fallback for missing values.
+    """
+    total_examples = len(examples)
+    match (total_examples, subset_size):
+        case (0, _):
+            return []
+        case (_, n) if n <= 0 or n >= total_examples:
+            return list(examples)
+        case _:
+            pass
+
+    rng = random.Random(seed)
+    ordered_groups = _group_examples(examples)
+    group_sizes = {key: len(group) for key, group in ordered_groups}
+    allocations = _allocate_stratified_counts(group_sizes, subset_size, total_examples)
+
+    subset = list(
+        chain.from_iterable(
+            rng.sample(group, allocations[key])
+            for key, group in ordered_groups
+            if allocations[key] > 0
+        )
+    )
+
+    return rng.sample(subset, len(subset))

@@ -101,6 +101,9 @@ class DatasetExample(SQLModel):
     ans1: str
     ans2: str
     label: int
+    sample_id: str | None = None
+    entry_id: int | None = None
+    source: str | None = None
 
 
 class SplitRecord(SQLModel):
