@@ -1,5 +1,1 @@
-"""Data domain package.
-
-Contains dataset parsing, normalization, persistence schemas, repository access,
-and split/tracking utilities used to build reproducible experiment inputs.
-"""
+"""Data domain: loading, schemas, repository, and split utilities."""
