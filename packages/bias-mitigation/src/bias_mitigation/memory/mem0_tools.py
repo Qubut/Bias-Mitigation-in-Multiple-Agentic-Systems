@@ -47,12 +47,7 @@ class _MemoryBackpressureError(RuntimeError):
 
 
 class Mem0Tools:
-    """Adapter/repository abstraction around Mem0 operations.
-
-    Architecture:
-    - Pure helpers: argument building + payload normalization + projection.
-    - Effectful gateways: provider `add/search/get_all/delete` calls only.
-    """
+    """Adapter/repository abstraction around Mem0 operations."""
 
     _CANCEL_ENV_VAR = 'BIAS_MITIGATION_CANCEL_REQUESTED'
     _EMBEDDER_PATCH_VERSION = 2
