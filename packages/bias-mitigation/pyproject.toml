@@ -68,6 +68,10 @@ docs = [
 test = [
     "pytest>=8.3.5",
 ]
+[tool.uv]
+# scikit-learn <1.4.0 predates Python 3.12 wheels; force a version that ships them.
+constraint-dependencies = ["scikit-learn>=1.4.0"]
+
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
