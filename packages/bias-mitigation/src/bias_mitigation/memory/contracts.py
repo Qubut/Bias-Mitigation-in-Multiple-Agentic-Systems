@@ -33,6 +33,7 @@ class MemoryProviderProtocol(Protocol):
         content: str | list[dict[str, Any]],
         user_id: str | None = None,
         metadata: Mapping[str, Any] | None = None,
+        **kwargs: Any,
     ) -> Any: ...
 
     def search(self, query: str, **kwargs: Any) -> dict[str, Any] | list[dict[str, Any]]: ...
