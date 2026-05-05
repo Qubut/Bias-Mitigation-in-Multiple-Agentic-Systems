@@ -4,43 +4,123 @@ rounds: 4
 protocol: cooperative
 malicious: false
 sample_size: 100
+evaluator_max_errors: 50
+evaluator_disable_progress_bar: false
+evaluator_deterministic_execution_mode: sliding_window
+evaluator_window_size: null
+evaluator_task_timeout_seconds: 180.0
+evaluator_concurrency:
+  max_evaluation_threads: 12
+  max_llm_inflight_per_endpoint: 12
+  llm_timeout_seconds: 20.0
+  llm_retry_attempts: 3
+  llm_retry_backoff_min_seconds: 0.5
+  llm_retry_backoff_max_seconds: 2.0
+  enable_monitoring: false
+memory_orchestration:
+  worker_threads: 12
+  max_pending_store_tasks: 128
+  recall_timeout_ms: 6000
+  store_timeout_ms: 2500
+  store_async: true
+  failure_trip_threshold: 8
+  recovery_success_threshold: 6
+analysis_artifact_root: evaluation/analysis/v1
+analysis_local_root: evaluation/analysis/live
+stream_flush_every_events: 1
+stream_fsync: false
+stream_live_csv: true
+stream_max_buffered_events: 2048
+stream_drop_events_on_backpressure: false
+analysis_live_dir_template: "{started_at}_{run_name}_{intervention}_{run_id_short}"
+analysis_live_slug_max_length: 48
+analysis_live_write_manifest: true
+analysis_live_index_filename: runs_index.jsonl
 reset_memory_on_genesis: false
-intervention: baseline
+intervention: mem0g
 memory_config:
+  enable_dimension_fallback: true
+  embedder_force_dimensionless_requests: true
+  recall_top_k: 3
+  max_query_chars: 2048
+  max_memory_content_chars: 4096
+  max_passage_chars: 1200
+  max_recalled_chars: 4000
+  enable_resilient_search_fallback: true
+  search_fallback_limit: 1
+  search_fallback_retry_attempts: 1
+  search_fallback_consecutive_fail_trip_threshold: 4
+  search_fallback_cooldown_ms: 20000
+  search_fallback_warning_every: 25
+  memory_add_infer: false
+  memory_pressure_mode: normal
+  memory_operation_semaphore_limit: 8
+  memory_slot_timeout_ms: 2500
+  pressure_timeout_trip_threshold: 12
+  pressure_cooldown_ms: 12000
+  drop_store_on_backpressure: true
+  degrade_search_on_backpressure: true
+  pressure_warning_every: 25
+  store_retry_attempts: 3
+  search_retry_attempts: 3
+  retry_backoff_min_ms: 50
+  retry_backoff_max_ms: 1500
+  retry_jitter_ms: 120
+  transient_error_markers:
+    - cannot commit - no transaction is active
+    - database is locked
+    - transaction
+    - busy
+    - timeout
+    - timed out
+    - deadline exceeded
+    - connection reset
+    - connection refused
+    - temporarily unavailable
+    - service unavailable
+    - too many requests
+    - "429"
+    - "502"
+    - "503"
+    - "504"
+  render_recalled_memory_style: bullet
+  recall_max_items: 5
+  parse_legacy_json_memory_payloads: true
+  include_question_in_memory_text: true
   llm:
     provider: openai
     config:
-      model: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+      model: "meta-llama/Llama-3.1-8B-Instruct"
       temperature: 0.0
       max_tokens: 8192
       top_p: 0.95
       openai_base_url: http://localhost:30002/v1
       api_key: local
   embedder:
-    provider: ollama
+    provider: openai
     config:
-      model: mxbai-embed-large:latest
-      ollama_base_url: http://localhost:11434
+      model: mixedbread-ai/mxbai-embed-large-v1
+      openai_base_url: http://localhost:30003/v1
+      api_key: local
   vector_store:
-    provider: qdrant
+    provider: chroma
     config:
-      path: ./.qdrant_memories
-      collection_name: bias_mitigation_v1
-      embedding_model_dims: 1024
-  graph_store:
-   provider: neo4j
-   config:
-     url: bolt://localhost:7687
-     username: ${oc.env:NEO4J_USERNAME,neo4j}
-     password: ${oc.env:NEO4J_PASSWORD}
+      path: ./.chroma_memories
+      collection_name: bias_mitigation_v2
+  # graph_store:
+    # provider: neo4j
+    # config:
+    #   url: bolt://localhost:7687
+    #   username: ${oc.env:NEO4J_USERNAME,neo4j}
+    #   password: ${oc.env:NEO4J_PASSWORD,password}
 
 agent_models:
-  - name: "openai/google/gemma-3-12b-it"
+  - name: "openai/meta-llama/Llama-3.1-8B-Instruct"
     api_key: ${oc.env:OPENAI_API_KEY,local}
     api_base: http://localhost:30001/v1
     temperature: 0.0
     max_tokens: 8192
-    agent_name: "Agent_Gemma-3-12b-it"
+    agent_name: "Agent_Llama-3.1-8B-Instruct"
 
   - name: "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
     api_key: ${oc.env:OPENAI_API_KEY,local}
