@@ -7,8 +7,9 @@ This module defines the deterministic lifecycle used in experiments:
 3. Completion: per-agent prediction history is returned for downstream metrics.
 """
 
+import re
+
 import dspy
-import mlflow
 from loguru import logger
 from mlflow.entities import SpanType
 from returns.result import Failure, Success
@@ -64,6 +65,13 @@ class MASStateMachine(StateChart[Agent]):
         return 'Unknown'
 
     @staticmethod
+    def _sanitize_path_token(token: str) -> str:
+        return re.sub(r'[^A-Za-z0-9_.-]+', '_', token).strip('_') or 'unknown'
+
+    def _artifact_root(self) -> str:
+        return f'agent_logs/{self.run_id}/{self._sanitize_path_token(self.sample_id)}'
+
+    @staticmethod
     def _raise_phase_failures(phase: str, failures: list[AgentExecutionError]) -> None:
         if not failures:
             return
@@ -77,7 +85,7 @@ class MASStateMachine(StateChart[Agent]):
         agent: Agent,
         agent_idx: int,
         prev_answers: dict[str, dspy.Prediction],
-    ) -> dict[str, str | list[str]]:
+    ) -> dict[str, str | list[str] | dict[str, str | int]]:
         return {
             'question': self.question,
             'context': self.context,
@@ -90,6 +98,12 @@ class MASStateMachine(StateChart[Agent]):
                 if p_name != agent.name
             ),
             'update_instruction': self.protocol.get_update_instruction(),
+            'logging_context': {
+                'artifact_root': self._artifact_root(),
+                'sample_id': self.sample_id,
+                'round_index': self.current_round,
+                'phase': 'interaction',
+            },
         }
 
     @staticmethod
@@ -125,6 +139,8 @@ class MASStateMachine(StateChart[Agent]):
         question: str,
         protocol: ProtocolStrategy,
         config: MASConfig,
+        sample_id: str,
+        run_id: str,
     ):
         """Initialize machine inputs and trigger lifecycle execution.
 
@@ -149,6 +165,8 @@ class MASStateMachine(StateChart[Agent]):
         self.question = question
         self.protocol = protocol
         self.config = config
+        self.sample_id = sample_id
+        self.run_id = run_id
         self.genesis_executor = None
         self.update_executor = None
         self.current_round = 0
@@ -160,6 +178,12 @@ class MASStateMachine(StateChart[Agent]):
                     'context': self.context,
                     'options': self.options,
                     'system_prompt': self.protocol.get_system_prompt(self.groups[i]),
+                    'logging_context': {
+                        'artifact_root': self._artifact_root(),
+                        'sample_id': self.sample_id,
+                        'round_index': 0,
+                        'phase': 'genesis',
+                    },
                 },
             )
             for i, agent in enumerate(self.agents)
@@ -179,24 +203,22 @@ class MASStateMachine(StateChart[Agent]):
             - Emits MLflow span metadata for the genesis phase.
             - Triggers ``to_interaction`` transition.
         """
-        with mlflow.start_span(name='MAS_Genesis', span_type=SpanType.AGENT) as span:
-            span.set_attribute('phase', 'genesis')
-            genesis_results: list[dspy.Prediction] = []
-            failures: list[AgentExecutionError] = []
-            for agent, kwargs in self._genesis_pairs:
-                res = agent(**kwargs)
-                self._collect_prediction_result(
-                    agent=agent,
-                    result=res,
-                    phase='genesis',
-                    predictions=genesis_results,
-                    failures=failures,
-                )
+        genesis_results: list[dspy.Prediction] = []
+        failures: list[AgentExecutionError] = []
+        for agent, kwargs in self._genesis_pairs:
+            res = agent(**kwargs)
+            self._collect_prediction_result(
+                agent=agent,
+                result=res,
+                phase='genesis',
+                predictions=genesis_results,
+                failures=failures,
+            )
 
-            self._raise_phase_failures('genesis', failures)
+        self._raise_phase_failures('genesis', failures)
 
-            for agent, pred in zip(self.agents, genesis_results, strict=False):
-                self._history[agent.name].append(pred)
+        for agent, pred in zip(self.agents, genesis_results, strict=False):
+            self._history[agent.name].append(pred)
 
         self.to_interaction()  # declarative chain to interaction phase
 
@@ -222,28 +244,23 @@ class MASStateMachine(StateChart[Agent]):
             self.finish()
             return
 
-        with mlflow.start_span(
-            name=f'MAS_Round_{self.current_round}', span_type=SpanType.AGENT
-        ) as span:
-            span.set_attribute('round', self.current_round)
+        prev_answers = {name: preds[-1] for name, preds in self._history.items()}
 
-            prev_answers = {name: preds[-1] for name, preds in self._history.items()}
+        update_pairs = [
+            (agent, self._interaction_kwargs(agent, agent_idx, prev_answers))
+            for agent_idx, agent in enumerate(self.agents)
+        ]
 
-            update_pairs = [
-                (agent, self._interaction_kwargs(agent, agent_idx, prev_answers))
-                for agent_idx, agent in enumerate(self.agents)
-            ]
+        new_preds: list[dspy.Prediction] = []
+        failures: list[AgentExecutionError] = []
+        for agent, kwargs in update_pairs:
+            res = agent(**kwargs)
+            self._collect_prediction_result(agent, res, 'interaction', new_preds, failures)
 
-            new_preds: list[dspy.Prediction] = []
-            failures: list[AgentExecutionError] = []
-            for agent, kwargs in update_pairs:
-                res = agent(**kwargs)
-                self._collect_prediction_result(agent, res, 'interaction', new_preds, failures)
+        self._raise_phase_failures('interaction', failures)
 
-            self._raise_phase_failures('interaction', failures)
-
-            for agent, pred in zip(self.agents, new_preds, strict=False):
-                self._history[agent.name].append(pred)
+        for agent, pred in zip(self.agents, new_preds, strict=False):
+            self._history[agent.name].append(pred)
 
         self.continue_interaction()  # library-managed recursive event queue
 
