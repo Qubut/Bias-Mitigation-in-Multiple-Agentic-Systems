@@ -15,7 +15,7 @@ dependencies = [
     "langchain>=1.0.3",
     "langchain-text-splitters>=1.0.0",
     "loguru>=0.7.3",
-    "mem0ai>=1.0.0",
+    "mem0ai[nlp]>=2.0.2",
     "motor>=3.7.1",
     "neo4j>=6.0.2",
     "omegaconf>=2.3.0",
@@ -34,18 +34,28 @@ dependencies = [
     "types-pyopenssl>=24.1.0.20240722",
     "types-requests>=2.32.0.20250515",
     "types-PyYAML>=6.0.12",
-    "panda>=0.3.1",
-    # "mlflow>=3.10.1",
     "python-statemachine>=3.0.0",
     "ollama>=0.6.1",
     "langchain-neo4j>=0.9.0",
-    # "giskard",
     "dependency-injector>=4.49.0",
     "tenacity>=9.1.2",
     "aiostream>=0.7.1",
     "joblib>=1.5.3",
     "matplotlib>=3.10.9",
-    "pandas>=3.0.2",
+    "mlflow>=3.12.0",
+    "giskard>=2.5.0",
+    "pandas>=2.3.3",
+    "statsmodels>=0.14.6",
+    "pingouin>=0.6.1",
+    "seaborn>=0.13.2",
+    "gepa>=0.0.27",
+    "quantecon>=0.7.2",
+    "arviz>=0.23.4",
+    "fairlearn>=0.13.0",
+    "scipy>=1.15.3",
+    "purgatory>=3.0.1",
+    "python-slugify>=8.0.4",
+    "asyncstdlib>=3.14.0",
 ]
 [dependency-groups]
 dev = [
@@ -75,7 +85,8 @@ test = [
 ]
 [tool.uv]
 # scikit-learn <1.4.0 predates Python 3.12 wheels; force a version that ships them.
-constraint-dependencies = ["scikit-learn>=1.4.0"]
+# opentelemetry-proto <1.27.0 ships protos compiled with old protoc; incompatible with protobuf 4.x C ext.
+constraint-dependencies = ["scikit-learn>=1.4.0", "opentelemetry-proto>=1.27.0"]
 
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
@@ -83,11 +94,13 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 evaluate = "scripts.evaluate:main"
+train = "scripts.train:main"
 analyze= "scripts.analyze:main"
 download-datasets = "scripts.download_datasets:cli"
 ingest-datasets = "scripts.ingest_datasets:run"
 split-datasets = "scripts.split_datasets:run"
 unify-datasets = "scripts.unify_datasets:run"
+generate-statecharts = "scripts.generate_statecharts:main"
 
 [tool.black]
 line-length = 100
