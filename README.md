@@ -1,197 +1,114 @@
-# Bias Mitigation in Multi-Agent Systems (MAS)
+# Bias Mitigation in Multi-Agent Systems
 
-## Overview
+A 2×2 factorial study of bias propagation between cooperating LLM agents
+(Llama 3.1-8B Instruct, DeepSeek-R1 distilled into the same 8B backbone)
+and of two interventions for reducing it: Mem0-backed vector memory
+recalled and stored between turns, and GEPA reflective prompt
+optimisation. Items are drawn from BBQ and StereoSet.
 
-**Bias-Mitigation-in-Multiple-Agentic-Systems** is a research-oriented project focused on identifying, analyzing, and mitigating biases within multi-agent systems. This repository provides a complete development environment with tooling for reproducibility, testing, and deployment of bias mitigation strategies in agentic AI systems.
+The paper, results, and reproducible notebooks live under
+`packages/bias-mitigation/notebooks/`. The Sphinx documentation lives under
+`packages/bias-mitigation/docs/`.
 
-## 🚀 Quick Start
+## The four arms
 
-### Prerequisites
+| Arm | Memory | Prompt |
+|---|---|---|
+| `baseline` | off | factory |
+| `baseline_opt` | off | GEPA |
+| `mem0g` | on | factory |
+| `mem0g_gepa` | on | GEPA |
 
-- [Devenv](https://devenv.sh/getting-started/)
-- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/docs/installation)
-
-### Installation
-
-1. **Clone and enter the project:**
-
-```bash
-git clone https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems/
-cd bias-mitigation-in-mas
-```
-
-2. **Start the development environment:**
-
-```bash
-cd ./packages/bias-mitigation
-devenv shell
-# or if you also already installed direnv
-direnv allow
-```
-
-3. **Start required services:**
+## Quick start
 
 ```bash
-docker-compose up  # Starts Ollama, MongoDB, and Neo4j
-# or
-podman-compose up
-```
+git clone https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems
+cd Bias-Mitigation-in-Multiple-Agentic-Systems/packages/bias-mitigation
 
-### Project Structure
-
-```sh
-bias-mitigation-in-mas/
-├── packages/bias-mitigation/   # Main Python package
-│   ├── src/                    # Source code
-│   ├── test/                   # Test files
-│   ├── devenv.nix             # Nix environment configuration
-│   ├── pyproject.toml         # Python dependencies and tooling
-│   └── docker-compose.yml     # Service containers
-├── devenv/                     # Global devenv configuration
-├── README.md                   # This file
-└── modules/python.nix         # Python-specific Nix module
-```
-
-## 🛠️ Development Environment
-
-This project uses a reproducible development environment with:
-
-### Core Tools
-
-- **Python 3.12** with UV for package management
-- **Ruff & Black** for code formatting and linting
-- **Mypy** for static type checking
-- **Pytest** for testing with asyncio support
-
-### Services (via Docker Compose)
-
-- **Ollama** (port `11434`): Local LLM inference with GPU support
-- **MongoDB** (port `27017`): Document database with Beanie ODM
-- **Neo4j** (port `7687/7474`): Graph database for knowledge representation
-
-### Development Commands
-
-```bash
-# Enter development shell
+# Devenv shell (or `direnv allow` if you have direnv).
 devenv shell
 
-# Run tests
-pytest
+# Bring up the local SGLang + embedding services.
+docker-compose up -d
 
-# Format code
-black .
-ruff check --fix
+# Install Python deps.
+uv sync
 
-# Type checking
-mypy src/
+# Train one arm.
+uv run train --config-path configs/mas_config.yaml --intervention baseline
 
-# Start Jupyter notebook
-devenv up jupyter
+# Evaluate on a 1500-item subset.
+uv run evaluate --config-path configs/mas_config.yaml --subset 1500
+
+# Analyse the per-sample streaming rows.
+uv run analyze \
+    --live-root evaluation/analysis/live \
+    --output-root evaluation/analysis/scientific_notebook_outputs \
+    --group-by intervention,protocol,dataset_name,model_name \
+    --bootstrap-samples 2000
 ```
 
-## 📦 Dependencies
+Swap `--intervention` for `baseline_opt`, `mem0g`, or `mem0g_gepa` to
+run the other arms.
 
-Key Python dependencies include:
+## What is measured per sample
 
-- **Agent Frameworks**: LangChain, DSPy for agent orchestration
-- **Data Processing**: Polars, Sentence Transformers for embeddings
-- **Databases**: Beanie (MongoDB ODM), Neo4j driver
-- **Memory Management**: Mem0 for agent memory
-- **Configuration**: OmegaConf, DotMap
-- **Async Utilities**: aiofiles, asyncio, returns
+| Outcome | Source | Direction |
+|---|---|---|
+| System robustness | `mas/metrics.py::system_robustness` | ↑ better |
+| Emergence rate (first-biased turn) | `mas/metrics.py::emergence_rate` | later better, `-1` = never |
+| Propagation rate `PR_t` (primary) | `mas/metrics.py::propagation_rate` | ↓ better |
+| Amplification rate | `mas/metrics.py::amplification_rate` | ↓ better |
 
-## 🔧 Configuration
+Per-category breakdowns (gender, race, religion, profession, ...) are
+reported alongside the pooled contrasts because both datasets group items
+that way.
 
-### Environment Variables
+## Repo layout
 
-Create a `.env` file in the project root:
-
-```env
-# MongoDB
-MONGO_ROOT_USER=admin
-MONGO_ROOT_PASSWORD=secure_password
-MONGO_PORT=27017
-
-# Neo4j
-NEO4J_PASSWORD=neo4j_password
-NEO4J_BOLT_PORT=7687
-NEO4J_BROWSER_PORT=7474
-
-# Ollama
-OLLAMA_PORT=11434
+```
+packages/bias-mitigation/
+├── src/
+│   ├── bias_mitigation/
+│   │   ├── mas/          # MASProgram, agents, state machines, evaluator, metrics, GEPA
+│   │   ├── memory/       # mem0.AsyncMemory wrapper, MemoryOrchestrator, contracts
+│   │   ├── analysis/     # polars + statsmodels + lifelines analysis pipeline
+│   │   ├── data/         # BBQ + StereoSet loaders, splitters, MASConfig
+│   │   ├── workflows/    # WorkflowMachine (prepare → build → execute → persist)
+│   │   └── containers.py # dependency-injector wiring
+│   └── scripts/          # train, evaluate, analyze, dataset CLIs, generate-statecharts
+├── configs/              # mas_config.yaml
+├── docs/                 # Sphinx + myst-nb site
+├── notebooks/            # Quarto config + the three analysis notebooks
+├── evaluation/           # checkpoints + per-arm live-stream rows
+└── datasets/splits/      # trainset.json, devset.json (seed=42, ratio=0.5)
 ```
 
-### Editor Integration
+## Stack
 
-**VS Code/Pyright**: Uses `pyrightconfig.json` for type checking and path configuration.
+`python-statemachine` (lifecycle), `mem0.AsyncMemory` (memory backend),
+`tenacity` + `purgatory` (retry + breakers), `dependency-injector`
+(DI wiring), DSPy + GEPA (prompt optimisation), `mlflow` (tracking),
+`polars` + `scipy.stats.bootstrap` + `statsmodels` + `lifelines` (analysis),
+`fairlearn.MetricFrame` (stratified fairness disparities).
 
-**Jupyter**: Configuration is stored in `.jupyter/` with notebook server on port `8888`.
+## Documentation
 
-## 🧪 Testing
-
-The project includes a comprehensive testing setup:
+Build the Sphinx site locally:
 
 ```bash
-# Run all tests
-pytest
-
-# Run specific test module
-pytest test/test_bias_mitigation/
-
-# Run with coverage
-pytest --cov=src
+LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build
+open docs/_build/html/index.html
 ```
 
-## 📚 Documentation
+Pages of interest:
 
-Documentation follows Google-style docstrings and can be generated using:
+- `docs/get_started/quickstart` — full four-arm sequence.
+- `docs/guides/reference/architecture` — how one sample runs, with the
+  auto-generated state-machine diagrams.
+- `docs/guides/reference/metrics` — scorer definitions and the GEPA composite.
+- `docs/notebooks/` — the three rendered analysis notebooks.
 
-```bash
-# Check documentation quality
-ruff check --select D
+## License
 
-# Generate API documentation (requires pdoc or similar)
-uv run pdoc src/bias_mitigation -o docs/
-```
-
-## 🔄 Git Hooks
-
-Pre-commit hooks are configured for:
-
-- Code formatting (Black)
-- Linting (Ruff)
-- Type checking (Mypy)
-- Shell script validation (ShellCheck)
-
-## 🧠 Research Focus
-
-This project investigates bias in multi-agent systems through:
-
-1. **Bias Detection**: Identifying biases in agent decision-making
-2. **Mitigation Strategies**: Implementing fairness-aware algorithms
-3. **Evaluation Framework**: Metrics and benchmarks for bias measurement
-4. **Reproducible Experiments**: Containerized environments for consistent results
-
-## 🤝 Contributing
-
-1. Ensure you have the development environment set up
-2. Create a feature branch from `main`
-3. Make changes with appropriate tests
-4. Run `black`, `ruff`, and `mypy` before committing
-5. Submit a pull request with a clear description
-
-## 📄 License
-
-This project is to be used in accordance with the [MIT LICENSE](./LICENSE)
-
-## 🆘 Support
-
-For issues with:
-
-- **Development environment**: Check Devenv documentation
-- **Service containers**: Check Docker logs and healthchecks
-- **Testing**: Review pytest configuration in `pyproject.toml`
-
----
-
-*This project is maintained as part of ongoing research in AI fairness and multi-agent systems.*
+MIT. See [LICENSE](./LICENSE).
