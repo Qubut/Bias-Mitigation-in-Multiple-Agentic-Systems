@@ -55,7 +55,7 @@ class InterventionType(StrEnum):
             optimization — the control condition.
         baseline_opt: Baseline MAS whose prompts have been pre-optimized
             with GEPA; isolates the effect of prompt search from memory.
-        MEM0G: Baseline MAS augmented with Mem0 graph-memory recall and
+        MEM0G: Baseline MAS augmented with Mem0 vector-memory recall and
             store between rounds; isolates the effect of memory.
         MEM0G_GEPA: Full treatment combining Mem0 memory and GEPA-optimized
             prompts.

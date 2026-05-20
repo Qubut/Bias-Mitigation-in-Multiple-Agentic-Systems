@@ -1,8 +1,9 @@
 # Bias Mitigation in Multi-Agent Systems
 
 **A 2×2 factorial study** of bias propagation between cooperating LLM
-agents, and of two interventions for reducing it — Mem0-backed graph
-memory between turns, and GEPA reflective prompt optimisation.
+agents, and of two interventions for reducing it: Mem0-backed vector
+memory recalled and stored between turns, and GEPA reflective prompt
+optimisation.
 
 :::{dropdown} {octicon}`telescope;1em` Study at a glance
 :animate: fade-in-slide-down
