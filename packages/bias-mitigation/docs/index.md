@@ -198,6 +198,15 @@ Install, train each arm, evaluate, analyse — the whole loop on one
 page.
 :::
 
+:::{grid-item-card} {octicon}`graph;1em` Analysis notebooks
+:link: notebooks/index
+:link-type: doc
+:shadow: md
+
+The three reproducible analysis notebooks behind the paper:
+paired main effects, survival, sensitivity.
+:::
+
 :::{grid-item-card} {octicon}`codescan;1em` Architecture
 :link: guides/reference/architecture
 :link-type: doc
@@ -270,6 +279,7 @@ Module-level reference generated from the source. Start at
 :hidden:
 
 get_started/quickstart
+notebooks/index
 guides/reference/index
 guides/how_to/index
 guides/developer/index

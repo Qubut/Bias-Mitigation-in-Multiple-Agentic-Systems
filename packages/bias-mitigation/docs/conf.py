@@ -19,7 +19,7 @@ version = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 extensions = [
-    'myst_parser',
+    'myst_nb',         # extends myst_parser and renders .ipynb sources
     'sphinx_design',
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
@@ -45,6 +45,10 @@ myst_enable_extensions = [
 ]
 myst_fence_as_directive = ['mermaid']
 myst_heading_anchors = 3
+
+# myst-nb: use the outputs already saved inside the .ipynb files; do not
+# re-execute on every Sphinx build (notebooks need GPU + 3,200 evaluation rows).
+nb_execution_mode = 'off'
 
 # Autodoc configuration
 autodoc_default_options = {
