@@ -1,5 +1,5 @@
 x-common-sglang: &common-sglang
-  image: lmsysorg/sglang:latest
+  image: docker.io/lmsysorg/sglang:latest
   ipc: host
   cap_add:
     - IPC_LOCK
@@ -33,103 +33,6 @@ x-common-sglang: &common-sglang
   #   - "nvidia.com/gpu=all"
 
 services:
-#   sglang-deepseek:
-#     <<: *common-sglang
-#     image: lmsysorg/sglang:latest
-#     # image: vllm/vllm-openai:latest   ←  vLLM backend
-
-#     container_name: sglang-server
-
-#     # Required for GPU access
-#     deploy:
-#       resources:
-#         reservations:
-#           devices:
-#             - driver: nvidia
-#               count: 2               #  2,3,4,... for multi-GPU
-#               capabilities: [gpu]
-#     ports:
-#       - "30000:30000"
-
-# # === CRITICAL FIX FOR NCCL "unhandled system error" ===
-#     ipc: host                  # Shares host /dev/shm (unlimited) – required for NCCL intra-node comm with TP>1
-#     shm_size: '64g'            # Generous buffer (vLLM/SGLang recommend 32–64g for 70B+ TP=2)
-#     cap_add:
-#       - IPC_LOCK               # Allows NCCL/CUDA to lock pinned memory
-#     ulimits:
-#       memlock:
-#         soft: -1
-#         hard: -1
-#       stack:
-#         soft: 67108864
-#         hard: 67108864
-#   # === End of NCCL fix ===
-#     volumes:
-#       - hf-cache:/root/.cache/huggingface
-#       - ./logs/llama:/app/logs
-#     # volumes:
-#     #   # Cache downloaded models + vLLM cache outside container
-#     #   - ./docker-entrypoint.sh:/app/docker-entrypoint.sh:ro
-#     #   - ./models:/root/.cache/huggingface
-#     #   - ./models:/root/.cache/modelscope
-#     #   - ./logs:/app/logs
-#     entrypoint: ["/app/docker-entrypoint.sh"]
-#     environment:
-#       - MODEL_PATH=RedHatAI/DeepSeek-R1-Distill-Llama-70B-quantized.w4a16
-#       # - MODEL_PATH=cognitivecomputations/DeepSeek-R1-Distill-Llama-70B-4bit
-#       # - MODEL_PATH=unsloth/DeepSeek-R1-Distill-Llama-70B-GGUF
-
-#       # Quantization & memory tuning (very important for 45–48 GB cards)
-#       - QUANTIZATION=compressed-tensors   # or fp8, none, gptq, ...
-#       - KV_CACHE_DTYPE=fp8_e4m3           # saves ~50% KV memory
-#       - MEM_FRACTION_STATIC=0.80          # 0.88–0.92 range usually safe
-#       - CHUNKED_PREFILL_SIZE=512          # helps with very long prompts
-
-#       # Performance & backend
-#       - TP_SIZE=2                         # tensor parallelism
-#       - ATTENTION_BACKEND=flashinfer      # fastest on NVIDIA (needs installed)
-#       - DISABLE_CUDA_GRAPH=false          # usually faster after warmup
-#       - TRUST_REMOTE_CODE=true
-#       # Server behavior
-#       - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN}
-#       # Optional – increase if you get connection refused / timeouts
-#       - MAX_RUNNING_REQUESTS=128
-#       - MAX_TOTAL_TOKENS=81920
-#     command: >
-#       python3 -m sglang.launch_server
-#         --model-path meta-llama/Llama-3.1-8B-Instruct
-#         --host 0.0.0.0
-#         --port 30000
-#         --tp 2
-#         # --data-parallel-size 2
-#         --mem-fraction-static 0.88
-#         --kv-cache-dtype fp8_e4m3
-#         --attention-backend flashinfer
-#         --prefill-attention-backend flashinfer
-#         --decode-attention-backend flashinfer
-#         --disable-hybrid-swa-memory
-#         --trust-remote-code
-#         --log-level info
-#         --max-running-requests 256
-#         --max-queued-requests 512
-#         --context-length 32768
-#         --chunked-prefill-size 4096
-#         --max-prefill-tokens 8192
-#         --max-total-tokens 32768
-#         --prefill-max-requests 32
-#         --enable-dynamic-chunking
-#         --enable-mixed-chunk
-#         --enable-single-batch-overlap
-#         --schedule-policy lpm
-#         --schedule-conservativeness 0.9
-#         --page-size 64
-#         --enable-torch-compile
-#         --torch-compile-max-bs 64
-#         --cuda-graph-max-bs 128
-#         --warmups 5
-#         --enable-metrics
-#         --enable-metrics-for-all-schedulers
-#         --radix-eviction-policy lru
 
   sglang-llama:
     <<: *common-sglang
@@ -138,9 +41,8 @@ services:
     shm_size: '4gb'
     devices:
       - nvidia.com/gpu=0
-      - nvidia.com/gpu=1
     environment:
-      - NVIDIA_VISIBLE_DEVICES=0,1
+      - NVIDIA_VISIBLE_DEVICES=0
     ports:
       - "30001:30000"
     volumes:
@@ -151,8 +53,8 @@ services:
         --model-path meta-llama/Llama-3.1-8B-Instruct
         --host 0.0.0.0
         --port 30000
-        --tensor-parallel-size 2
-        --mem-fraction-static 0.82
+        --tensor-parallel-size 1
+        --mem-fraction-static 0.9
         --kv-cache-dtype fp8_e4m3
         --attention-backend flashinfer
         --prefill-attention-backend flashinfer
@@ -160,22 +62,19 @@ services:
         --disable-hybrid-swa-memory
         --trust-remote-code
         --log-level info
-        --max-running-requests 256
+        --max-running-requests 64
         --max-queued-requests 512
-        --context-length 32768
-        --chunked-prefill-size 4096
-        --max-prefill-tokens 8192
-        --max-total-tokens 32768
+        --context-length 16384
+        --chunked-prefill-size 8192
+        --max-prefill-tokens 16384
+        --max-total-tokens 65536
         --prefill-max-requests 32
         --enable-dynamic-chunking
         --enable-mixed-chunk
         --enable-single-batch-overlap
         --schedule-policy lpm
-        --schedule-conservativeness 0.9
-        --page-size 64
-        --enable-torch-compile
-        --torch-compile-max-bs 64
-        --cuda-graph-max-bs 128
+        --schedule-conservativeness 0.7
+        --cuda-graph-max-bs 64
         --warmups 5
         --enable-metrics
         --enable-metrics-for-all-schedulers
@@ -187,10 +86,9 @@ services:
     profiles: ["deepseek"]
     shm_size: '4gb'
     devices:
-      - nvidia.com/gpu=2
-      - nvidia.com/gpu=3
+      - nvidia.com/gpu=1
     environment:
-      - NVIDIA_VISIBLE_DEVICES=,2,3
+      - NVIDIA_VISIBLE_DEVICES=1
     ports:
       - "30002:30000"
     volumes:
@@ -201,30 +99,28 @@ services:
       --model-path deepseek-ai/DeepSeek-R1-Distill-Llama-8B
       --host 0.0.0.0
       --port 30000
-      --tensor-parallel-size 2
-      --mem-fraction-static 0.82
+      --tensor-parallel-size 1
+      --mem-fraction-static 0.9
       --kv-cache-dtype fp8_e4m3
       --attention-backend flashinfer
       --prefill-attention-backend flashinfer
       --decode-attention-backend flashinfer
+      --disable-hybrid-swa-memory
       --trust-remote-code
       --log-level info
-      --max-running-requests 256
+      --max-running-requests 64
       --max-queued-requests 512
       --context-length 16384
-      --chunked-prefill-size 4096
-      --max-prefill-tokens 8192
-      --max-total-tokens 16384
+      --chunked-prefill-size 8192
+      --max-prefill-tokens 16384
+      --max-total-tokens 65536
       --prefill-max-requests 32
       --enable-dynamic-chunking
       --enable-mixed-chunk
       --enable-single-batch-overlap
       --schedule-policy lpm
-      --schedule-conservativeness 0.9
-      --page-size 64
-      --enable-torch-compile
-      --torch-compile-max-bs 256
-      --cuda-graph-max-bs 512
+      --schedule-conservativeness 0.7
+      --cuda-graph-max-bs 64
       --warmups 5
       --enable-metrics
       --enable-metrics-for-all-schedulers
@@ -378,34 +274,46 @@ services:
       timeout: 5s
       retries: 5
 
-  sglang-embedding:
-    <<: *common-sglang
-    container_name: sglang-embedding
+  embedding:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.6
+    container_name: embedding
     profiles: ["embedding"]
-    shm_size: '2gb'
-    devices:
-      - nvidia.com/gpu=1
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - NVIDIA_VISIBLE_DEVICES=1
       - HF_TOKEN=${HF_TOKEN}
       - HF_HUB_ENABLE_HF_TRANSFER=1
+      - HUGGINGFACE_HUB_CACHE=/data
     ports:
-      - "30003:30000"
+      - "30003:80"
     volumes:
-      - hf-cache:/root/.cache/huggingface
+      - hf-cache:/data
       - ./logs/embedding:/app/logs
-    command: >
-      python3 -m sglang.launch_server
-      --model-path mixedbread-ai/mxbai-embed-large-v1
-      --host 0.0.0.0
-      --port 30000
-      --is-embedding
-      --tensor-parallel-size 1
-      --mem-fraction-static 0.12
-      --dtype float16
-      --trust-remote-code
-      --log-level info
-      --radix-eviction-policy lru
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 300s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    command:
+      - --model-id
+      - mixedbread-ai/mxbai-embed-large-v1
+      - --hostname
+      - 0.0.0.0
+      - --port
+      - "80"
+      - --max-concurrent-requests
+      - "256"
+      - --max-batch-tokens
+      - "4096"
+      - --max-client-batch-size
+      - "32"
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest
@@ -423,7 +331,8 @@ services:
       --host 0.0.0.0
       --port 5000
       --backend-store-uri sqlite:///mlflow/mlflow.db
-      --default-artifact-root /mlflow/artifacts
+      --artifacts-destination /mlflow/artifacts
+      --serve-artifacts
       --workers 4
       --uvicorn-opts "--timeout-keep-alive 120 --limit-max-requests 1000"
     restart: unless-stopped
