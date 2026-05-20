@@ -257,3 +257,5 @@ __pycache__/
 # memory
 .qdrant_memories/
 mlartifacts
+.mlflow
+.chroma_memories/
