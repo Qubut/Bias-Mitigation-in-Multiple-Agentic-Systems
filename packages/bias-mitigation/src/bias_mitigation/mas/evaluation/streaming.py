@@ -6,16 +6,16 @@ import asyncio
 import csv
 import json
 import os
-import re
 from collections.abc import Coroutine, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from queue import Full, Queue
 from threading import Lock
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol, cast
 
 from aiostream import stream
+from slugify import slugify
 
 
 @dataclass(frozen=True, slots=True)
@@ -142,40 +142,32 @@ class LocalStreamConfig:
         return self.run_dir / 'stream_summary.json'
 
 
-@dataclass(frozen=True, slots=True)
-class _MetricRow:
-    """Normalized row envelope for successful stream events."""
+_RowKind = Literal['metric', 'failure', 'round', 'summary']
 
+
+@dataclass(frozen=True, slots=True)
+class _NormalizedRow:
+    """Normalized row envelope tagged by event kind."""
+
+    kind: _RowKind
     row: dict[str, Any]
 
 
-@dataclass(frozen=True, slots=True)
-class _FailureRow:
-    """Normalized row envelope for failure stream events."""
-
-    row: dict[str, Any]
-
-
-@dataclass(frozen=True, slots=True)
-class _RoundMetricRow:
-    """Normalized row envelope for round-level metric stream events."""
-
-    row: dict[str, Any]
-
-
-@dataclass(frozen=True, slots=True)
-class _SummaryRow:
-    """Normalized row envelope for completion summary."""
-
-    row: dict[str, int]
+_SLUG_KEEP_PATTERN = r'[^-a-z0-9_.]+'
 
 
 def _slugify_token(value: Any, max_length: int) -> str:
-    raw = str(value or '').strip().lower()
-    normalized = re.sub(r'[^a-z0-9_.-]+', '-', raw).strip('-_.')
-    if not normalized:
-        return 'na'
-    return normalized[:max_length]
+    """Slug a single token used inside the live-run directory template."""
+    return (
+        slugify(
+            str(value),
+            max_length=max_length,
+            lowercase=True,
+            separator='-',
+            regex_pattern=_SLUG_KEEP_PATTERN,
+        )
+        or 'na'
+    )
 
 
 def build_live_run_dir_name(
@@ -184,18 +176,15 @@ def build_live_run_dir_name(
     tokens: dict[str, Any],
     token_max_length: int,
 ) -> str:
-    """Build deterministic, readable live directory name from runtime tokens."""
-    slugged_tokens = {
-        key: _slugify_token(value, token_max_length)
-        for key, value in tokens.items()
-    }
+    """Build readable live directory name from runtime tokens."""
+    slugged_tokens = {key: _slugify_token(value, token_max_length) for key, value in tokens.items()}
     try:
         rendered = template.format(**slugged_tokens)
     except KeyError:
         rendered = '{started_at}_{run_name}_{intervention}_{run_id_short}'.format(**slugged_tokens)
-
-    normalized_rendered = re.sub(r'[^a-z0-9_.-]+', '-', rendered.lower()).strip('-_.')
-    return normalized_rendered or slugged_tokens.get('run_id_short', slugged_tokens['run_id'])
+    return slugify(
+        rendered, lowercase=True, separator='-', regex_pattern=_SLUG_KEEP_PATTERN,
+    ) or slugged_tokens.get('run_id_short', slugged_tokens['run_id'])
 
 
 def initialize_local_stream_layout(config: LocalStreamConfig) -> None:
@@ -218,11 +207,12 @@ def initialize_local_stream_layout(config: LocalStreamConfig) -> None:
         index_file.write(json.dumps(manifest_payload, ensure_ascii=False) + '\n')
 
 
-def _normalize_event_row(
-    event: EvalStreamEvent,
-    emitted_at: str,
-) -> _MetricRow | _FailureRow | _RoundMetricRow | _SummaryRow:
-    """Normalize stream events into typed row payloads using pattern matching."""
+def _normalize_event_row(event: EvalStreamEvent, emitted_at: str) -> _NormalizedRow:
+    """Normalize stream events into a tagged row payload via pattern matching.
+
+    Each kind has a distinct row schema baked here so sinks can dispatch
+    on ``kind`` alone and never need to know the originating event type.
+    """
     match event:
         case SampleMetricsStreamEvent(
             sample_id=sample_id,
@@ -232,7 +222,8 @@ def _normalize_event_row(
             turn_count=turn_count,
             sample_run_id=sample_run_id,
         ):
-            return _MetricRow(
+            return _NormalizedRow(
+                kind='metric',
                 row={
                     'sample_id': sample_id,
                     'example_index': example_index,
@@ -241,7 +232,7 @@ def _normalize_event_row(
                     'emitted_at_utc': emitted_at,
                     **metadata,
                     **metrics,
-                }
+                },
             )
         case SampleFailureStreamEvent(
             sample_id=sample_id,
@@ -249,14 +240,15 @@ def _normalize_event_row(
             metadata=metadata,
             error=error,
         ):
-            return _FailureRow(
+            return _NormalizedRow(
+                kind='failure',
                 row={
                     'sample_id': sample_id,
                     'example_index': example_index,
                     'error': error,
                     'emitted_at_utc': emitted_at,
                     **metadata,
-                }
+                },
             )
         case SampleRoundMetricsStreamEvent(
             sample_id=sample_id,
@@ -273,7 +265,8 @@ def _normalize_event_row(
             biased_models=biased_models,
             agent_bias_flags=agent_bias_flags,
         ):
-            return _RoundMetricRow(
+            return _NormalizedRow(
+                kind='round',
                 row={
                     'sample_id': sample_id,
                     'example_index': example_index,
@@ -289,17 +282,18 @@ def _normalize_event_row(
                     'agent_bias_flags': agent_bias_flags,
                     'emitted_at_utc': emitted_at,
                     **metadata,
-                }
+                },
             )
         case EvaluationCompletedStreamEvent(
             processed_count=processed_count,
             failure_count=failure_count,
         ):
-            return _SummaryRow(
+            return _NormalizedRow(
+                kind='summary',
                 row={
                     'processed_count': processed_count,
                     'failure_count': failure_count,
-                }
+                },
             )
 
 
@@ -310,21 +304,23 @@ class InMemoryMetricEventSink:
     metric_rows: list[dict[str, Any]] = field(default_factory=list)
     failure_rows: list[dict[str, Any]] = field(default_factory=list)
     round_metric_rows: list[dict[str, Any]] = field(default_factory=list)
-    summary: dict[str, int] = field(default_factory=lambda: {'processed_count': 0, 'failure_count': 0})
+    summary: dict[str, int] = field(
+        default_factory=lambda: {'processed_count': 0, 'failure_count': 0}
+    )
 
     async def handle(self, event: EvalStreamEvent) -> None:
         """Consume one event and store normalized sink rows."""
         emitted_at = datetime.now(tz=UTC).isoformat()
         normalized = _normalize_event_row(event, emitted_at)
         match normalized:
-            case _MetricRow(row=row):
+            case _NormalizedRow(kind='metric', row=row):
                 self.metric_rows.append(row)
-            case _FailureRow(row=row):
+            case _NormalizedRow(kind='failure', row=row):
                 self.failure_rows.append(row)
-            case _RoundMetricRow(row=row):
+            case _NormalizedRow(kind='round', row=row):
                 self.round_metric_rows.append(row)
-            case _SummaryRow(row=row):
-                self.summary = row
+            case _NormalizedRow(kind='summary', row=row):
+                self.summary = cast(dict[str, int], row)
 
     async def flush(self) -> None:
         """No-op for in-memory sink."""
@@ -367,16 +363,16 @@ class JsonlFileMetricEventSink:
 
         with self._lock:
             match normalized:
-                case _MetricRow(row=row):
+                case _NormalizedRow(kind='metric', row=row):
                     self._write_line(self._metric_file, row)
                     self._events_since_flush += 1
-                case _FailureRow(row=row):
+                case _NormalizedRow(kind='failure', row=row):
                     self._write_line(self._failure_file, row)
                     self._events_since_flush += 1
-                case _RoundMetricRow(row=row):
+                case _NormalizedRow(kind='round', row=row):
                     self._write_line(self._round_metric_file, row)
                     self._events_since_flush += 1
-                case _SummaryRow(row=row):
+                case _NormalizedRow(kind='summary', row=row):
                     self.config.summary_path.write_text(
                         json.dumps(row, ensure_ascii=False, indent=2),
                         encoding='utf-8',
@@ -398,12 +394,9 @@ class CsvFileMetricEventSink:
     _metric_file: Any = field(init=False, default=None)
     _failure_file: Any = field(init=False, default=None)
     _round_metric_file: Any = field(init=False, default=None)
-    _metric_writer: Any = field(init=False, default=None)
-    _failure_writer: Any = field(init=False, default=None)
-    _round_metric_writer: Any = field(init=False, default=None)
-    _metric_header: list[str] | None = field(init=False, default=None)
-    _failure_header: list[str] | None = field(init=False, default=None)
-    _round_metric_header: list[str] | None = field(init=False, default=None)
+    _metric_writer: csv.DictWriter[str] | None = field(init=False, default=None)
+    _failure_writer: csv.DictWriter[str] | None = field(init=False, default=None)
+    _round_metric_writer: csv.DictWriter[str] | None = field(init=False, default=None)
     _events_since_flush: int = field(init=False, default=0)
     _lock: Lock = field(init=False, default_factory=Lock)
 
@@ -411,24 +404,26 @@ class CsvFileMetricEventSink:
         self.config.run_dir.mkdir(parents=True, exist_ok=True)
         self._metric_file = self.config.metric_csv_path.open('a', newline='', encoding='utf-8')
         self._failure_file = self.config.failure_csv_path.open('a', newline='', encoding='utf-8')
-        self._round_metric_file = self.config.round_metric_csv_path.open('a', newline='', encoding='utf-8')
-        self._metric_writer = csv.writer(self._metric_file)
-        self._failure_writer = csv.writer(self._failure_file)
-        self._round_metric_writer = csv.writer(self._round_metric_file)
+        self._round_metric_file = self.config.round_metric_csv_path.open(
+            'a', newline='', encoding='utf-8'
+        )
 
     @staticmethod
-    def _write_row(
-        writer: Any,
-        header: list[str] | None,
+    def _write(
+        writer: csv.DictWriter[str] | None,
         file_handle: Any,
         row: dict[str, Any],
-    ) -> tuple[Any, list[str]]:
-        current_header = header
-        if current_header is None:
-            current_header = list(row.keys())
-            writer.writerow(current_header)
-        writer.writerow([row.get(column) for column in current_header])
-        return writer, current_header
+    ) -> csv.DictWriter[str]:
+        """Lazily create the writer on first row and append ``row``."""
+        if writer is None:
+            writer = csv.DictWriter(
+                file_handle,
+                fieldnames=list(row.keys()),
+                extrasaction='ignore',
+            )
+            writer.writeheader()
+        writer.writerow(row)
+        return writer
 
     def _flush_locked(self) -> None:
         self._metric_file.flush()
@@ -446,31 +441,22 @@ class CsvFileMetricEventSink:
 
         with self._lock:
             match normalized:
-                case _MetricRow(row=row):
-                    self._metric_writer, self._metric_header = self._write_row(
-                        self._metric_writer,
-                        self._metric_header,
-                        self._metric_file,
-                        row,
+                case _NormalizedRow(kind='metric', row=row):
+                    self._metric_writer = self._write(self._metric_writer, self._metric_file, row)
+                    self._events_since_flush += 1
+                case _NormalizedRow(kind='failure', row=row):
+                    self._failure_writer = self._write(
+                        self._failure_writer, self._failure_file, row
                     )
                     self._events_since_flush += 1
-                case _FailureRow(row=row):
-                    self._failure_writer, self._failure_header = self._write_row(
-                        self._failure_writer,
-                        self._failure_header,
-                        self._failure_file,
-                        row,
-                    )
-                    self._events_since_flush += 1
-                case _RoundMetricRow(row=row):
-                    self._round_metric_writer, self._round_metric_header = self._write_row(
+                case _NormalizedRow(kind='round', row=row):
+                    self._round_metric_writer = self._write(
                         self._round_metric_writer,
-                        self._round_metric_header,
                         self._round_metric_file,
                         row,
                     )
                     self._events_since_flush += 1
-                case _SummaryRow():
+                case _NormalizedRow(kind='summary'):
                     pass
 
             if self._events_since_flush >= max(1, self.config.flush_every_events):
