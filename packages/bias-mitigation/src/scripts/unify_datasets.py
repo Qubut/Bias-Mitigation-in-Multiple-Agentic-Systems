@@ -1,4 +1,5 @@
 """CLI entrypoint for unifying BBQ and StereoSet into one schema."""
+
 # bias_mitigation/data/unify_datasets.py
 import asyncio
 import hashlib
@@ -18,11 +19,7 @@ from sqlalchemy.orm import selectinload
 from sqlmodel import SQLModel, delete, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from bias_mitigation.data.schemas.datasets import (
-    BBQ,
-    StereoSet,
-    UnifiedBiasEntry,
-)
+from bias_mitigation.data.schemas.datasets import BBQ, StereoSet, UnifiedBiasEntry
 
 BIAS_TO_CATEGORY_MAP = {
     'gender': 'Gender_identity',
@@ -34,6 +31,7 @@ BIAS_TO_CATEGORY_MAP = {
 
 class UnificationConfig(BaseSettings):
     """Runtime settings controlling sampling sizes and balancing behavior."""
+
     model_config = SettingsConfigDict(extra='forbid', env_prefix='UNIFY_')
 
     random_seed: int = 42
@@ -55,6 +53,7 @@ class TransformerStrategy[T: SQLModel](ABC):
 
 class BBQTransformer(TransformerStrategy[BBQ]):
     """Transformer that keeps only ambiguous BBQ samples."""
+
     def transform(self, item: BBQ) -> UnifiedBiasEntry | None:
         """Map one ambiguous BBQ row into the unified representation."""
         if not BBQTransformer._is_ambiguous(item):
@@ -86,6 +85,7 @@ class BBQTransformer(TransformerStrategy[BBQ]):
 
 class StereoSetTransformer(TransformerStrategy[StereoSet]):
     """Transformer that converts StereoSet records to multiple-choice form."""
+
     def transform(self, item: StereoSet) -> UnifiedBiasEntry | None:
         """Map one StereoSet sample into the unified schema with shuffled options."""
         category = BIAS_TO_CATEGORY_MAP.get(item.bias_type.lower())
@@ -128,7 +128,7 @@ class StereoSetTransformer(TransformerStrategy[StereoSet]):
                 'target': item.target,
                 'original_id': item.id,
                 'stereotype_index': choices.index(stereotype),
-                'anti_stereotype_index': choices.index(anti)
+                'anti_stereotype_index': choices.index(anti),
             },
         )
 
@@ -177,7 +177,9 @@ class CategoryBalancer:
             remaining_pool = [i for i in items if i not in balanced]
             balanced.extend(random.sample(remaining_pool, min(remainder, len(remaining_pool))))
 
-        logger.info(f'Balanced {len(groups)} categories → {len(balanced)} items (target {target_total})')
+        logger.info(
+            f'Balanced {len(groups)} categories → {len(balanced)} items (target {target_total})'
+        )
         return balanced
 
 
