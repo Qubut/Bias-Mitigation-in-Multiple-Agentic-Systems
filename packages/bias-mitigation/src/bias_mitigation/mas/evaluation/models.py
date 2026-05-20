@@ -324,12 +324,10 @@ class _EvaluatorOutput(BaseModel):
 
     model_config = ConfigDict(extra='forbid', arbitrary_types_allowed=True)
 
-    backend: str
     system_robustness: float
-    genai_evaluation: Any
     detailed_results: list[dict[str, Any]] | None
     config: Any
-    genai_metrics: dict[str, Any]
+    overall_metrics: dict[str, float]
     stratified_metrics: list[dict[str, Any]]
     uncertainty: dict[str, float]
     failure_count: int
