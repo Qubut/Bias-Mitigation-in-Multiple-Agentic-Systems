@@ -1,0 +1,23 @@
+project:
+  type: default
+  output-dir: _quarto_out
+
+execute:
+  freeze: auto
+  enabled: false
+
+format:
+  html:
+    toc: true
+    code-fold: true
+    embed-resources: true
+  pdf:
+    documentclass: scrartcl
+    keep-tex: true
+    pdf-engine: xelatex
+    fig-pos: H
+
+render:
+  - "01_paired_main_effects.ipynb"
+  - "02_emergence_survival.ipynb"
+  - "03_sensitivity_and_confounders.ipynb"
