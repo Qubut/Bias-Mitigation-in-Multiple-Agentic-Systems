@@ -1,4 +1,5 @@
 """Data split strategies for reproducible train/dev generation."""
+
 import random
 from abc import ABC, abstractmethod
 from collections import defaultdict
@@ -54,7 +55,7 @@ class StratifiedCategorySplitter(AbstractSplitStrategy):
                 sample_id=f'{entry.source}:{entry.example_id}',
                 entry_id=entry.id,
                 source=entry.source,
-            )
+            ),
         )
 
     def split(self, data: list[UnifiedBiasEntry]) -> tuple[list[SplitRecord], list[SplitRecord]]:
@@ -70,7 +71,9 @@ class StratifiedCategorySplitter(AbstractSplitStrategy):
         sorted_data = sorted(data, key=get_group_key)
         groups = [list(group) for _, group in groupby(sorted_data, key=get_group_key)]
 
-        def split_group(group: list[UnifiedBiasEntry]) -> tuple[list[SplitRecord], list[SplitRecord]]:
+        def split_group(
+            group: list[UnifiedBiasEntry],
+        ) -> tuple[list[SplitRecord], list[SplitRecord]]:
             """Split one group into train/dev subsets using deterministic shuffling."""
             shuffled = self.rng.sample(group, len(group))
             split_idx = int(len(shuffled) * self.train_ratio)
@@ -123,12 +126,8 @@ def _group_examples(examples: Sequence[Example]) -> list[tuple[tuple[str, str], 
 def _allocate_stratified_counts(
     group_sizes: dict[tuple[str, str], int], subset_size: int, total_examples: int
 ) -> dict[tuple[str, str], int]:
-    target_share = {
-        key: (subset_size * size) / total_examples for key, size in group_sizes.items()
-    }
-    allocations = {
-        key: min(size, floor(target_share[key])) for key, size in group_sizes.items()
-    }
+    target_share = {key: (subset_size * size) / total_examples for key, size in group_sizes.items()}
+    allocations = {key: min(size, floor(target_share[key])) for key, size in group_sizes.items()}
     remaining = subset_size - sum(allocations.values())
     ranked_keys = sorted(
         group_sizes,

@@ -245,10 +245,6 @@ class Mem0Config(BaseModel):
         ge=1,
         description='Maximum recalled memory snippets rendered into the prompt.',
     )
-    parse_legacy_json_memory_payloads: bool = Field(
-        default=True,
-        description='If true, parse legacy JSON memory payloads before rendering prompt text.',
-    )
     include_question_in_memory_text: bool = Field(
         default=True,
         description='If true, include the question text in stored memory content.',
