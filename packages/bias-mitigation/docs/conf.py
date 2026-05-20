@@ -26,12 +26,13 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.mathjax',   # renders the ``dollarmath`` MyST extension
     'sphinx_autodoc_typehints',
     'sphinx_copybutton',
     'sphinxcontrib.mermaid',
 ]
 
-# MyST configuration — full extension set like Anomalib
+# MyST configuration
 myst_enable_extensions = [
     'colon_fence',
     'linkify',
@@ -39,6 +40,8 @@ myst_enable_extensions = [
     'tasklist',
     'deflist',
     'fieldlist',
+    'dollarmath',    # ``$PR_t$`` inline math, ``$$...$$`` displays
+    'amsmath',       # LaTeX ``align`` / ``equation`` environments
 ]
 myst_fence_as_directive = ['mermaid']
 myst_heading_anchors = 3
@@ -55,6 +58,15 @@ napoleon_use_param = True
 suppress_warnings = [
     'sphinx_autodoc_typehints.forward_reference',
     'sphinx_autodoc_typehints.guarded_import',
+    # ``python-statemachine``'s own docstrings cross-reference labels
+    # (``:ref:state``, ``:ref:transitionlist`` …) defined in its docs site,
+    # not ours.  Autodoc surfaces them as unresolved refs; silence the noise.
+    'ref.ref',
+    # ``automodule`` re-emits names imported from ``data.models.config``
+    # when ``memory.orchestration.service`` references them.  Duplicates
+    # are cosmetic; the canonical rendering lives in ``api/data.md``.
+    'autodoc',
+    'autodoc.duplicate_object',
 ]
 
 # Enable section anchors for cross-referencing
