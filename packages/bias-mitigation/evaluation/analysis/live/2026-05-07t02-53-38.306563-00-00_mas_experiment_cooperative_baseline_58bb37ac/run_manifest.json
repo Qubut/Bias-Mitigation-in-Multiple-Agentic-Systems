@@ -1,0 +1,18 @@
+{
+  "run_id": "58bb37ac37504d4eb6f3f682c5bc9ec2",
+  "run_dir_name": "2026-05-07t02-53-38.306563-00-00_mas_experiment_cooperative_baseline_58bb37ac",
+  "run_dir_path": "evaluation/analysis/live/2026-05-07t02-53-38.306563-00-00_mas_experiment_cooperative_baseline_58bb37ac",
+  "run_name": "MAS_Experiment_Cooperative",
+  "experiment_id": "135",
+  "experiment_name": "DSPy_20260507_025338",
+  "backend": "deterministic",
+  "intervention": "baseline",
+  "protocol": "cooperative",
+  "agent_model_map": {
+    "Agent_Llama-3.1-8B-Instruct": "openai/meta-llama/Llama-3.1-8B-Instruct",
+    "Agent_DeepSeek-R1-Distill-Llama-8B": "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+  },
+  "subset": 3200,
+  "subset_seed": 42,
+  "started_at_utc": "2026-05-07T02:53:38.306563+00:00"
+}
