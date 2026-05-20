@@ -1,58 +1,82 @@
-# Reproducibility Checklist
+# {octicon}`sync;1em` Reproducibility
 
-Use this checklist to keep intervention comparisons valid and repeatable.
+A checklist for keeping intervention comparisons valid across runs.
 
-## Configuration Controls
+::::{tab-set}
 
-- [ ] Fix intervention-independent settings (`num_agents`, `rounds`, `protocol`, model configs).
-- [ ] Keep dataset sources and transformed schema constant across arms.
-- [ ] Keep random seeds fixed for data sampling and split generation.
+:::{tab-item} {octicon}`gear;1em` Configuration
 
-## Data Pipeline Controls
+- [ ] Fix `num_agents`, `rounds`, `protocol`, `agent_models` across
+      arms in one comparison.
+- [ ] Keep `gepa.seed` (default `42`) fixed.
+- [ ] Keep dataset splits fixed —
+      `split-datasets --seed --train-ratio` identical across
+      pipeline rebuilds.
+- [ ] Pin `MASConfig.intervention` via CLI
+      (`--intervention <arm>`), not via YAML edits, when iterating.
+:::
 
-- [ ] Run scripts in canonical order (`download`, `ingest`, `unify`, `split`).
-- [ ] Keep one DB URL consistently across pipeline stages.
-- [ ] Version-control config files used for each run.
+:::{tab-item} {octicon}`database;1em` Data pipeline
 
-## Runtime Controls
+- [ ] Run scripts in order:
+      `download-datasets → ingest-datasets → unify-datasets →
+      split-datasets`.
+- [ ] Use the same `--db-url` across all four.
+- [ ] Version the YAML configs that produced the runs.
+:::
 
-- [ ] Use matched model endpoints and inference settings across interventions.
-- [ ] Reset memory state between test cases in memory-based interventions.
-- [ ] Log all runs to MLflow with intervention labels and config parameters.
-- [ ] Enable local live stream persistence for long runs (`analysis_local_root`).
-- [ ] Set durability policy (`stream_flush_every_events`, `stream_fsync`) for interruption safety.
+:::{tab-item} {octicon}`broadcast;1em` Runtime
 
-## Live Analysis Artifacts
+- [ ] Match model endpoints + temperatures across arms.
+- [ ] For memory arms, memory is reset between samples at runtime
+      — do **not** override `reset_memory_on_genesis: false`.
+- [ ] Log every run to MLflow with the intervention tag set.
+:::
 
-- Deterministic evaluation writes live per-event files under:
-	- `analysis_local_root/<readable_run_dir>/stream_metric_rows.jsonl`
-	- `analysis_local_root/<readable_run_dir>/stream_failure_rows.jsonl`
-	- `analysis_local_root/<readable_run_dir>/stream_round_metrics.jsonl`
-	- `analysis_local_root/<readable_run_dir>/stream_summary.json`
-	- `analysis_local_root/<readable_run_dir>/run_manifest.json`
-- Root index map for quick lookup:
-	- `analysis_local_root/runs_index.jsonl`
-- Naming and traceability are configurable via:
-	- `analysis_live_dir_template`
-	- `analysis_live_slug_max_length`
-	- `analysis_live_write_manifest`
-	- `analysis_live_index_filename`
-- Final CSV/Parquet analysis tables remain logged to MLflow artifacts at `analysis_artifact_root`.
+:::{tab-item} {octicon}`shield-check;1em` Validation
 
-## Exclusions and Reporting
+- [ ] `uv run ruff check .`
+- [ ] `uv run mypy src/bias_mitigation`
+- [ ] `LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build`
+- [ ] `uv run generate-statecharts`
+:::
 
-- [ ] Record technical exclusions with concrete reason codes.
-- [ ] Report retained vs excluded counts.
-- [ ] Provide sensitivity comparisons when exclusions occur.
+::::
 
-## Validation Controls
+## {octicon}`file-binary;1em` Live streaming artefacts
 
-- [ ] Run lint and tests before evaluation.
-- [ ] Build docs with warnings as errors.
-- [ ] Ensure diagram and reference pages are up to date for changed behavior.
+Each evaluator run writes to `evaluation/analysis/live/<run_dir>/`:
 
-## Related Pages
+| File | Contents |
+|---|---|
+| `stream_metric_rows.{csv,jsonl}` | Per-sample MAS scorer values. |
+| `stream_failure_rows.{csv,jsonl}` | Per-sample failures with full traceback in `error`. |
+| `stream_round_metrics.{csv,jsonl}` | Per-round bias attribution. |
+| `stream_summary.json` + `run_manifest.json` | Counts + final summary; run id, intervention, agent map. |
 
-- {doc}`/guides/reference/metrics`
-- {doc}`/guides/how_to/troubleshooting`
-- {doc}`/guides/how_to/scripts`
+A top-level `evaluation/analysis/live/runs_index.jsonl` indexes
+every `run_dir`. CSV and JSONL are written in parallel; the polars
+analysis pipeline reads the CSVs.
+
+:::{dropdown} {octicon}`gear;1em` Streaming knobs in `mas_config.yaml`
+:animate: fade-in-slide-down
+
+- `analysis_local_root` — base path (default
+  `evaluation/analysis/live`).
+- `analysis_live_dir_template` — slug template for `<run_dir>`.
+- `analysis_live_index_filename` — index filename.
+- `stream_flush_every_events`, `stream_fsync` — durability vs
+  throughput.
+:::
+
+## {octicon}`x-circle;1em` Exclusions
+
+- [ ] Record technical exclusions with reason codes captured from
+      `stream_failure_rows.jsonl::error`.
+- [ ] Report retained vs excluded counts in any aggregate.
+
+## {octicon}`link;1em` See also
+
+- [Metrics](metrics.md)
+- [Troubleshooting](../how_to/troubleshooting.md)
+- [Scripts](../how_to/scripts.md)

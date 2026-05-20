@@ -1,36 +1,67 @@
-# Data Pipeline and `src/data`
+# {octicon}`database;1em` Data
 
-This page documents the `src/bias_mitigation/data` package and its role in the experiment workflow.
+`bias_mitigation.data` ingests **BBQ + StereoSet** into a unified
+MCQ schema, splits into train / dev, and exposes the splits as
+`dspy.Example` lists.
 
-## Responsibilities
+## {octicon}`workflow;1em` Pipeline
 
-The data package provides:
+```mermaid
+flowchart LR
+    A[download-datasets] --> B[ingest-datasets]
+    B --> C[unify-datasets]
+    C --> D[split-datasets]
+    D --> E[train.py / evaluate]
+```
 
-- dataset schemas and models,
-- configuration models for data and experiment loading,
-- data ingestion and tracking helpers,
-- stratified splitting utilities,
-- repository interfaces for unified entries.
+::::{tab-set}
 
-## Workflow Position
+:::{tab-item} download
 
-`src/bias_mitigation/data` powers the full preprocessing lifecycle:
+Pulls BBQ + StereoSet source files into `datasets/`.
+:::
 
-1. load/ingest benchmark records,
-2. normalize to unified MCQ-compatible entries,
-3. stratify into train/dev splits,
-4. expose reproducible examples for MAS evaluation.
+:::{tab-item} ingest
 
-## Key Submodules
+Parses raw files into per-source SQL tables (`bias_mitigation.data.schemas`).
+:::
 
-- `bias_mitigation.data.models`: configuration and memory-related model schemas.
-- `bias_mitigation.data.schemas`: SQLModel/Pydantic entities for dataset records.
-- `bias_mitigation.data.dataset_tracker`: dataset tracking and MLflow logging helpers.
-- `bias_mitigation.data.splitters`: stratified split logic for balanced evaluation.
-- `bias_mitigation.data.repository`: unified dataset access layer.
+:::{tab-item} unify
 
-## API Entry
+Transforms and samples entries into `UnifiedBiasEntry` records — a
+common MCQ schema across both benchmarks.
+:::
 
-For module-level API details, see:
+:::{tab-item} split
 
-- {doc}`/api/data`
+Stratified train / dev split, written as
+`datasets/splits/{trainset,devset}.json`.
+:::
+
+::::
+
+CLI invocations and per-script flags live in
+[scripts](../how_to/scripts.md).
+
+## {octicon}`package;1em` Submodules
+
+| Module | Role |
+|---|---|
+| `bias_mitigation.data.loaders` | Async loaders for benchmark sources. |
+| `bias_mitigation.data.schemas` | SQLModel tables for raw + unified rows. |
+| `bias_mitigation.data.models` | Pydantic config (`MASConfig`, `Mem0Config`, dataset-config types). |
+| `bias_mitigation.data.repository` | Single async DB session + CRUD helpers. |
+| `bias_mitigation.data.splitters` | Stratified split + subset selection used by the evaluator. |
+| `bias_mitigation.data.dataset_tracker` | MLflow `DatasetInput` builders + tag extraction. |
+
+## {octicon}`sync;1em` Reproducibility
+
+:::{important}
+Fix `--seed` and `--train-ratio` across `split-datasets` invocations
+that you intend to compare. Use the same `--db-url` across all four
+scripts in one pipeline.
+:::
+
+## {octicon}`code-square;1em` API
+
+[`api/data`](../../api/data.md).
