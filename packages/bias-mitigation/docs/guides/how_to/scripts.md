@@ -1,106 +1,99 @@
-# Data Pipeline Scripts
+# {octicon}`terminal;1em` Data Pipeline Scripts
 
-This page documents the project scripts in `src/scripts` used to prepare datasets before training/evaluation.
-
-## Overview
-
-The scripts form a deterministic pipeline:
-
-1. download raw benchmark files,
-2. ingest raw files into SQL models,
-3. unify datasets into a common MCQ schema,
-4. split unified data into train/dev sets.
-
-## Pipeline Diagram
+The four scripts in `src/scripts` prepare BBQ + StereoSet for
+training/evaluation. They form a **deterministic pipeline**:
 
 ```mermaid
 flowchart LR
-	A[download_datasets.py] --> B[ingest_datasets.py]
-	B --> C[unify_datasets.py]
-	C --> D[split_datasets.py]
-	D --> E[train.py / evaluation]
+    A[download-datasets] --> B[ingest-datasets]
+    B --> C[unify-datasets]
+    C --> D[split-datasets]
+    D --> E[train / evaluate]
 ```
 
-## Script Catalog
+## {octicon}`book;1em` Script catalog
 
-- `download_datasets.py`: downloads BBQ and StereoSet source files from configured URLs.
-- `ingest_datasets.py`: parses downloaded files and inserts normalized rows into the database.
-- `unify_datasets.py`: transforms and samples entries into `UnifiedBiasEntry` records.
-- `split_datasets.py`: creates stratified train/dev JSON splits.
+| Script | Role |
+|---|---|
+| {octicon}`download;1em` `download-datasets` | Downloads BBQ and StereoSet source files from configured URLs. |
+| {octicon}`database;1em` `ingest-datasets` | Parses downloaded files and inserts normalized rows into the database. |
+| {octicon}`git-merge;1em` `unify-datasets` | Transforms and samples entries into `UnifiedBiasEntry` records. |
+| {octicon}`git-branch;1em` `split-datasets` | Creates stratified train/dev JSON splits. |
 
-## CLI Options and Examples
+## {octicon}`code-square;1em` CLI options and examples
 
-### `download_datasets.py`
+::::{tab-set}
 
-Key options:
+:::{tab-item} download
 
-- `--output-dir/-o`: destination folder for raw files.
-- `--config/-c`: YAML config path.
-- `--force/-f`: overwrite existing files.
-- `--log-level`: `DEBUG|INFO|WARNING|ERROR`.
+**Key options**
 
-Example:
+- `--output-dir/-o` — destination folder for raw files.
+- `--config/-c` — YAML config path.
+- `--force/-f` — overwrite existing files.
+- `--log-level` — `DEBUG | INFO | WARNING | ERROR`.
 
 ```bash
 uv run download-datasets \
-	--output-dir datasets \
-	--config configs/config.yaml \
-	--force \
-	--log-level INFO
+    --output-dir datasets \
+    --config configs/config.yaml \
+    --force \
+    --log-level INFO
 ```
+:::
 
-### `ingest_datasets.py`
+:::{tab-item} ingest
 
-Key options:
+**Key options**
 
-- `--db-url`: async SQLAlchemy URL (default SQLite).
-- `--output-dir`: directory containing downloaded files.
-- `--config`: YAML config path.
-
-Example:
+- `--db-url` — async SQLAlchemy URL (default SQLite).
+- `--output-dir` — directory containing downloaded files.
+- `--config` — YAML config path.
 
 ```bash
 uv run ingest-datasets \
-	--db-url sqlite+aiosqlite:///./datasets.db \
-	--output-dir datasets \
-	--config configs/config.yaml
+    --db-url sqlite+aiosqlite:///./datasets.db \
+    --output-dir datasets \
+    --config configs/config.yaml
 ```
+:::
 
-### `unify_datasets.py`
+:::{tab-item} unify
 
-Key options:
+**Key options**
 
-- `--db-url`: source/target unified DB URL.
-- `--force/-f`: truncate existing unified table before rebuild.
-
-Example:
+- `--db-url` — source/target unified DB URL.
+- `--force/-f` — truncate existing unified table before rebuild.
 
 ```bash
 uv run unify-datasets \
-	--db-url sqlite+aiosqlite:///./datasets.db \
-	--force
+    --db-url sqlite+aiosqlite:///./datasets.db \
+    --force
 ```
+:::
 
-### `split_datasets.py`
+:::{tab-item} split
 
-Key options:
+**Key options**
 
-- `--db-url`: source DB URL.
-- `--train-ratio`: train split ratio (e.g. `0.5`).
-- `--seed`: deterministic split seed.
-- `--output-dir`: where `trainset.json` and `devset.json` are written.
-
-Example:
+- `--db-url` — source DB URL.
+- `--train-ratio` — train split ratio (e.g. `0.5`).
+- `--seed` — deterministic split seed.
+- `--output-dir` — where `trainset.json` + `devset.json` are
+  written.
 
 ```bash
 uv run split-datasets \
-	--db-url sqlite+aiosqlite:///./datasets.db \
-	--train-ratio 0.5 \
-	--seed 42 \
-	--output-dir datasets/splits
+    --db-url sqlite+aiosqlite:///./datasets.db \
+    --train-ratio 0.5 \
+    --seed 42 \
+    --output-dir datasets/splits
 ```
+:::
 
-## Recommended Execution Order
+::::
+
+## {octicon}`play;1em` Recommended execution order
 
 ```bash
 uv run download-datasets
@@ -109,13 +102,14 @@ uv run unify-datasets
 uv run split-datasets
 ```
 
-## Notes
+:::{important}
+- Use a **consistent seed** across runs you intend to compare.
+- Use `--force` only when intentionally rebuilding artefacts.
+- Keep `--db-url` and output directories consistent across all
+  four scripts.
+:::
 
-- Use consistent random seed settings across runs to keep split reproducibility.
-- Use `--force` options where available when intentionally rebuilding artifacts.
-- Keep database URL and output directories consistent across all script steps.
-
-## Related Pages
+## {octicon}`link;1em` Related
 
 - {doc}`/guides/how_to/troubleshooting`
 - {doc}`/guides/reference/data`

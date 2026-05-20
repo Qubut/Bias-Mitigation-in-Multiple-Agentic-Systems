@@ -1,149 +1,138 @@
-# Troubleshooting
+# {octicon}`bug;1em` Troubleshooting
 
-This page lists common runtime and evaluation issues and their practical fixes.
+Each section below is a self-contained recipe — symptom → root
+cause → fix.
 
-## `mem0g` Run Hangs or Becomes Unresponsive
+:::{dropdown} {octicon}`alert;1em` `mem0g` run hangs at startup
+:animate: fade-in-slide-down
+:color: warning
 
-Symptoms:
-
-- `uv run train.py --intervention mem0g` appears stuck after startup logs.
-- Keyboard interrupt responsiveness is degraded.
-
-Actions:
-
-- Ensure telemetry is disabled for Mem0 paths (`MEM0_TELEMETRY=False`).
-- Validate memory backend dependencies (vector store, optional graph store) are reachable.
-- Run with minimal config and reduced sample size to isolate backend connectivity.
-
-## `mem0g` Occupies All CPU Cores
-
-Symptoms:
-
-- `uv run evaluate ... --intervention mem0g` spikes to full-core CPU usage.
-- Baseline intervention does not show the same saturation profile.
-
-Actions:
-
-- Use `evaluator_num_threads` in `configs/mas_config.yaml` to cap evaluation concurrency.
-- For GenAI backend, runtime now maps that value to `MLFLOW_GENAI_EVAL_MAX_WORKERS` during evaluation.
-- For `mem0g` interventions, runtime now applies a thread guard (when unset) for:
-	`OMP_NUM_THREADS`, `MKL_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `NUMEXPR_NUM_THREADS`, `VECLIB_MAXIMUM_THREADS`.
-- Inspect logged concurrency snapshot in `evaluation/summary.json` and MLflow artifact `evaluation/concurrency_snapshot.json`.
-
-## Agent State / Memory Lifecycle Mismatch
-
-Symptoms:
-
-- Agent performs interaction behavior during expected genesis step.
-- Memory retrieval or persistence appears in unexpected phases.
-- Runtime raises transition guard errors from `AgentStateMachine`.
-
-Actions:
-
-- Confirm `peer_answers` is only provided during interaction rounds.
-- Verify `AgentStateMachine` transitions (`genesis -> interaction -> completed`) are not bypassed.
-- Keep `reset_memory_on_genesis` disabled unless strict reset behavior is required and measured.
-
-## Memory Clear Policy Causes Slowdowns
-
-Symptoms:
-
-- `mem0g` runs are responsive but significantly slower than baseline.
-- Runtime logs show repeated memory clear activity at genesis.
-
-Actions:
-
-- Prefer `reset_memory_on_genesis: false` when session IDs are already run-scoped.
-- Enable `reset_memory_on_genesis: true` only for strict isolation experiments where added cleanup overhead is acceptable.
-- Check MLflow metrics `memory.clear.attempts` and `memory.clear.successes` to quantify cleanup impact.
-
-## `mem0g` Evaluation Appears Stuck at `0%`
-
-Symptoms:
-
-- Deterministic evaluation starts but progress stays at `0%` for a long time.
-- `Ctrl+C` feels delayed while memory and model operations are in flight.
-
-Actions:
-
-- Keep `evaluator_num_threads` moderate for `mem0g` (start with `2` to `4`).
-- Tune `evaluator_mem0_thread_multiplier` and `evaluator_mem0_thread_cap` so evaluator workers stay close to memory capacity.
-- Avoid `memory_operation_semaphore_limit: 1` for parallel evaluation; use `2` or higher.
-- Set `memory_slot_timeout_ms` low (for example `250`-`500`) to avoid long blocking when memory slots are saturated.
-- If timeout storms occur, lower `pressure_timeout_trip_threshold` and use `pressure_cooldown_ms` to let the backend recover.
-- Keep `drop_store_on_backpressure: true` and `degrade_search_on_backpressure: true` for resilient long runs.
-- If you need immediate stop, press `Ctrl+C` twice: first requests graceful cancel, second forces abort.
-- For smoke tests, run a small subset first (`--subset 20`) to validate runtime behavior.
-
-## Embedding Endpoint Returns Mixed `400` and `200`
-
-Symptoms:
-
-- Docker logs from embedding service show alternating `POST /v1/embeddings` `400` and `200`.
-- Evaluation keeps running but memory recall quality degrades and fallback warnings increase.
-
-Actions:
-
-- Enable `memory_config.embedder_force_dimensionless_requests: true` for OpenAI-compatible embedding endpoints.
-- Keep `memory_config.enable_dimension_fallback: true` as a secondary safety net.
-- If running a long job, validate with a small subset first and confirm `400` spikes disappear before scaling up.
-
-## MLflow `evaluate(...)` API Mismatch Errors
-
-Symptoms:
-
-- `unexpected keyword argument` errors for evaluation parameters.
-
-Actions:
-
-- Use the evaluation API signature matching the installed MLflow version.
-- Prefer pinned MLflow versions in reproducible environments.
-- Re-run with `uv sync` after dependency updates.
-
-## `uv run evaluate.py` Uses All CPU Cores
-
-Symptoms:
-
-- Evaluation spikes to near-100% usage on high-core machines (for example, 64 cores).
-- Host responsiveness degrades during MAS evaluation.
-
-Actions:
-
-- Set `evaluator_num_threads` in `configs/mas_config.yaml` to a bounded value (for example, `8`).
-- Use deterministic backend for full control via `dspy.Parallel` threading.
-- For GenAI backend, ensure `MLFLOW_GENAI_EVAL_MAX_WORKERS` is bounded; the evaluator now maps this from `evaluator_num_threads` by default.
-- Reduce `--subset` during iterative debugging to minimize concurrent workload and latency.
-
-## Sphinx Build Failures
-
-Symptoms:
-
-- Documentation build fails on warnings or unresolved references.
-
-Actions:
-
-- Run local docs build with warnings as errors:
+Likely **mem0 telemetry blocking on SIGINT**. Confirm
+`MEM0_TELEMETRY=False`:
 
 ```bash
-uv run sphinx-build -M html docs docs/_build -W --keep-going
+MEM0_TELEMETRY=False uv run train --intervention mem0g
 ```
 
-- Fix broken links/toctrees and verify Mermaid blocks are correctly fenced.
+Then validate vector-store reachability (chroma path is writable,
+or the qdrant/postgres URL is reachable) and the embedder endpoint
+responds to `POST /v1/embeddings`.
+:::
 
-## Dataset Pipeline Inconsistencies
+:::{dropdown} {octicon}`cpu;1em` `mem0g` saturates CPU cores
+:animate: fade-in-slide-down
+:color: warning
 
-Symptoms:
+The evaluator runs through `dspy.Evaluate` with N worker threads;
+`mem0g` adds embedder + vector-store I/O on top. Cap:
 
-- Unexpected split sizes or category imbalance.
+```yaml
+evaluator_concurrency:
+  max_evaluation_threads: 8
+  max_llm_inflight_per_endpoint: 8
+```
 
-Actions:
+For `mem0g` / `mem0g_gepa` interventions, `evaluation.py`
+additionally sets `OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`,
+`MKL_NUM_THREADS=1`, `NUMEXPR_NUM_THREADS=1` **defensively** (only
+when the env var is unset).
+:::
 
-- Verify consistent `--seed` and `--train-ratio` values.
-- Ensure scripts are run in order: download -> ingest -> unify -> split.
-- Confirm the same DB URL is used across all script steps.
+:::{dropdown} {octicon}`x-circle;1em` `'tuple' object has no attribute 'get'` in failure rows
+:animate: fade-in-slide-down
+:color: danger
 
-## Related Pages
+Every sample failed with the same `AttributeError`. The traceback
+is preserved in `stream_failure_rows.jsonl::error` since
+`mas/evaluator.py::metric` formats the traceback into that field.
 
-- {doc}`/guides/how_to/scripts`
-- {doc}`/guides/reference/reproducibility`
-- {doc}`/guides/reference/metrics`
+:::{tip}
+Read the **JSONL** row rather than the CSV — CSV collapses
+newlines and truncates the traceback.
+:::
+:::
+
+:::{dropdown} {octicon}`clock;1em` Recall / store timeouts dominate the log
+:animate: fade-in-slide-down
+:color: warning
+
+`Mem0Tools._memory_slot` uses a cross-thread
+`threading.BoundedSemaphore` — `asyncio.Semaphore` is loop-local
+and breaks under `dspy.syncify`'s per-call event loops.
+
+If you still see
+`[MemoryOrchestrator]: recall timed out after Xs`, the **embedder**
+is the likely bottleneck. Raise:
+
+```yaml
+memory_orchestration:
+  recall_timeout_ms: 8000
+  store_timeout_ms: 6000
+
+memory_config:
+  memory_slot_timeout_ms: 4000   # must be < recall_timeout_ms
+```
+:::
+
+:::{dropdown} {octicon}`flame;1em` Pressure circuit opens immediately
+:animate: fade-in-slide-down
+:color: danger
+
+The pressure breaker trips on consecutive
+`_MemoryBackpressureError` events. Inspect
+`Mem0Tools.stats_snapshot()` counters:
+
+- `semaphore.wait_timeouts` high → raise
+  `memory_operation_semaphore_limit` and `memory_slot_timeout_ms`.
+- `search.fallback_circuit_open_skips` high → the **search-fallback**
+  circuit (separate from pressure) tripped; extend
+  `search_fallback_cooldown_ms` or raise
+  `search_fallback_consecutive_fail_trip_threshold`.
+:::
+
+:::{dropdown} {octicon}`pulse;1em` Embedding endpoint flips between 400 and 200
+:animate: fade-in-slide-down
+:color: warning
+
+The OpenAI-compatible embedder rejected the dimension override:
+
+```yaml
+memory_config:
+  embedder_force_dimensionless_requests: true
+  enable_dimension_fallback: true
+```
+
+`Mem0Tools._attempt_dimension_fallback_reinit` triggers a one-shot
+re-init without the explicit dimension once a dim-mismatch error
+is seen.
+:::
+
+:::{dropdown} {octicon}`book;1em` Sphinx build fails
+:animate: fade-in-slide-down
+:color: warning
+
+```bash
+LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build -W --keep-going
+```
+
+Then fix any unresolved references or broken toctrees. Regenerate
+state-machine diagrams when the build complains about missing
+`docs/_generated/*.md`:
+
+```bash
+uv run generate-statecharts
+```
+:::
+
+:::{dropdown} {octicon}`workflow;1em` Dataset script ordering
+:animate: fade-in-slide-down
+:color: primary
+
+Run in order:
+`download-datasets → ingest-datasets → unify-datasets →
+split-datasets`. Use the **same** `--db-url` across all four,
+the **same** `--seed` and `--train-ratio` across `split-datasets`
+invocations within one comparison.
+
+See [Scripts](scripts.md).
+:::
