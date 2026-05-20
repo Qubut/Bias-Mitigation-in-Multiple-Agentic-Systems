@@ -3,28 +3,58 @@ num_agents: 2
 rounds: 4
 protocol: cooperative
 malicious: false
-sample_size: 100
+# Evaluator runs through dspy.Evaluate. max_evaluation_threads → num_threads;
+# the LLM-level knobs apply to each agent's bounded-concurrency LM client.
 evaluator_max_errors: 50
 evaluator_disable_progress_bar: false
-evaluator_deterministic_execution_mode: sliding_window
-evaluator_window_size: null
-evaluator_task_timeout_seconds: 180.0
 evaluator_concurrency:
-  max_evaluation_threads: 12
-  max_llm_inflight_per_endpoint: 12
+  max_evaluation_threads: 8
+  max_llm_inflight_per_endpoint: 8
   llm_timeout_seconds: 20.0
   llm_retry_attempts: 3
   llm_retry_backoff_min_seconds: 0.5
   llm_retry_backoff_max_seconds: 2.0
-  enable_monitoring: false
 memory_orchestration:
   worker_threads: 12
   max_pending_store_tasks: 128
-  recall_timeout_ms: 6000
-  store_timeout_ms: 2500
+  # Embedding round-trip alone is ~1.7s under load (see docker embedding
+  # service logs), and mem0's store path additionally writes to the vector
+  # store and (with infer=True) calls an LLM to extract memorables.
+  # These give the backend headroom while
+  # still capping pathological latency.
+  recall_timeout_ms: 8000
+  store_timeout_ms: 6000
   store_async: true
   failure_trip_threshold: 8
   recovery_success_threshold: 6
+gepa:
+  # Budget profile.  'light' ≈ ~6× trainset metric calls.  Set to null and use
+  # max_full_evals / max_metric_calls for explicit budget control.
+  auto: null
+  max_full_evals: null
+  max_metric_calls: 970
+  num_threads: 8
+  track_stats: true
+  use_merge: false
+  seed: 42
+  failure_score: 0.0
+  # Optional separate (stronger) reflection LM.  Same model-name format as
+  # agent_models entries (e.g. "openai/meta-llama/Llama-3.1-8B-Instruct").
+  reflection_lm_model: openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+  # Reflection-LM tuning knobs.  Proposers benefit from diversity (non-zero
+  # temperature) rather than the agents' task-time setting.  Fallback tokens
+  # and retries only matter when reflection_lm_model is *not* mirrored from
+  # one of agent_models[*].name (e.g. for hosted models via LiteLLM env vars).
+  reflection_temperature: 1.0
+  reflection_fallback_max_tokens: 4096
+  reflection_num_retries: 3
+  # Where to save the optimized DSPy program (program.save() format).
+  save_path: evaluation/checkpoints/gepa_optimized.json
+  # Stratified dev examples used by GEPA *during* optimization (Pareto tracker).
+  # 0 disables → GEPA falls back to trainset (overfits, emits a warning).
+  valset_size: 200
+  # Stratified dev examples used for *post-GEPA* hold-out validation (0 disables).
+  validation_subset: 500
 analysis_artifact_root: evaluation/analysis/v1
 analysis_local_root: evaluation/analysis/live
 stream_flush_every_events: 1
@@ -55,7 +85,10 @@ memory_config:
   memory_add_infer: false
   memory_pressure_mode: normal
   memory_operation_semaphore_limit: 8
-  memory_slot_timeout_ms: 2500
+  # Slot acquisition timeout must stay strictly below the orchestrator's
+  # recall/store budgets so a slow backend surfaces as a recall/store
+  # timeout (informative) rather than as a slot saturation (pressure trip).
+  memory_slot_timeout_ms: 4000
   pressure_timeout_trip_threshold: 12
   pressure_cooldown_ms: 12000
   drop_store_on_backpressure: true
@@ -85,7 +118,6 @@ memory_config:
     - "504"
   render_recalled_memory_style: bullet
   recall_max_items: 5
-  parse_legacy_json_memory_payloads: true
   include_question_in_memory_text: true
   llm:
     provider: openai
@@ -119,12 +151,18 @@ agent_models:
     api_key: ${oc.env:OPENAI_API_KEY,local}
     api_base: http://localhost:30001/v1
     temperature: 0.0
-    max_tokens: 8192
+    max_tokens: 10240
     agent_name: "Agent_Llama-3.1-8B-Instruct"
 
-  - name: "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+  - name: "openai/meta-llama/Llama-3.1-8B-Instruct"
     api_key: ${oc.env:OPENAI_API_KEY,local}
-    api_base: http://localhost:30002/v1
+    api_base: http://localhost:30001/v1
     temperature: 0.0
-    max_tokens: 8192
-    agent_name: "Agent_DeepSeek-R1-Distill-Llama-8B"
+    max_tokens: 10240
+    agent_name: "Agent_Llama-3.1-8B-Instruct"
+  # - name: "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+  #   api_key: ${oc.env:OPENAI_API_KEY,local}
+  #   api_base: http://localhost:30002/v1
+  #   temperature: 0.0
+  #   max_tokens: 10240
+  #   agent_name: "Agent_DeepSeek-R1-Distill-Llama-8B"
