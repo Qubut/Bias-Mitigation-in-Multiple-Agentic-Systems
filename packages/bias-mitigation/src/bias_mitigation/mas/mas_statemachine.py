@@ -7,12 +7,13 @@ This module defines the deterministic lifecycle used in experiments:
 3. Completion: per-agent prediction history is returned for downstream metrics.
 """
 
+import asyncio
 import re
+from itertools import starmap
 
 import dspy
 from loguru import logger
-from mlflow.entities import SpanType
-from returns.result import Failure, Success
+from returns.result import Failure, Result, Success
 from statemachine import State, StateChart
 
 from bias_mitigation.data.models.config import MASConfig
@@ -20,21 +21,33 @@ from bias_mitigation.mas.protocols import ProtocolStrategy
 
 from .agent import Agent, AgentExecutionError
 
+PhaseResult = Result[dspy.Prediction, AgentExecutionError]
+
 
 class MASStateMachine(StateChart[Agent]):
-    """Declarative lifecycle: genesis → interaction × N → completed."""
+    """Declarative lifecycle: genesis → interaction x N → completed.
 
-    catch_errors_as_events = False  # enterprise fail-fast
+    The whole lifecycle collapses into a single :attr:`advance` event:
+    python-statemachine evaluates the :meth:`rounds_exhausted` guard and
+    picks the right edge (continue the interaction loop or finish), so
+    the async ``on_enter_*`` handlers never have to know which kind of
+    transition they are taking next.
+    """
 
-    # States
-    genesis = State(initial=True)
-    interaction = State()
-    completed = State(final=True)
+    catch_errors_as_events = False  # fail-fast
 
-    # Declarative transitions (library-managed event queue)
-    to_interaction = genesis.to(interaction)
-    continue_interaction = interaction.to(interaction)
-    finish = interaction.to(completed)
+    genesis = State(initial=True, value='genesis')
+    interaction = State(value='interaction')
+    completed = State(final=True, value='completed')
+
+    advance = (
+        genesis.to(interaction)
+        | interaction.to(interaction, unless='rounds_exhausted')
+        | interaction.to(completed, cond='rounds_exhausted')
+    )
+
+    def rounds_exhausted(self) -> bool:
+        return self.current_round > self.config.rounds
 
     @staticmethod
     def _prediction_reasoning(prediction: dspy.Prediction) -> str:
@@ -66,36 +79,30 @@ class MASStateMachine(StateChart[Agent]):
         )
         raise RuntimeError(f'MAS {phase} failed after retries: {summary}')
 
-    def _interaction_kwargs(
+    def _format_peer_answers(
         self,
         agent: Agent,
-        agent_idx: int,
         prev_answers: dict[str, dspy.Prediction],
-    ) -> dict[str, str | list[str] | dict[str, str | int]]:
+    ) -> str:
+        return '\n'.join(
+            f'{p_name}: {self._prediction_answer(prev_answers[p_name])} — '
+            f'{self._prediction_reasoning(prev_answers[p_name])}'
+            for p_name in self._history
+            if p_name != agent.name
+        )
+
+    def _logging_context(self, phase: str) -> dict[str, str | int]:
         return {
-            'question': self.question,
-            'context': self.context,
-            'options': self.options,
-            'system_prompt': self.protocol.get_system_prompt(self.groups[agent_idx]),
-            'peer_answers': '\n'.join(
-                f'{p_name}: {self._prediction_answer(prev_answers[p_name])} — '
-                f'{self._prediction_reasoning(prev_answers[p_name])}'
-                for p_name in self._history
-                if p_name != agent.name
-            ),
-            'update_instruction': self.protocol.get_update_instruction(),
-            'logging_context': {
-                'artifact_root': self._artifact_root(),
-                'sample_id': self.sample_id,
-                'round_index': self.current_round,
-                'phase': 'interaction',
-            },
+            'artifact_root': self._artifact_root(),
+            'sample_id': self.sample_id,
+            'round_index': self.current_round,
+            'phase': phase,
         }
 
     @staticmethod
     def _collect_prediction_result(
         agent: Agent,
-        result: Success[dspy.Prediction] | Failure[AgentExecutionError],
+        result: PhaseResult,
         phase: str,
         predictions: list[dspy.Prediction],
         failures: list[AgentExecutionError],
@@ -113,7 +120,9 @@ class MASStateMachine(StateChart[Agent]):
                 else:
                     predictions.append(prediction)
             case Failure(failure):
-                logger.error(f'Agent {agent.name} failed during {phase} after retries: {failure.reason}')
+                logger.error(
+                    f'Agent {agent.name} failed during {phase} after retries: {failure.reason}'
+                )
                 failures.append(failure)
 
     def __init__(
@@ -138,79 +147,88 @@ class MASStateMachine(StateChart[Agent]):
         self.config = config
         self.sample_id = sample_id
         self.run_id = run_id
-        self.genesis_executor = None
-        self.update_executor = None
         self.current_round = 0
-        self._genesis_pairs = [
-            (
-                agent,
-                {
-                    'question': self.question,
-                    'context': self.context,
-                    'options': self.options,
-                    'system_prompt': self.protocol.get_system_prompt(self.groups[i]),
-                    'logging_context': {
-                        'artifact_root': self._artifact_root(),
-                        'sample_id': self.sample_id,
-                        'round_index': 0,
-                        'phase': 'genesis',
-                    },
-                },
-            )
-            for i, agent in enumerate(self.agents)
-        ]
 
-        super().__init__()  # triggers on_enter_genesis immediately → full lifecycle runs declaratively
+        super().__init__()
+        # python-statemachine detects the async on_enter_* handlers and
+        # defers the lifecycle — caller must drive it with
+        # ``await sm.activate_initial_state()``.
 
-    def on_enter_genesis(self, target, event):
-        genesis_results: list[dspy.Prediction] = []
-        failures: list[AgentExecutionError] = []
-        for agent, kwargs in self._genesis_pairs:
-            res = agent(**kwargs)
-            self._collect_prediction_result(
-                agent=agent,
-                result=res,
-                phase='genesis',
-                predictions=genesis_results,
-                failures=failures,
-            )
+    async def _genesis_call(self, agent_idx: int, agent: Agent) -> PhaseResult:
+        return await agent.aforward(
+            question=self.question,
+            context=self.context,
+            options=self.options,
+            system_prompt=self.protocol.get_system_prompt(self.groups[agent_idx]),
+            logging_context=self._logging_context('genesis'),
+        )
 
-        self._raise_phase_failures('genesis', failures)
+    async def _interaction_call(
+        self,
+        agent_idx: int,
+        agent: Agent,
+        prev_answers: dict[str, dspy.Prediction],
+    ) -> PhaseResult:
+        return await agent.aforward(
+            question=self.question,
+            context=self.context,
+            options=self.options,
+            system_prompt=self.protocol.get_system_prompt(self.groups[agent_idx]),
+            peer_answers=self._format_peer_answers(agent, prev_answers),
+            update_instruction=self.protocol.get_update_instruction(),
+            logging_context=self._logging_context('interaction'),
+        )
 
-        for agent, pred in zip(self.agents, genesis_results, strict=False):
+    async def on_enter_genesis(self) -> None:
+        """Run all agents' genesis turn concurrently, then advance."""
+        results = await asyncio.gather(
+            *starmap(self._genesis_call, enumerate(self.agents)),
+        )
+        for agent, pred in zip(self.agents, self._validate_phase('genesis', results), strict=True):
             self._history[agent.name].append(pred)
+        await self.advance()
 
-        self.to_interaction()  # declarative chain to interaction phase
-
-    def on_enter_interaction(self, target, event):
+    async def on_enter_interaction(self) -> None:
+        """Run all agents' update turn concurrently."""
         self.current_round += 1
-
-        if self.current_round > self.config.rounds:
-            for agent in self.agents:
-                if hasattr(agent, 'lifecycle'):
-                    agent.lifecycle.mark_completed()
-            self.finish()
+        if self.rounds_exhausted():
+            await self.advance()
             return
 
         prev_answers = {name: preds[-1] for name, preds in self._history.items()}
-
-        update_pairs = [
-            (agent, self._interaction_kwargs(agent, agent_idx, prev_answers))
-            for agent_idx, agent in enumerate(self.agents)
-        ]
-
-        new_preds: list[dspy.Prediction] = []
-        failures: list[AgentExecutionError] = []
-        for agent, kwargs in update_pairs:
-            res = agent(**kwargs)
-            self._collect_prediction_result(agent, res, 'interaction', new_preds, failures)
-
-        self._raise_phase_failures('interaction', failures)
-
-        for agent, pred in zip(self.agents, new_preds, strict=False):
+        results = await asyncio.gather(
+            *(self._interaction_call(i, a, prev_answers) for i, a in enumerate(self.agents)),
+        )
+        for agent, pred in zip(
+            self.agents, self._validate_phase('interaction', results), strict=True
+        ):
             self._history[agent.name].append(pred)
+        await self.advance()
 
-        self.continue_interaction()  # library-managed recursive event queue
+    async def on_enter_completed(self) -> None:
+        """Cleanup hook fired when the lifecycle terminates.
 
-    def run(self) -> dict[str, list[dspy.Prediction]]:
+        Marks each agent's own state machine as completed; previously
+        this was inlined into ``on_enter_interaction``'s exhausted branch.
+        """
+        for agent in self.agents:
+            if hasattr(agent, 'lifecycle'):
+                agent.lifecycle.mark_completed()
+
+    def _validate_phase(
+        self,
+        phase: str,
+        results: list[PhaseResult],
+    ) -> list[dspy.Prediction]:
+        """Split phase results into predictions and failures; raise on any failure."""
+        predictions: list[dspy.Prediction] = []
+        failures: list[AgentExecutionError] = []
+        for agent, result in zip(self.agents, results, strict=True):
+            self._collect_prediction_result(agent, result, phase, predictions, failures)
+        self._raise_phase_failures(phase, failures)
+        return predictions
+
+    @property
+    def history(self) -> dict[str, list[dspy.Prediction]]:
+        """Return the per-agent prediction history accumulated so far."""
         return self._history
