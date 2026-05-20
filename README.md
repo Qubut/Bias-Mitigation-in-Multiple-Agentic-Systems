@@ -1,5 +1,7 @@
 # Bias Mitigation in Multi-Agent Systems
 
+**Documentation: https://qubut.github.io/Bias-Mitigation-in-Multiple-Agentic-Systems/**
+
 A 2×2 factorial study of bias propagation between cooperating LLM agents
 (Llama 3.1-8B Instruct, DeepSeek-R1 distilled into the same 8B backbone)
 and of two interventions for reducing it: Mem0-backed vector memory
@@ -8,7 +10,7 @@ optimisation. Items are drawn from BBQ and StereoSet.
 
 The paper, results, and reproducible notebooks live under
 `packages/bias-mitigation/notebooks/`. The Sphinx documentation lives under
-`packages/bias-mitigation/docs/`.
+`packages/bias-mitigation/docs/` and is published at the link above.
 
 ## The four arms
 
@@ -94,7 +96,10 @@ packages/bias-mitigation/
 
 ## Documentation
 
-Build the Sphinx site locally:
+Published at https://qubut.github.io/Bias-Mitigation-in-Multiple-Agentic-Systems/
+(deployed from `main` by `.github/workflows/docs.yml`).
+
+To build it locally:
 
 ```bash
 LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build
