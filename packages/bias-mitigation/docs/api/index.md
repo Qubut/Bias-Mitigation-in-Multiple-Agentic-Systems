@@ -1,39 +1,6 @@
-# API Reference
+# {octicon}`code-square;1em` API reference
 
-Auto-generated API documentation from source code docstrings.
-
-Use this section as the technical source of truth for runtime components,
-including the MAS orchestration layer, state machine lifecycle, memory adapters,
-and data model interfaces.
-
-## {octicon}`package;1em` Packages
-
-::::{grid} 1 1 2 3
-:gutter: 2
-:padding: 1
-
-:::{grid-item-card} {octicon}`organization;1em` mas
-:link: mas
-:link-type: doc
-
-The Multi-Agent System orchestrator, agents, state machine, evaluators, and protocol handlers.
-:::
-
-:::{grid-item-card} {octicon}`database;1em` memory
-:link: memory
-:link-type: doc
-
-In-memory indexing for prior context and intervention via the mem0 backend.
-:::
-
-:::{grid-item-card} {octicon}`container;1em` data
-:link: data
-:link-type: doc
-
-Dataset loaders, models, schemas, dataset operations.
-:::
-
-::::
+Module-level reference auto-generated from docstrings.
 
 ```{toctree}
 :hidden:
@@ -42,3 +9,35 @@ mas
 memory
 data
 ```
+
+::::{grid} 1 1 3 3
+:gutter: 2
+
+:::{grid-item-card} {octicon}`workflow;1em` `mas`
+:link: mas
+:link-type: doc
+:shadow: md
+
+`MASProgram`, `MASStateMachine`, `Agent`, `AgentStateMachine`,
+`ProtocolStrategy`, `MASEvaluator`, metrics, GEPA.
+:::
+
+:::{grid-item-card} {octicon}`database;1em` `memory`
+:link: memory
+:link-type: doc
+:shadow: md
+
+`Mem0Tools`, `MemoryOrchestrator`,
+`MemoryOrchestrationStateChart`, mem0 errors + contracts.
+:::
+
+:::{grid-item-card} {octicon}`package;1em` `data`
+:link: data
+:link-type: doc
+:shadow: md
+
+`MASConfig`, `Mem0Config`, dataset configs, loaders, splitters,
+tracker, repository.
+:::
+
+::::
