@@ -1,10 +1,12 @@
 """Dataset loading and MLflow dataset-tracking helpers."""
+
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import cast
 
 import pandas as pd
 from dspy import Example
-from mlflow.data import from_pandas
+from mlflow.data import from_pandas  # type: ignore[attr-defined]  # present at runtime in mlflow 2.x
 from mlflow.data.dataset_source import DatasetSource
 from mlflow.entities import DatasetInput
 
@@ -66,7 +68,7 @@ class UnifiedBiasToMLflowAdapter:
         if examples:
             dataset.tags = MetadataExtractionStrategy().extract_tags(examples[0])
 
-        return dataset
+        return cast(DatasetInput, dataset)
 
 
 class DatasetTrackerFacade:
