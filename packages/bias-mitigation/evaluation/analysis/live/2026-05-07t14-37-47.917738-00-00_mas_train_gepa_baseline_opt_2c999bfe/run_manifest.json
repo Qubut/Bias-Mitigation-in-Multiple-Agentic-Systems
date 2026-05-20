@@ -1,0 +1,18 @@
+{
+  "run_id": "2c999bfebfce45af9c385b7a9e946d0e",
+  "run_dir_name": "2026-05-07t14-37-47.917738-00-00_mas_train_gepa_baseline_opt_2c999bfe",
+  "run_dir_path": "evaluation/analysis/live/2026-05-07t14-37-47.917738-00-00_mas_train_gepa_baseline_opt_2c999bfe",
+  "run_name": "MAS_Train_GEPA",
+  "experiment_id": "176",
+  "experiment_name": "DSPy_20260507_143747",
+  "backend": "deterministic",
+  "intervention": "baseline_opt",
+  "protocol": "cooperative",
+  "agent_model_map": {
+    "Agent_Llama-3.1-8B-Instruct": "openai/meta-llama/Llama-3.1-8B-Instruct",
+    "Agent_DeepSeek-R1-Distill-Llama-8B": "openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+  },
+  "subset": 50,
+  "subset_seed": 42,
+  "started_at_utc": "2026-05-07T14:37:47.917738+00:00"
+}
