@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>System Architecture &#8212; Bias Mitigation Documentation</title>
+    <title>Architecture &#8212; Bias Mitigation Documentation</title>
   
   
   
@@ -32,6 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=ab2ac80f" />
@@ -488,8 +489,8 @@ window.runMermaid = runMermaid;</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guides/reference/architecture';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Data Pipeline and src/data" href="data.html" />
-    <link rel="prev" title="Reference Guide" href="index.html" />
+    <link rel="next" title="Data" href="data.html" />
+    <link rel="prev" title="Reference" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="1.0.0" />
@@ -580,41 +581,33 @@ window.runMermaid = runMermaid;</script>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../get_started/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../how_to/index.html">How-To Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../how_to/scripts.html">Data Pipeline Scripts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../how_to/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../get_started/quickstart.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-rocket" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../notebooks/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis notebooks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/01_paired_main_effects.html">Notebook 01: Paired Main Effects &amp; Lifecycle (4-arm 2x2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/02_emergence_survival.html">Notebook 02: Emergence, Survival &amp; Markov Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/03_sensitivity_and_confounders.html">Notebook 03 — Sensitivity &amp; Confounders</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer Guide</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Reference Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">System Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics Definitions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reproducibility.html">Reproducibility Checklist</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-book" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#"><svg aria-hidden="true" class="sd-octicon sd-octicon-workflow" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-database" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reproducibility.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-sync" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"></path></svg> Reproducibility</a></li>
 </ul>
 </details></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/mas.html">Multi-Agent System (MAS) API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../api/mas_statemachine.html"><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code> API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/agent_statemachine.html"><code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code> API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/mas_program.html"><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/agent.html"><code class="docutils literal notranslate"><span class="pre">Agent</span></code> API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/evaluator.html"><code class="docutils literal notranslate"><span class="pre">MASEvaluator</span></code> API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/protocols.html"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code> API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../how_to/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to/scripts.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-terminal" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z"></path></svg> Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to/troubleshooting.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-bug" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 .1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 .556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 .558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 0v.327c0 .096.077.173.173.173Z"></path></svg> Troubleshooting</a></li>
 </ul>
 </details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/memory.html">Memory Models and Retrieval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../api/mem0ai.html"><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> API</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../developer/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> Developer guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer/maintenance.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-law" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z"></path></svg> Maintenance contract</a></li>
 </ul>
 </details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data.html">Data Models and configuration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../api/data_models.html">Data Models API</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-code-square" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/mas.html">MAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/memory.html">Memory layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/data.html">Data</a></li>
 </ul>
 </details></li>
 </ul>
@@ -767,7 +760,7 @@ window.runMermaid = runMermaid;</script>
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>System Architecture</h1>
+    <h1><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-workflow" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> Architecture</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -777,16 +770,14 @@ window.runMermaid = runMermaid;</script>
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-components">Runtime Components</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#state-machine-flow">State Machine Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-lifecycle-flow">Agent Lifecycle Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-sequence">Execution Sequence</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#component-boundaries">Component Boundaries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervention-flow">Intervention Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observability-flow">Observability Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagram-conventions">Diagram Conventions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibility-invariants">Reproducibility Invariants</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-rationale">Design Rationale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components"><svg aria-hidden="true" class="sd-octicon sd-octicon-package" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path></svg> Components</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#state-machines"><svg aria-hidden="true" class="sd-octicon sd-octicon-workflow" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> State machines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-step-lm-dispatch"><svg aria-hidden="true" class="sd-octicon sd-octicon-broadcast" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M8.75 8.582v5.668a.75.75 0 0 1-1.5 0V8.582a1.75 1.75 0 1 1 1.5 0Zm3.983-7.125a.75.75 0 0 1 1.06.026A7.976 7.976 0 0 1 16 7c0 2.139-.84 4.083-2.207 5.517a.75.75 0 1 1-1.086-1.034A6.474 6.474 0 0 0 14.5 7a6.474 6.474 0 0 0-1.793-4.483.75.75 0 0 1 .026-1.06Zm-9.466 0c.3.286.312.76.026 1.06A6.474 6.474 0 0 0 1.5 7a6.47 6.47 0 0 0 1.793 4.483.75.75 0 0 1-1.086 1.034A7.973 7.973 0 0 1 0 7c0-2.139.84-4.083 2.207-5.517a.75.75 0 0 1 1.06-.026Zm8.556 2.321A4.988 4.988 0 0 1 13 7a4.988 4.988 0 0 1-1.177 3.222.75.75 0 1 1-1.146-.967A3.487 3.487 0 0 0 11.5 7c0-.86-.309-1.645-.823-2.255a.75.75 0 0 1 1.146-.967Zm-6.492.958A3.48 3.48 0 0 0 4.5 7a3.48 3.48 0 0 0 .823 2.255.75.75 0 0 1-1.146.967A4.981 4.981 0 0 1 3 7a4.982 4.982 0 0 1 1.188-3.236.75.75 0 1 1 1.143.972Z"></path></svg> Per-step LM dispatch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-stack"><svg aria-hidden="true" class="sd-octicon sd-octicon-database" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Memory stack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#di-graph"><svg aria-hidden="true" class="sd-octicon sd-octicon-stack" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M7.122.392a1.75 1.75 0 0 1 1.756 0l5.003 2.902c.83.481.83 1.68 0 2.162L8.878 8.358a1.75 1.75 0 0 1-1.756 0L2.119 5.456a1.251 1.251 0 0 1 0-2.162ZM8.125 1.69a.248.248 0 0 0-.25 0l-4.63 2.685 4.63 2.685a.248.248 0 0 0 .25 0l4.63-2.685ZM1.601 7.789a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0L1.874 8.814A.75.75 0 0 1 1.6 7.789Zm0 3.5a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0l-5.248-3.044a.75.75 0 0 1-.273-1.025Z"></path></svg> DI graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-pipeline"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-sinks"><svg aria-hidden="true" class="sd-octicon sd-octicon-file-binary" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2a.75.75 0 0 1-1.5 0Zm-4 6C0 6.784.784 6 1.75 6h1.5C4.216 6 5 6.784 5 7.75v2.5A1.75 1.75 0 0 1 3.25 12h-1.5A1.75 1.75 0 0 1 0 10.25ZM6.75 6h1.5a.75.75 0 0 1 .75.75v3.75h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75v-3h-.75a.75.75 0 0 1 0-1.5Zm-5 1.5a.25.25 0 0 0-.25.25v2.5c0 .138.112.25.25.25h1.5a.25.25 0 0 0 .25-.25v-2.5a.25.25 0 0 0-.25-.25Zm9.75-5.938V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg> Streaming sinks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also"><svg aria-hidden="true" class="sd-octicon sd-octicon-link" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg> See also</a></li>
 </ul>
             </nav>
         </div>
@@ -798,198 +789,232 @@ window.runMermaid = runMermaid;</script>
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="system-architecture">
-<h1>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">#</a></h1>
-<p>This page documents the runtime architecture used to execute one evaluation sample in the Multi-Agent System (MAS).</p>
-<section id="runtime-components">
-<h2>Runtime Components<a class="headerlink" href="#runtime-components" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code>: top-level DSPy module that prepares agents, intervention wiring, and executors.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code>: lifecycle controller for genesis and interaction rounds.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ProtocolStrategy</span></code>: provides system prompts and round-update instruction semantics.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code> (optional): retrieval backend activated for memory interventions.</p></li>
-</ul>
+  <section class="tex2jax_ignore mathjax_ignore" id="architecture">
+<h1><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-workflow" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h1>
+<p>How one evaluation sample runs. Every claim points to a file or
+function so it can be verified against the code.</p>
+<section id="components">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-package" viewBox="0 0 16 16" aria-hidden="true"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path></svg> Components<a class="headerlink" href="#components" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Module</p></th>
+<th class="head"><p>Role</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MASConfig</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/models/config.py</span></code></p></td>
+<td><p>Pydantic root config; cross-field validators.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Container</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">containers.py</span></code></p></td>
+<td><p>DI graph; per-intervention memory wiring; syncified <code class="docutils literal notranslate"><span class="pre">MASProgram</span></code> factory.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MASProgram</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mas/mas_program.py</span></code></p></td>
+<td><p>DSPy module; runs one debate; sync <code class="docutils literal notranslate"><span class="pre">forward</span></code> grafted via <code class="docutils literal notranslate"><span class="pre">dspy.syncify</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mas/mas_statemachine.py</span></code></p></td>
+<td><p>Per-sample lifecycle.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Agent</span></code> + <code class="docutils literal notranslate"><span class="pre">AgentStateMachine</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mas/agent.py</span></code>, <code class="docutils literal notranslate"><span class="pre">mas/agent_statemachine.py</span></code></p></td>
+<td><p>LM call + memory recall/store. Statechart owns predictor dispatch, tenacity retry, cross-thread LM bulkhead.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Mem0Tools</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">memory/mem0_tools.py</span></code></p></td>
+<td><p>Async wrapper over <code class="docutils literal notranslate"><span class="pre">mem0.AsyncMemory</span></code>; recovery pipeline; purgatory breakers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MemoryOrchestrator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">memory/orchestration/service.py</span></code></p></td>
+<td><p>Per-call timeouts; load-aware statechart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WorkflowMachine</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">workflows/statechart.py</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prepare</span> <span class="pre">→</span> <span class="pre">build</span> <span class="pre">→</span> <span class="pre">execute</span> <span class="pre">→</span> <span class="pre">persist</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">paper_bias_metrics_gepa</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mas/metrics.py</span></code></p></td>
+<td><p>GEPA composite metric.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="state-machine-flow">
-<h2>State Machine Flow<a class="headerlink" href="#state-machine-flow" title="Link to this heading">#</a></h2>
-<p>The run follows a fixed lifecycle:</p>
-<ol class="arabic simple">
-<li><p><strong>Genesis phase</strong></p>
-<ul class="simple">
-<li><p>Each agent receives context, question, options, and group-conditioned system prompt.</p></li>
-<li><p>One prediction per agent is produced and stored as turn 0.</p></li>
-</ul>
-</li>
-<li><p><strong>Interaction rounds</strong></p>
-<ul class="simple">
-<li><p>For each round, each agent receives peer answers from the previous turn.</p></li>
-<li><p>The configured protocol determines the update instruction.</p></li>
-<li><p>One updated prediction per agent is appended per round.</p></li>
-</ul>
-</li>
-<li><p><strong>Completion</strong></p>
-<ul class="simple">
-<li><p>The machine exits after configured rounds and returns ordered per-agent histories.</p></li>
-</ul>
-</li>
-</ol>
+<section id="state-machines">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-workflow" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> State machines<a class="headerlink" href="#state-machines" title="Link to this heading">#</a></h2>
+<p>The four diagrams below are regenerated from the class bodies by
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">generate-statecharts</span></code>. <strong>Do not edit them
+by hand</strong> — re-run the script after editing any
+<code class="docutils literal notranslate"><span class="pre">python-statemachine</span></code> subclass.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
+<span class="sd-summary-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-globe" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM5.78 8.75a9.64 9.64 0 0 0 1.363 4.177c.255.426.542.832.857 1.215.245-.296.551-.705.857-1.215A9.64 9.64 0 0 0 10.22 8.75Zm4.44-1.5a9.64 9.64 0 0 0-1.363-4.177c-.307-.51-.612-.919-.857-1.215a9.927 9.927 0 0 0-.857 1.215A9.64 9.64 0 0 0 5.78 7.25Zm-5.944 1.5H1.543a6.507 6.507 0 0 0 4.666 5.5c-.123-.181-.24-.365-.352-.552-.715-1.192-1.437-2.874-1.581-4.948Zm-2.733-1.5h2.733c.144-2.074.866-3.756 1.58-4.948.12-.197.237-.381.353-.552a6.507 6.507 0 0 0-4.666 5.5Zm10.181 1.5c-.144 2.074-.866 3.756-1.58 4.948-.12.197-.237.381-.353.552a6.507 6.507 0 0 0 4.666-5.5Zm2.733-1.5a6.507 6.507 0 0 0-4.666-5.5c.123.181.24.365.353.552.714 1.192 1.436 2.874 1.58 4.948Z"></path></svg> MAS lifecycle</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <pre  class="mermaid">
         stateDiagram-v2
-   [*] --&gt; genesis
-   genesis --&gt; interaction: to_interaction
-   interaction --&gt; interaction: continue_interaction
-   interaction --&gt; completed: finish (current_round &gt; config.rounds)
-   completed --&gt; [*]
-    </pre></section>
-<section id="agent-lifecycle-flow">
-<h2>Agent Lifecycle Flow<a class="headerlink" href="#agent-lifecycle-flow" title="Link to this heading">#</a></h2>
-<p>Each agent also uses a local lifecycle state machine for phase-specific behavior.</p>
+    [*] --&gt; genesis
+    genesis --&gt; interaction : advance
+    interaction --&gt; interaction : advance · cond !rounds_exhausted
+    interaction --&gt; completed : advance · cond rounds_exhausted
+    completed --&gt; [*]
+    </pre><p class="sd-card-text">One <code class="docutils literal notranslate"><span class="pre">advance</span></code> event. <code class="docutils literal notranslate"><span class="pre">MASStateMachine.rounds_exhausted</span></code> is the
+guard (<code class="docutils literal notranslate"><span class="pre">current_round</span> <span class="pre">&gt;</span> <span class="pre">config.rounds</span></code>).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-person" viewBox="0 0 16 16" aria-hidden="true"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg> Agent lifecycle</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <pre  class="mermaid">
         stateDiagram-v2
-   [*] --&gt; genesis
-   genesis --&gt; interaction: start_interaction (peer answers available)
-   interaction --&gt; interaction: continue_interaction
-   genesis --&gt; completed: finish
-   interaction --&gt; completed: finish
-   completed --&gt; [*]
-    </pre><p>Memory interaction semantics:</p>
+    [*] --&gt; genesis
+    genesis --&gt; interaction : step · cond has_peer_answers
+    genesis --&gt; genesis : step · cond !has_peer_answers
+    genesis --&gt; completed : finish
+    interaction --&gt; interaction : step · cond has_peer_answers
+    interaction --&gt; completed : finish
+    completed --&gt; [*]
+    </pre><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">allow_event_without_transition</span> <span class="pre">=</span> <span class="pre">False</span></code>
+(<code class="docutils literal notranslate"><span class="pre">agent_statemachine.py</span></code>) so illegal sequences raise
+<code class="docutils literal notranslate"><span class="pre">statemachine.exceptions.TransitionNotAllowed</span></code>.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-database" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Memory orchestration</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<pre  class="mermaid">
+        stateDiagram-v2
+    [*] --&gt; healthy
+    healthy --&gt; degraded : failure_step · cond !failure_tripped
+    healthy --&gt; shed : failure_step · cond failure_tripped
+    healthy --&gt; degraded : pressure_step
+    degraded --&gt; shed : failure_step · cond failure_tripped
+    degraded --&gt; recovering : success_step · cond recovery_complete
+    degraded --&gt; shed : pressure_step
+    shed --&gt; recovering : success_step
+    recovering --&gt; shed : failure_step · cond failure_tripped
+    recovering --&gt; healthy : success_step · cond recovery_complete
+    </pre><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">note_success</span></code>, <code class="docutils literal notranslate"><span class="pre">note_failure</span></code>, <code class="docutils literal notranslate"><span class="pre">note_pressure</span></code> are the public
+events. Counters reset on state entry (<code class="docutils literal notranslate"><span class="pre">on_enter_recovering</span></code>,
+<code class="docutils literal notranslate"><span class="pre">on_enter_healthy</span></code>, <code class="docutils literal notranslate"><span class="pre">on_enter_shed</span></code>).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-gear" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071.214-.143.437-.272.668-.386.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03 7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27.161.107.328.204.501.29.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"></path></svg> Workflow</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<pre  class="mermaid">
+        stateDiagram-v2
+    [*] --&gt; initialized
+    initialized --&gt; prepared : advance
+    initialized --&gt; failed : error_execution error.execution
+    prepared --&gt; built : advance
+    prepared --&gt; failed : error_execution error.execution
+    built --&gt; executed : advance
+    built --&gt; failed : error_execution error.execution
+    executed --&gt; persisted : advance
+    executed --&gt; failed : error_execution error.execution
+    persisted --&gt; completed : advance
+    persisted --&gt; failed : error_execution error.execution
+    completed --&gt; [*]
+    failed --&gt; [*]
+    </pre><p class="sd-card-text">Each stage’s runtime is a <code class="docutils literal notranslate"><span class="pre">WorkflowRuntime</span></code> (<code class="docutils literal notranslate"><span class="pre">workflows/statechart.py</span></code>).</p>
+</div>
+</details></section>
+<section id="per-step-lm-dispatch">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-broadcast" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.75 8.582v5.668a.75.75 0 0 1-1.5 0V8.582a1.75 1.75 0 1 1 1.5 0Zm3.983-7.125a.75.75 0 0 1 1.06.026A7.976 7.976 0 0 1 16 7c0 2.139-.84 4.083-2.207 5.517a.75.75 0 1 1-1.086-1.034A6.474 6.474 0 0 0 14.5 7a6.474 6.474 0 0 0-1.793-4.483.75.75 0 0 1 .026-1.06Zm-9.466 0c.3.286.312.76.026 1.06A6.474 6.474 0 0 0 1.5 7a6.47 6.47 0 0 0 1.793 4.483.75.75 0 0 1-1.086 1.034A7.973 7.973 0 0 1 0 7c0-2.139.84-4.083 2.207-5.517a.75.75 0 0 1 1.06-.026Zm8.556 2.321A4.988 4.988 0 0 1 13 7a4.988 4.988 0 0 1-1.177 3.222.75.75 0 1 1-1.146-.967A3.487 3.487 0 0 0 11.5 7c0-.86-.309-1.645-.823-2.255a.75.75 0 0 1 1.146-.967Zm-6.492.958A3.48 3.48 0 0 0 4.5 7a3.48 3.48 0 0 0 .823 2.255.75.75 0 0 1-1.146.967A4.981 4.981 0 0 1 3 7a4.982 4.982 0 0 1 1.188-3.236.75.75 0 1 1 1.143.972Z"></path></svg> Per-step LM dispatch<a class="headerlink" href="#per-step-lm-dispatch" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">AgentStateMachine.predictor_call</span></code> builds the zero-arg predictor
+closure for the current phase. Two Pydantic envelopes
+(<code class="docutils literal notranslate"><span class="pre">_InitialInputs</span></code>, <code class="docutils literal notranslate"><span class="pre">_UpdateInputs</span></code>) shape the kwargs.
+<code class="docutils literal notranslate"><span class="pre">past_interaction_memory</span></code> is added only when the predictor
+signature declares it (detected via <code class="docutils literal notranslate"><span class="pre">_predictor_input_fields</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">AgentStateMachine.run_predictor</span></code> wraps that closure in:</p>
 <ul class="simple">
-<li><p>Retrieval runs during <code class="docutils literal notranslate"><span class="pre">interaction</span></code> phase only.</p></li>
-<li><p>Memory persistence runs after each generated prediction.</p></li>
-<li><p>Memory clear/reset is controlled at MAS lifecycle level (<code class="docutils literal notranslate"><span class="pre">reset_memory_on_genesis</span></code>).</p></li>
-</ul>
-<p>Memory clear policy semantics:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code> (<code class="docutils literal notranslate"><span class="pre">reset_memory_on_genesis:</span> <span class="pre">false</span></code>): recommended default for run-scoped user IDs; avoids cleanup overhead.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">on_genesis</span></code> (<code class="docutils literal notranslate"><span class="pre">reset_memory_on_genesis:</span> <span class="pre">true</span></code>): clears each agent session at genesis start; improves strict isolation but adds extra backend I/O.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-shield" viewBox="0 0 16 16" aria-hidden="true"><path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> <strong>Cross-thread bulkhead</strong> —
+<code class="docutils literal notranslate"><span class="pre">threading.BoundedSemaphore</span></code> keyed on <code class="docutils literal notranslate"><span class="pre">(api_base,</span> <span class="pre">model)</span></code>.
+<code class="docutils literal notranslate"><span class="pre">asyncio.Semaphore</span></code> is loop-local and unsafe under
+<code class="docutils literal notranslate"><span class="pre">dspy.syncify</span></code>’s worker loops.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-sync" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"></path></svg> <strong>Retry</strong> — <code class="docutils literal notranslate"><span class="pre">tenacity.AsyncRetrying</span></code> with
+exponential backoff; the blocking acquire is bridged via
+<code class="docutils literal notranslate"><span class="pre">asyncio.to_thread</span></code>.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-shield-check" viewBox="0 0 16 16" aria-hidden="true"><path d="m8.533.133 5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667l5.25-1.68a1.748 1.748 0 0 1 1.066 0Zm-.61 1.429.001.001-5.25 1.68a.251.251 0 0 0-.174.237V7c0 1.36.275 2.666 1.057 3.859.784 1.194 2.121 2.342 4.366 3.298a.196.196 0 0 0 .154 0c2.245-.957 3.582-2.103 4.366-3.297C13.225 9.666 13.5 8.358 13.5 7V3.48a.25.25 0 0 0-.174-.238l-5.25-1.68a.25.25 0 0 0-.153 0ZM11.28 6.28l-3.5 3.5a.75.75 0 0 1-1.06 0l-1.5-1.5a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l.97.97 2.97-2.97a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> <strong>Result envelope</strong> —
+<code class="docutils literal notranslate"><span class="pre">try/except</span> <span class="pre">→</span> <span class="pre">returns.Result[dspy.Prediction,</span> <span class="pre">AgentExecutionError]</span></code>.
+Failures don’t bubble; they’re typed.</p></li>
 </ul>
 </section>
-<section id="execution-sequence">
-<h2>Execution Sequence<a class="headerlink" href="#execution-sequence" title="Link to this heading">#</a></h2>
-<pre  class="mermaid">
-        sequenceDiagram
-   participant T as train.py
-   participant MP as MASProgram
-   participant SM as MASStateMachine
-   participant A as Agent
-   participant EV as MASEvaluator
-
-   T-&gt;&gt;MP: initialize(config)
-   T-&gt;&gt;EV: evaluate(program, devset)
-   EV-&gt;&gt;MP: forward(sample)
-   MP-&gt;&gt;SM: run lifecycle
-   SM-&gt;&gt;A: genesis(question/context/options)
-   A--&gt;&gt;SM: turn-0 prediction
-   loop interaction rounds
-      SM-&gt;&gt;A: interaction(peer_answers, instruction)
-      A--&gt;&gt;SM: updated prediction
-   end
-   SM--&gt;&gt;MP: history per agent
-   MP--&gt;&gt;EV: prediction payload
-    </pre></section>
-<section id="component-boundaries">
-<h2>Component Boundaries<a class="headerlink" href="#component-boundaries" title="Link to this heading">#</a></h2>
-<pre  class="mermaid">
-        flowchart LR
-   subgraph data[bias_mitigation.data]
-      D1[loaders/repository]
-      D2[models/schemas]
-      D3[splitters/tracker]
-   end
-
-   subgraph mas[bias_mitigation.mas]
-      M1[MASProgram]
-      M2[MASStateMachine]
-      M3[ProtocolStrategy]
-      M4[Evaluator/Metrics]
-   end
-
-   subgraph memory[bias_mitigation.memory]
-      MM1[Mem0RM]
-      MM2[mem0 backend]
-   end
-
-   data --&gt; mas
-   mas --&gt; memory
-   memory --&gt; mas
-   mas --&gt; M4
-    </pre></section>
-<section id="intervention-flow">
-<h2>Intervention Flow<a class="headerlink" href="#intervention-flow" title="Link to this heading">#</a></h2>
-<pre  class="mermaid">
-        flowchart TD
-   S[Start Sample] --&gt; I{Intervention}
-   I --&gt;|baseline| B[MAS only]
-   I --&gt;|baseline_prompt_opt| BP[MAS + optimized baseline prompts]
-   I --&gt;|mem0g| M0[MAS + Mem0 retrieval]
-   I --&gt;|mem0g_gepa| M0G[MAS + Mem0 retrieval + optimized prompts]
-   B --&gt; R[Run state machine]
-   BP --&gt; R
-   M0 --&gt; R
-   M0G --&gt; R
-   R --&gt; O[Collect metrics PRt/ERt/ARt/robustness]
-    </pre></section>
-<section id="observability-flow">
-<h2>Observability Flow<a class="headerlink" href="#observability-flow" title="Link to this heading">#</a></h2>
-<pre  class="mermaid">
-        flowchart LR
-   A[MASProgram_Init span] --&gt; B[MAS_Genesis span]
-   B --&gt; C[MAS_Round_1..N spans]
-   C --&gt; D[Evaluator scoring]
-   D --&gt; E[MLflow metrics/artifacts]
-    </pre></section>
-<section id="diagram-conventions">
-<h2>Diagram Conventions<a class="headerlink" href="#diagram-conventions" title="Link to this heading">#</a></h2>
-<p>Use the following style conventions across documentation diagrams:</p>
+<section id="memory-stack">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-database" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Memory stack<a class="headerlink" href="#memory-stack" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Mem0Tools</span></code> awaits <code class="docutils literal notranslate"><span class="pre">mem0.AsyncMemory.search</span></code> / <code class="docutils literal notranslate"><span class="pre">add</span></code> directly. The
+recovery pipeline:</p>
 <ul class="simple">
-<li><p><strong>Shapes</strong>:</p>
-<ul>
-<li><p>Rectangles (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) for runtime components/processes.</p></li>
-<li><p>Diamonds (<code class="docutils literal notranslate"><span class="pre">{}</span></code>) for decisions/branching conditions.</p></li>
-<li><p>Rounded states in <code class="docutils literal notranslate"><span class="pre">stateDiagram-v2</span></code> for lifecycle states.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-sync" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"></path></svg> <strong>Transient retries</strong> — <code class="docutils literal notranslate"><span class="pre">tenacity.AsyncRetrying</span></code>.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.533.753V.752c.217 2.385 1.463 3.626 2.653 4.81C13.37 6.74 14.498 7.863 14.498 10c0 3.5-3 6-6.5 6S1.5 13.512 1.5 10c0-1.298.536-2.56 1.425-3.286.376-.308.862 0 1.035.454C4.46 8.487 5.581 8.419 6 8c.282-.282.341-.811-.003-1.5C4.34 3.187 7.035.75 8.77.146c.39-.137.726.194.763.607ZM7.998 14.5c2.832 0 5-1.98 5-4.5 0-1.463-.68-2.19-1.879-3.383l-.036-.037c-1.013-1.008-2.3-2.29-2.834-4.434-.322.256-.63.579-.864.953-.432.696-.621 1.58-.046 2.73.473.947.67 2.284-.278 3.232-.61.61-1.545.84-2.403.633a2.79 2.79 0 0 1-1.436-.874A3.198 3.198 0 0 0 3 10c0 2.53 2.164 4.5 4.998 4.5Z"></path></svg> <strong>Pressure / fallback breakers</strong> —
+<code class="docutils literal notranslate"><span class="pre">purgatory.AsyncCircuitBreakerFactory</span></code>, materialised lazily via
+<code class="docutils literal notranslate"><span class="pre">asyncstdlib.functools.lru_cache</span></code>.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-shield" viewBox="0 0 16 16" aria-hidden="true"><path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> <strong>Cross-loop slot bulkhead</strong> —
+<code class="docutils literal notranslate"><span class="pre">threading.BoundedSemaphore</span></code>, acquired through
+<code class="docutils literal notranslate"><span class="pre">asyncio.to_thread</span></code>.</p></li>
+<li><p><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-workflow" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> <strong>Result composition</strong> —
+<code class="docutils literal notranslate"><span class="pre">returns.Result.bind/map/lash</span></code> composes the steps end-to-end.</p></li>
 </ul>
-</li>
-<li><p><strong>Directionality</strong>:</p>
-<ul>
-<li><p>Prefer left-to-right (<code class="docutils literal notranslate"><span class="pre">LR</span></code>) for architecture and data pipelines.</p></li>
-<li><p>Use top-to-bottom (<code class="docutils literal notranslate"><span class="pre">TD</span></code>) for intervention branch logic.</p></li>
-</ul>
-</li>
-<li><p><strong>Naming</strong>:</p>
-<ul>
-<li><p>Use code identifiers in backticks when referenced in prose.</p></li>
-<li><p>Keep node labels concise and action-oriented.</p></li>
-</ul>
-</li>
-<li><p><strong>Color/Semantics Policy</strong>:</p>
-<ul>
-<li><p>Do not encode meaning with color only; rely on node labels and structure.</p></li>
-<li><p>If colors are later introduced, include textual legend entries.</p></li>
-</ul>
-</li>
-<li><p><strong>Maintenance Rule</strong>:</p>
-<ul>
-<li><p>Any lifecycle/configuration change in <code class="docutils literal notranslate"><span class="pre">MASProgram</span></code>, <code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code>,
-intervention routing, or data pipeline scripts must update relevant diagrams
-in this page and <code class="docutils literal notranslate"><span class="pre">guides/how_to/scripts.md</span></code> in the same PR.</p></li>
-</ul>
-</li>
-</ul>
+<p><code class="docutils literal notranslate"><span class="pre">MemoryOrchestrator</span></code> adds <code class="docutils literal notranslate"><span class="pre">asyncio.wait_for</span></code> timeouts and the
+<code class="docutils literal notranslate"><span class="pre">healthy</span> <span class="pre">→</span> <span class="pre">degraded</span> <span class="pre">→</span> <span class="pre">shed</span> <span class="pre">→</span> <span class="pre">recovering</span></code> statechart in
+<code class="docutils literal notranslate"><span class="pre">memory/orchestration/statechart.py</span></code>.</p>
 </section>
-<section id="reproducibility-invariants">
-<h2>Reproducibility Invariants<a class="headerlink" href="#reproducibility-invariants" title="Link to this heading">#</a></h2>
+<section id="di-graph">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-stack" viewBox="0 0 16 16" aria-hidden="true"><path d="M7.122.392a1.75 1.75 0 0 1 1.756 0l5.003 2.902c.83.481.83 1.68 0 2.162L8.878 8.358a1.75 1.75 0 0 1-1.756 0L2.119 5.456a1.251 1.251 0 0 1 0-2.162ZM8.125 1.69a.248.248 0 0 0-.25 0l-4.63 2.685 4.63 2.685a.248.248 0 0 0 .25 0l4.63-2.685ZM1.601 7.789a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0L1.874 8.814A.75.75 0 0 1 1.6 7.789Zm0 3.5a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0l-5.248-3.044a.75.75 0 0 1-.273-1.025Z"></path></svg> DI graph<a class="headerlink" href="#di-graph" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.containers.Container</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mas_config</span>          <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Dependency</span><span class="p">(</span><span class="n">instance_of</span><span class="o">=</span><span class="n">MASConfig</span><span class="p">)</span>
+<span class="n">memory_tools</span>        <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Selector</span><span class="p">(</span><span class="n">mas_config</span><span class="o">.</span><span class="n">provided</span><span class="o">.</span><span class="n">intervention</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="n">memory_orchestrator</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Selector</span><span class="p">(</span><span class="n">mas_config</span><span class="o">.</span><span class="n">provided</span><span class="o">.</span><span class="n">intervention</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="n">mas_program</span>         <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">MASProgram</span><span class="o">.</span><span class="n">syncified</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">_assert_intervention_coverage()</span></code> runs at import and raises
+<code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> if any <code class="docutils literal notranslate"><span class="pre">InterventionType</span></code> member is missing from
+either <code class="docutils literal notranslate"><span class="pre">Selector</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.analysis.containers.AnalysisContainer.config</span></code> is a
+<code class="docutils literal notranslate"><span class="pre">Singleton(load_analysis_config)</span></code> — defers <code class="docutils literal notranslate"><span class="pre">configs/analysis.yaml</span></code>
+loading until first call.</p>
+</section>
+<section id="analysis-pipeline">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-graph" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis pipeline<a class="headerlink" href="#analysis-pipeline" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">bias_mitigation.analysis.pipeline</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>load_runs            pl.concat([pl.read_csv(...)], how=&#39;diagonal_relaxed&#39;)
+filter_unit_interval df.filter(pl.all_horizontal([...]))
+group_estimates      df.group_by(...).agg(_bootstrap_ci × METRIC_COLS)
+write_outputs        estimates.write_csv(...) + JSON envelope
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">_bootstrap_ci</span></code> delegates to <code class="docutils literal notranslate"><span class="pre">library_stats.safe_bootstrap_mean_ci</span></code>
+(scipy percentile bootstrap, ≥6 sample guard).</p>
+</section>
+<section id="streaming-sinks">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-file-binary" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2a.75.75 0 0 1-1.5 0Zm-4 6C0 6.784.784 6 1.75 6h1.5C4.216 6 5 6.784 5 7.75v2.5A1.75 1.75 0 0 1 3.25 12h-1.5A1.75 1.75 0 0 1 0 10.25ZM6.75 6h1.5a.75.75 0 0 1 .75.75v3.75h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75v-3h-.75a.75.75 0 0 1 0-1.5Zm-5 1.5a.25.25 0 0 0-.25.25v2.5c0 .138.112.25.25.25h1.5a.25.25 0 0 0 .25-.25v-2.5a.25.25 0 0 0-.25-.25Zm9.75-5.938V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg> Streaming sinks<a class="headerlink" href="#streaming-sinks" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">evaluation/analysis/live/&lt;run_dir&gt;/</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stream_metric_rows.csv</span></code></p></td>
+<td><p>Per-sample metrics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stream_failure_rows.jsonl</span></code></p></td>
+<td><p>Failures with full traceback (formatted by <code class="docutils literal notranslate"><span class="pre">mas/evaluator.py::metric</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stream_round_metrics.csv</span></code></p></td>
+<td><p>Per-round bias attribution.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="see-also">
+<h2><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-link" viewBox="0 0 16 16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg> See also<a class="headerlink" href="#see-also" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>State progression is declarative and deterministic at the control-flow level.</p></li>
-<li><p>One genesis output plus <code class="docutils literal notranslate"><span class="pre">N</span></code> interaction outputs per agent for <code class="docutils literal notranslate"><span class="pre">N</span></code> rounds.</p></li>
-<li><p>Memory state is reset between test cases for memory-based intervention conditions.</p></li>
-<li><p>Traces are emitted through MLflow spans for phase and round observability.</p></li>
+<li><p><a class="reference internal" href="../developer/maintenance.html"><span class="std std-doc">Maintenance contract</span></a> — code edits
+that require doc updates.</p></li>
 </ul>
-</section>
-<section id="design-rationale">
-<h2>Design Rationale<a class="headerlink" href="#design-rationale" title="Link to this heading">#</a></h2>
-<p>The architecture separates concerns between orchestration (<code class="docutils literal notranslate"><span class="pre">MASProgram</span></code>), lifecycle (<code class="docutils literal notranslate"><span class="pre">MASStateMachine</span></code>),
-conversation policy (<code class="docutils literal notranslate"><span class="pre">ProtocolStrategy</span></code>), and memory intervention (<code class="docutils literal notranslate"><span class="pre">Mem0RM</span></code>).
-This keeps execution auditable while allowing controlled intervention comparisons.</p>
 </section>
 </section>
 
@@ -1010,7 +1035,7 @@ This keeps execution auditable while allowing controlled intervention comparison
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Reference Guide</p>
+        <p class="prev-next-title"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-book" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> Reference</p>
       </div>
     </a>
     <a class="right-next"
@@ -1018,7 +1043,7 @@ This keeps execution auditable while allowing controlled intervention comparison
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Data Pipeline and <code class="docutils literal notranslate"><span class="pre">src/data</span></code></p>
+        <p class="prev-next-title"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-database" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Data</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1040,16 +1065,14 @@ This keeps execution auditable while allowing controlled intervention comparison
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-components">Runtime Components</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#state-machine-flow">State Machine Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-lifecycle-flow">Agent Lifecycle Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-sequence">Execution Sequence</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#component-boundaries">Component Boundaries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervention-flow">Intervention Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observability-flow">Observability Flow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagram-conventions">Diagram Conventions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibility-invariants">Reproducibility Invariants</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-rationale">Design Rationale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components"><svg aria-hidden="true" class="sd-octicon sd-octicon-package" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path></svg> Components</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#state-machines"><svg aria-hidden="true" class="sd-octicon sd-octicon-workflow" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> State machines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-step-lm-dispatch"><svg aria-hidden="true" class="sd-octicon sd-octicon-broadcast" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M8.75 8.582v5.668a.75.75 0 0 1-1.5 0V8.582a1.75 1.75 0 1 1 1.5 0Zm3.983-7.125a.75.75 0 0 1 1.06.026A7.976 7.976 0 0 1 16 7c0 2.139-.84 4.083-2.207 5.517a.75.75 0 1 1-1.086-1.034A6.474 6.474 0 0 0 14.5 7a6.474 6.474 0 0 0-1.793-4.483.75.75 0 0 1 .026-1.06Zm-9.466 0c.3.286.312.76.026 1.06A6.474 6.474 0 0 0 1.5 7a6.47 6.47 0 0 0 1.793 4.483.75.75 0 0 1-1.086 1.034A7.973 7.973 0 0 1 0 7c0-2.139.84-4.083 2.207-5.517a.75.75 0 0 1 1.06-.026Zm8.556 2.321A4.988 4.988 0 0 1 13 7a4.988 4.988 0 0 1-1.177 3.222.75.75 0 1 1-1.146-.967A3.487 3.487 0 0 0 11.5 7c0-.86-.309-1.645-.823-2.255a.75.75 0 0 1 1.146-.967Zm-6.492.958A3.48 3.48 0 0 0 4.5 7a3.48 3.48 0 0 0 .823 2.255.75.75 0 0 1-1.146.967A4.981 4.981 0 0 1 3 7a4.982 4.982 0 0 1 1.188-3.236.75.75 0 1 1 1.143.972Z"></path></svg> Per-step LM dispatch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-stack"><svg aria-hidden="true" class="sd-octicon sd-octicon-database" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Memory stack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#di-graph"><svg aria-hidden="true" class="sd-octicon sd-octicon-stack" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M7.122.392a1.75 1.75 0 0 1 1.756 0l5.003 2.902c.83.481.83 1.68 0 2.162L8.878 8.358a1.75 1.75 0 0 1-1.756 0L2.119 5.456a1.251 1.251 0 0 1 0-2.162ZM8.125 1.69a.248.248 0 0 0-.25 0l-4.63 2.685 4.63 2.685a.248.248 0 0 0 .25 0l4.63-2.685ZM1.601 7.789a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0L1.874 8.814A.75.75 0 0 1 1.6 7.789Zm0 3.5a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0l-5.248-3.044a.75.75 0 0 1-.273-1.025Z"></path></svg> DI graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-pipeline"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-sinks"><svg aria-hidden="true" class="sd-octicon sd-octicon-file-binary" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2a.75.75 0 0 1-1.5 0Zm-4 6C0 6.784.784 6 1.75 6h1.5C4.216 6 5 6.784 5 7.75v2.5A1.75 1.75 0 0 1 3.25 12h-1.5A1.75 1.75 0 0 1 0 10.25ZM6.75 6h1.5a.75.75 0 0 1 .75.75v3.75h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75v-3h-.75a.75.75 0 0 1 0-1.5Zm-5 1.5a.25.25 0 0 0-.25.25v2.5c0 .138.112.25.25.25h1.5a.25.25 0 0 0 .25-.25v-2.5a.25.25 0 0 0-.25-.25Zm9.75-5.938V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg> Streaming sinks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also"><svg aria-hidden="true" class="sd-octicon sd-octicon-link" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg> See also</a></li>
 </ul>
   </nav></div>
 

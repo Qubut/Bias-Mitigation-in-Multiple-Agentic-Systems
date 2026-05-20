@@ -1,89 +1,138 @@
-# Troubleshooting
+# {octicon}`bug;1em` Troubleshooting
 
-This page lists common runtime and evaluation issues and their practical fixes.
+Each section below is a self-contained recipe — symptom → root
+cause → fix.
 
-## `mem0g` Run Hangs or Becomes Unresponsive
+:::{dropdown} {octicon}`alert;1em` `mem0g` run hangs at startup
+:animate: fade-in-slide-down
+:color: warning
 
-Symptoms:
-
-- `uv run train.py --intervention mem0g` appears stuck after startup logs.
-- Keyboard interrupt responsiveness is degraded.
-
-Actions:
-
-- Ensure telemetry is disabled for Mem0 paths (`MEM0_TELEMETRY=False`).
-- Validate memory backend dependencies (vector store, optional graph store) are reachable.
-- Run with minimal config and reduced sample size to isolate backend connectivity.
-
-## Agent State / Memory Lifecycle Mismatch
-
-Symptoms:
-
-- Agent performs interaction behavior during expected genesis step.
-- Memory retrieval or persistence appears in unexpected phases.
-- Runtime raises transition guard errors from `AgentStateMachine`.
-
-Actions:
-
-- Confirm `peer_answers` is only provided during interaction rounds.
-- Verify `AgentStateMachine` transitions (`genesis -> interaction -> completed`) are not bypassed.
-- Keep `reset_memory_on_genesis` disabled unless strict reset behavior is required and measured.
-
-## Memory Clear Policy Causes Slowdowns
-
-Symptoms:
-
-- `mem0g` runs are responsive but significantly slower than baseline.
-- Runtime logs show repeated memory clear activity at genesis.
-
-Actions:
-
-- Prefer `reset_memory_on_genesis: false` when session IDs are already run-scoped.
-- Enable `reset_memory_on_genesis: true` only for strict isolation experiments where added cleanup overhead is acceptable.
-- Check MLflow metrics `memory.clear.attempts` and `memory.clear.successes` to quantify cleanup impact.
-
-## MLflow `evaluate(...)` API Mismatch Errors
-
-Symptoms:
-
-- `unexpected keyword argument` errors for evaluation parameters.
-
-Actions:
-
-- Use the evaluation API signature matching the installed MLflow version.
-- Prefer pinned MLflow versions in reproducible environments.
-- Re-run with `uv sync` after dependency updates.
-
-## Sphinx Build Failures
-
-Symptoms:
-
-- Documentation build fails on warnings or unresolved references.
-
-Actions:
-
-- Run local docs build with warnings as errors:
+Likely **mem0 telemetry blocking on SIGINT**. Confirm
+`MEM0_TELEMETRY=False`:
 
 ```bash
-uv run sphinx-build -M html docs docs/_build -W --keep-going
+MEM0_TELEMETRY=False uv run train --intervention mem0g
 ```
 
-- Fix broken links/toctrees and verify Mermaid blocks are correctly fenced.
+Then validate vector-store reachability (chroma path is writable,
+or the qdrant/postgres URL is reachable) and the embedder endpoint
+responds to `POST /v1/embeddings`.
+:::
 
-## Dataset Pipeline Inconsistencies
+:::{dropdown} {octicon}`cpu;1em` `mem0g` saturates CPU cores
+:animate: fade-in-slide-down
+:color: warning
 
-Symptoms:
+The evaluator runs through `dspy.Evaluate` with N worker threads;
+`mem0g` adds embedder + vector-store I/O on top. Cap:
 
-- Unexpected split sizes or category imbalance.
+```yaml
+evaluator_concurrency:
+  max_evaluation_threads: 8
+  max_llm_inflight_per_endpoint: 8
+```
 
-Actions:
+For `mem0g` / `mem0g_gepa` interventions, `evaluation.py`
+additionally sets `OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`,
+`MKL_NUM_THREADS=1`, `NUMEXPR_NUM_THREADS=1` **defensively** (only
+when the env var is unset).
+:::
 
-- Verify consistent `--seed` and `--train-ratio` values.
-- Ensure scripts are run in order: download -> ingest -> unify -> split.
-- Confirm the same DB URL is used across all script steps.
+:::{dropdown} {octicon}`x-circle;1em` `'tuple' object has no attribute 'get'` in failure rows
+:animate: fade-in-slide-down
+:color: danger
 
-## Related Pages
+Every sample failed with the same `AttributeError`. The traceback
+is preserved in `stream_failure_rows.jsonl::error` since
+`mas/evaluator.py::metric` formats the traceback into that field.
 
-- {doc}`/guides/how_to/scripts`
-- {doc}`/guides/reference/reproducibility`
-- {doc}`/guides/reference/metrics`
+:::{tip}
+Read the **JSONL** row rather than the CSV — CSV collapses
+newlines and truncates the traceback.
+:::
+:::
+
+:::{dropdown} {octicon}`clock;1em` Recall / store timeouts dominate the log
+:animate: fade-in-slide-down
+:color: warning
+
+`Mem0Tools._memory_slot` uses a cross-thread
+`threading.BoundedSemaphore` — `asyncio.Semaphore` is loop-local
+and breaks under `dspy.syncify`'s per-call event loops.
+
+If you still see
+`[MemoryOrchestrator]: recall timed out after Xs`, the **embedder**
+is the likely bottleneck. Raise:
+
+```yaml
+memory_orchestration:
+  recall_timeout_ms: 8000
+  store_timeout_ms: 6000
+
+memory_config:
+  memory_slot_timeout_ms: 4000   # must be < recall_timeout_ms
+```
+:::
+
+:::{dropdown} {octicon}`flame;1em` Pressure circuit opens immediately
+:animate: fade-in-slide-down
+:color: danger
+
+The pressure breaker trips on consecutive
+`_MemoryBackpressureError` events. Inspect
+`Mem0Tools.stats_snapshot()` counters:
+
+- `semaphore.wait_timeouts` high → raise
+  `memory_operation_semaphore_limit` and `memory_slot_timeout_ms`.
+- `search.fallback_circuit_open_skips` high → the **search-fallback**
+  circuit (separate from pressure) tripped; extend
+  `search_fallback_cooldown_ms` or raise
+  `search_fallback_consecutive_fail_trip_threshold`.
+:::
+
+:::{dropdown} {octicon}`pulse;1em` Embedding endpoint flips between 400 and 200
+:animate: fade-in-slide-down
+:color: warning
+
+The OpenAI-compatible embedder rejected the dimension override:
+
+```yaml
+memory_config:
+  embedder_force_dimensionless_requests: true
+  enable_dimension_fallback: true
+```
+
+`Mem0Tools._attempt_dimension_fallback_reinit` triggers a one-shot
+re-init without the explicit dimension once a dim-mismatch error
+is seen.
+:::
+
+:::{dropdown} {octicon}`book;1em` Sphinx build fails
+:animate: fade-in-slide-down
+:color: warning
+
+```bash
+LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build -W --keep-going
+```
+
+Then fix any unresolved references or broken toctrees. Regenerate
+state-machine diagrams when the build complains about missing
+`docs/_generated/*.md`:
+
+```bash
+uv run generate-statecharts
+```
+:::
+
+:::{dropdown} {octicon}`workflow;1em` Dataset script ordering
+:animate: fade-in-slide-down
+:color: primary
+
+Run in order:
+`download-datasets → ingest-datasets → unify-datasets →
+split-datasets`. Use the **same** `--db-url` across all four,
+the **same** `--seed` and `--train-ratio` across `split-datasets`
+invocations within one comparison.
+
+See [Scripts](scripts.md).
+:::

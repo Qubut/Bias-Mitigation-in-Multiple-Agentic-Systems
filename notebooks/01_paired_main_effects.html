@@ -1,0 +1,1462 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Notebook 01: Paired Main Effects &amp; Lifecycle (4-arm 2x2) &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/01_paired_main_effects';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Notebook 02: Emergence, Survival &amp; Markov Dynamics" href="02_emergence_survival.html" />
+    <link rel="prev" title="Analysis notebooks" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-rocket" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> Quickstart</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis notebooks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Notebook 01: Paired Main Effects &amp; Lifecycle (4-arm 2x2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_emergence_survival.html">Notebook 02: Emergence, Survival &amp; Markov Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_sensitivity_and_confounders.html">Notebook 03 — Sensitivity &amp; Confounders</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/reference/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-book" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/architecture.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-workflow" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/data.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-database" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/metrics.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/reproducibility.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-sync" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"></path></svg> Reproducibility</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/how_to/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/scripts.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-terminal" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z"></path></svg> Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/troubleshooting.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-bug" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 .1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 .556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 .558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 0v.327c0 .096.077.173.173.173Z"></path></svg> Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/developer/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> Developer guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/developer/maintenance.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-law" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z"></path></svg> Maintenance contract</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-code-square" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/mas.html">MAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/data.html">Data</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/01_paired_main_effects.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Notebook 01: Paired Main Effects & Lifecycle (4-arm 2x2)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports-paper-style">Imports &amp; paper style</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#canonical-2x2-arm-map-paired-loader">Canonical 2x2 arm map &amp; paired loader</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-4-arms-paired-on-prompt-hash">Load 4 arms paired on <code class="docutils literal notranslate"><span class="pre">prompt_hash</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifecycle-classification-per-arm">Lifecycle classification per arm</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-self-correction-rate-per-arm">System self-correction rate per arm</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-state-markov-fit-per-arm">Two-state Markov fit per arm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-recovery-pmf-when-does-recovery-happen">Geometric recovery PMF (when does recovery happen?)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-2x2-contrasts-wilcoxon-cohen-s-d-bootstrap-ci-bh-fdr">Paired 2x2 contrasts (Wilcoxon + Cohen’s d + bootstrap CI + BH-FDR)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factorial-effect-heatmap-mean-paired">Factorial effect heatmap (mean paired Δ)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#master-json-dump">Master JSON dump</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="notebook-01-paired-main-effects-lifecycle-4-arm-2x2">
+<h1>Notebook 01: Paired Main Effects &amp; Lifecycle (4-arm 2x2)<a class="headerlink" href="#notebook-01-paired-main-effects-lifecycle-4-arm-2x2" title="Link to this heading">#</a></h1>
+<p>This notebook <strong>recomputes</strong> all paired main-effect, lifecycle, and recovery
+analyses from the raw per-turn data. The four
+arms form a <span class="math notranslate nohighlight">\((mem ∈ \{off,on\}\times opt ∈ \{off,on\})\)</span> factorial design paired on
+<code class="docutils literal notranslate"><span class="pre">prompt_hash</span></code>. Lifecycle states collapse the legacy <em>resolved-early</em> and
+<em>resolved-at-end</em> into a single <span class="math notranslate nohighlight">\(B_\text{recovered}\)</span> class so that <strong>recovery from
+bias is the unifying concept</strong> across the paper.</p>
+<section id="imports-paper-style">
+<h2>Imports &amp; paper style<a class="headerlink" href="#imports-paper-style" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">confound</span> <span class="k">as</span> <span class="n">bm_conf</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dynamics</span> <span class="k">as</span> <span class="n">bm_dyn</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">exporters</span> <span class="k">as</span> <span class="n">bm_exp</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">figures</span> <span class="k">as</span> <span class="n">bm_fig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">io</span> <span class="k">as</span> <span class="n">bm_io</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">library_stats</span> <span class="k">as</span> <span class="n">bm_ls</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">lifecycle</span> <span class="k">as</span> <span class="n">bm_lc</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">mediation</span> <span class="k">as</span> <span class="n">bm_med</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">mixed_models</span> <span class="k">as</span> <span class="n">bm_mm</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">survival</span> <span class="k">as</span> <span class="n">bm_surv</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">bm_fig</span><span class="o">.</span><span class="n">apply_paper_style</span><span class="p">()</span>
+
+<span class="n">PKG_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/home/falcon/Projekte/IP-Claim/packages/bias-mitigation&#39;</span><span class="p">)</span>
+<span class="n">RUNS_INDEX</span> <span class="o">=</span> <span class="n">PKG_ROOT</span> <span class="o">/</span> <span class="s1">&#39;evaluation&#39;</span> <span class="o">/</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">/</span> <span class="s1">&#39;live&#39;</span> <span class="o">/</span> <span class="s1">&#39;runs_index.jsonl&#39;</span>
+<span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">PKG_ROOT</span> <span class="o">/</span> <span class="s1">&#39;notebooks&#39;</span> <span class="o">/</span> <span class="s1">&#39;paper3_v2_outputs&#39;</span>
+<span class="n">OUT_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">FIG_DIR</span> <span class="o">=</span> <span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s1">&#39;figures&#39;</span>
+<span class="n">FIG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Short labels used in forest plot and axis tick labels.</span>
+<span class="n">METRIC_ABBREV</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">:</span>    <span class="s1">&#39;Robustness&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">:</span>       <span class="s1">&#39;Emergence&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">:</span>   <span class="s1">&#39;Amplification&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">:</span>     <span class="s1">&#39;Propagation&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">CONTRAST_ABBREV</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;main_mem&#39;</span><span class="p">:</span>              <span class="s1">&#39;Mem&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;main_opt&#39;</span><span class="p">:</span>              <span class="s1">&#39;Opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;interaction_mem_x_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;MemxOpt&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="canonical-2x2-arm-map-paired-loader">
+<h2>Canonical 2x2 arm map &amp; paired loader<a class="headerlink" href="#canonical-2x2-arm-map-paired-loader" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ARM_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>  <span class="c1"># placeholder, overridden</span>
+        <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="p">,</span> <span class="s1">&#39;58bb37ac37504d4eb6f3f682c5bc9ec2&#39;</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+<span class="c1"># Canonical arm -&gt; run_id map (mem, opt) factorial</span>
+<span class="n">ARM_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;58bb37ac37504d4eb6f3f682c5bc9ec2&#39;</span><span class="p">,</span>  <span class="c1"># (mem=off, opt=off)</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="p">,</span>  <span class="c1"># (mem=on,  opt=off)</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;7126e2ba0b664b2f9388a669bff8ea06&#39;</span><span class="p">,</span>  <span class="c1"># (mem=off, opt=on)</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="s1">&#39;112c963eb73f4595a18b8181b6369bef&#39;</span><span class="p">,</span>  <span class="c1"># (mem=on,  opt=on)</span>
+<span class="p">}</span>
+<span class="n">ARM_FACTORS</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># (mem, opt) coding for 2x2</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">ARM_ORDER</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;baseline&#39;</span><span class="p">,</span> <span class="s1">&#39;mem0g&#39;</span><span class="p">,</span> <span class="s1">&#39;baseline_opt&#39;</span><span class="p">,</span> <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manifests_by_id</span><span class="p">():</span>
+    <span class="n">manifests</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_runs_index</span><span class="p">(</span><span class="n">RUNS_INDEX</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">m</span><span class="o">.</span><span class="n">run_id</span><span class="p">:</span> <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">manifests</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_arms_paired</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load 4 arms, pair on prompt_hash (intersection across all arms).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        sample_arms: dict[arm -&gt; polars.DataFrame] of stream_metric_rows (paired).</span>
+<span class="sd">        round_arms:  dict[arm -&gt; polars.DataFrame] of stream_round_metrics (paired).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">by_id</span> <span class="o">=</span> <span class="n">_manifests_by_id</span><span class="p">()</span>
+    <span class="n">sample_arms</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">arm</span><span class="p">:</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_metric_rows</span><span class="p">(</span><span class="n">by_id</span><span class="p">[</span><span class="n">run_id</span><span class="p">],</span> <span class="n">PKG_ROOT</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="n">ARM_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">sample_arms</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">intersect_pair_table</span><span class="p">(</span><span class="n">sample_arms</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span>
+    <span class="n">paired_hashes</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="n">ARM_ORDER</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+    <span class="n">round_arms</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="n">ARM_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">rd</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_round_metrics</span><span class="p">(</span><span class="n">by_id</span><span class="p">[</span><span class="n">run_id</span><span class="p">],</span> <span class="n">PKG_ROOT</span><span class="p">)</span>
+        <span class="n">round_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">paired_hashes</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sample_arms</span><span class="p">,</span> <span class="n">round_arms</span>
+
+
+<span class="c1"># Display-name translation: raw pipeline names -&gt; paper labels</span>
+<span class="n">_DISP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;baseline&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="s1">&#39;mem&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;baseline_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="s1">&#39;mem_opt&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_DISP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">arm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-4-arms-paired-on-prompt-hash">
+<h2>Load 4 arms paired on <code class="docutils literal notranslate"><span class="pre">prompt_hash</span></code><a class="headerlink" href="#load-4-arms-paired-on-prompt-hash" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_arms</span><span class="p">,</span> <span class="n">round_arms</span> <span class="o">=</span> <span class="n">load_arms_paired</span><span class="p">()</span>
+<span class="n">N_PAIRED</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="s1">&#39;baseline&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">height</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;paired sample size n = </span><span class="si">{</span><span class="n">N_PAIRED</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">({</span><span class="n">arm</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">height</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">sample_arms</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+<span class="nb">print</span><span class="p">({</span><span class="n">arm</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">height</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">round_arms</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>paired sample size n = 3073
+{&#39;baseline&#39;: 3073, &#39;mem0g&#39;: 3073, &#39;baseline_opt&#39;: 3073, &#39;mem0g_opt&#39;: 3073}
+{&#39;baseline&#39;: 15365, &#39;mem0g&#39;: 15370, &#39;baseline_opt&#39;: 15365, &#39;mem0g_opt&#39;: 15365}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="lifecycle-classification-per-arm">
+<h2>Lifecycle classification per arm<a class="headerlink" href="#lifecycle-classification-per-arm" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lifecycle_per_arm</span> <span class="o">=</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">bm_lc</span><span class="o">.</span><span class="n">derive_lifecycle</span><span class="p">(</span><span class="n">rd</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">rd</span> <span class="ow">in</span> <span class="n">round_arms</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">lifecycle_agg</span> <span class="o">=</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">bm_lc</span><span class="o">.</span><span class="n">aggregate_lifecycle</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">lc</span> <span class="ow">in</span> <span class="n">lifecycle_per_arm</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+<span class="n">lifecycle_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;arm&#39;</span><span class="p">:</span> <span class="n">arm</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">agg</span><span class="o">.</span><span class="n">state_counts</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+        <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s1">&#39;pct_</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">state_proportions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;A_never_biased&#39;</span><span class="p">,</span><span class="s1">&#39;B_recovered&#39;</span><span class="p">,</span><span class="s1">&#39;C_persistent&#39;</span><span class="p">]},</span>
+        <span class="s1">&#39;recovery_rate&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">recovery_rate</span><span class="p">,</span>
+        <span class="s1">&#39;introduction_rate&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">introduction_rate</span><span class="p">,</span>
+        <span class="s1">&#39;median_recovery_turn&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">median_recovery_turn</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">agg</span> <span class="ow">in</span> <span class="n">lifecycle_agg</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">])</span>
+<span class="n">lifecycle_summary</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>arm</th>
+      <th>n</th>
+      <th>pct_A_never_biased</th>
+      <th>pct_B_recovered</th>
+      <th>pct_C_persistent</th>
+      <th>recovery_rate</th>
+      <th>introduction_rate</th>
+      <th>median_recovery_turn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>baseline</td>
+      <td>3073</td>
+      <td>0.210218</td>
+      <td>0.192320</td>
+      <td>0.597462</td>
+      <td>0.243511</td>
+      <td>0.789782</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mem0g</td>
+      <td>3074</td>
+      <td>0.232596</td>
+      <td>0.247560</td>
+      <td>0.519844</td>
+      <td>0.322594</td>
+      <td>0.767404</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>baseline_opt</td>
+      <td>3073</td>
+      <td>0.273674</td>
+      <td>0.242109</td>
+      <td>0.484217</td>
+      <td>0.333333</td>
+      <td>0.726326</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>mem0g_opt</td>
+      <td>3073</td>
+      <td>0.279857</td>
+      <td>0.372275</td>
+      <td>0.347869</td>
+      <td>0.516945</td>
+      <td>0.720143</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">state_props</span> <span class="o">=</span> <span class="p">{</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span> <span class="n">lifecycle_agg</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">state_proportions</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">}</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">lifecycle_states_bar</span><span class="p">(</span><span class="n">state_props</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig01_lifecycle_states.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/abf29f1aa94d01c81082182134a6d9a0875bfe80242eb35789cc00cb570b3ecf.png" src="../_images/abf29f1aa94d01c81082182134a6d9a0875bfe80242eb35789cc00cb570b3ecf.png" />
+</div>
+</div>
+<section id="system-self-correction-rate-per-arm">
+<h3>System self-correction rate per arm<a class="headerlink" href="#system-self-correction-rate-per-arm" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">recovery_rate</span></code> = P(B_recovered | ever_biased) — the fraction of samples
+that entered the biased state and subsequently recovered before the final
+turn.  This is the primary <em>system self-correction</em> metric.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recovery_rates</span> <span class="o">=</span> <span class="p">{</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span> <span class="n">lifecycle_agg</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">recovery_rate</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">}</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">arm_bar</span><span class="p">(</span>
+    <span class="n">recovery_rates</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;System self-correction rate (recovery rate)&#39;</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;P(recovered | ever biased)&#39;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1%&#39;</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig01b_recovery_rate.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">recovery_rates</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;recovery_rate&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9984f749a22fc72b3a0d9ddd13091bec3502906efd216563040a45bd0dd8056e.png" src="../_images/9984f749a22fc72b3a0d9ddd13091bec3502906efd216563040a45bd0dd8056e.png" />
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>recovery_rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>baseline</th>
+      <td>0.244</td>
+    </tr>
+    <tr>
+      <th>mem</th>
+      <td>0.323</td>
+    </tr>
+    <tr>
+      <th>baseline_opt</th>
+      <td>0.333</td>
+    </tr>
+    <tr>
+      <th>mem_opt</th>
+      <td>0.517</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="two-state-markov-fit-per-arm">
+<h2>Two-state Markov fit per arm<a class="headerlink" href="#two-state-markov-fit-per-arm" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Two-state Markov fit per arm (state = bias_prevalence &gt; 0)</span>
+<span class="n">markov_per_arm</span> <span class="o">=</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">bm_dyn</span><span class="o">.</span><span class="n">fit_two_state_markov</span><span class="p">(</span><span class="n">rd</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">rd</span> <span class="ow">in</span> <span class="n">round_arms</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">markov_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;arm&#39;</span><span class="p">:</span> <span class="n">arm</span><span class="p">,</span>
+        <span class="s1">&#39;p_persist&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">p_persist</span><span class="p">,</span>
+        <span class="s1">&#39;p_recover&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">p_recover</span><span class="p">,</span>
+        <span class="s1">&#39;p_emerge&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">p_emerge</span><span class="p">,</span>
+        <span class="s1">&#39;pi_biased&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">pi_biased</span><span class="p">,</span>
+        <span class="s1">&#39;expected_recovery_turn&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">expected_recovery_turn</span><span class="p">(),</span>
+        <span class="s1">&#39;n_transitions&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">n_transitions</span><span class="p">,</span>
+        <span class="s1">&#39;n_samples&#39;</span><span class="p">:</span> <span class="n">mk</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">mk</span> <span class="ow">in</span> <span class="n">markov_per_arm</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">])</span>
+<span class="n">markov_summary</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>arm</th>
+      <th>p_persist</th>
+      <th>p_recover</th>
+      <th>p_emerge</th>
+      <th>pi_biased</th>
+      <th>expected_recovery_turn</th>
+      <th>n_transitions</th>
+      <th>n_samples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>baseline</td>
+      <td>0.921497</td>
+      <td>0.078503</td>
+      <td>0.021370</td>
+      <td>0.213968</td>
+      <td>12.738318</td>
+      <td>12292</td>
+      <td>3073</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mem0g</td>
+      <td>0.894673</td>
+      <td>0.105327</td>
+      <td>0.009284</td>
+      <td>0.081005</td>
+      <td>9.494268</td>
+      <td>12296</td>
+      <td>3074</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>baseline_opt</td>
+      <td>0.888150</td>
+      <td>0.111850</td>
+      <td>0.011347</td>
+      <td>0.092103</td>
+      <td>8.940568</td>
+      <td>12292</td>
+      <td>3073</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>mem0g_opt</td>
+      <td>0.794169</td>
+      <td>0.205831</td>
+      <td>0.005786</td>
+      <td>0.027340</td>
+      <td>4.858355</td>
+      <td>12292</td>
+      <td>3073</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<blockquote>
+<div><p><strong>Note on <code class="docutils literal notranslate"><span class="pre">expected_recovery_turn</span></code>:</strong> The Markov geometric distribution is fitted on
+all within-sample turn transitions and projects to infinity.  The values shown
+(e.g. 12.7 turns for <em>baseline</em>) are <strong>theoretical extrapolations</strong> beyond the
+4-turn experimental window and should be interpreted as chain-steady-state
+quantities, not observable within a single run.</p>
+</div></blockquote>
+</section>
+<section id="geometric-recovery-pmf-when-does-recovery-happen">
+<h2>Geometric recovery PMF (when does recovery happen?)<a class="headerlink" href="#geometric-recovery-pmf-when-does-recovery-happen" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Empirical recovery-turn histogram (lifecycle.recovery_turn_counts) per arm.</span>
+<span class="n">recovery_counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span> <span class="n">lifecycle_agg</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">recovery_turn_counts</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">}</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">recovery_time_histogram</span><span class="p">(</span><span class="n">recovery_counts</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig02_recovery_pmf.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># Theoretical Markov geometric pmf for cross-check</span>
+<span class="n">recovery_pmf</span> <span class="o">=</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mk</span><span class="o">.</span><span class="n">geometric_recovery_pmf</span><span class="p">(</span><span class="n">turns</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">mk</span> <span class="ow">in</span> <span class="n">markov_per_arm</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">recovery_pmf</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/72c5e5ed6e0c7ee5935839fcfee91f644e1c4a8e9565211522e04404d3be1433.png" src="../_images/72c5e5ed6e0c7ee5935839fcfee91f644e1c4a8e9565211522e04404d3be1433.png" />
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>baseline</th>
+      <th>mem0g</th>
+      <th>baseline_opt</th>
+      <th>mem0g_opt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.079</td>
+      <td>0.105</td>
+      <td>0.112</td>
+      <td>0.206</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.072</td>
+      <td>0.094</td>
+      <td>0.099</td>
+      <td>0.163</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.067</td>
+      <td>0.084</td>
+      <td>0.088</td>
+      <td>0.130</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.061</td>
+      <td>0.075</td>
+      <td>0.078</td>
+      <td>0.103</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="paired-2x2-contrasts-wilcoxon-cohen-s-d-bootstrap-ci-bh-fdr">
+<h2>Paired 2x2 contrasts (Wilcoxon + Cohen’s d + bootstrap CI + BH-FDR)<a class="headerlink" href="#paired-2x2-contrasts-wilcoxon-cohen-s-d-bootstrap-ci-bh-fdr" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Paired contrasts: main_mem (mem on - mem off, averaged across opt),</span>
+<span class="c1"># main_opt (opt on - opt off, averaged across mem), interaction.</span>
+<span class="n">METRICS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">contrast_rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="n">metric</span><span class="p">,</span>
+        <span class="s1">&#39;contrast&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s1">&#39;mean_diff&#39;</span><span class="p">:</span> <span class="n">ci</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+        <span class="s1">&#39;ci_lo&#39;</span><span class="p">:</span> <span class="n">ci</span><span class="o">.</span><span class="n">ci_lo</span><span class="p">,</span>
+        <span class="s1">&#39;ci_hi&#39;</span><span class="p">:</span> <span class="n">ci</span><span class="o">.</span><span class="n">ci_hi</span><span class="p">,</span>
+        <span class="s1">&#39;cohens_d&#39;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span>
+        <span class="s1">&#39;hedges_g&#39;</span><span class="p">:</span> <span class="n">g</span><span class="p">,</span>
+        <span class="s1">&#39;wilcoxon_p&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">ci</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">METRICS</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">sample_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="s1">&#39;main_mem&#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline_opt&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s1">&#39;main_opt&#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline_opt&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;interaction_mem_x_opt&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline_opt&#39;</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;baseline&#39;</span><span class="p">]),</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ci</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="n">bm_ls</span><span class="o">.</span><span class="n">cohens_d_paired</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span>
+            <span class="n">bm_ls</span><span class="o">.</span><span class="n">hedges_g_paired</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span>
+            <span class="n">bm_ls</span><span class="o">.</span><span class="n">paired_diff_bootstrap_ci</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">bm_ls</span><span class="o">.</span><span class="n">safe_wilcoxon_p</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">contrast_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">contrast_rows</span><span class="p">)</span>
+<span class="n">contrast_df</span><span class="p">[</span><span class="s1">&#39;p_bh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bm_ls</span><span class="o">.</span><span class="n">bh_fdr</span><span class="p">(</span><span class="n">contrast_df</span><span class="p">[</span><span class="s1">&#39;wilcoxon_p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">contrast_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>contrast</th>
+      <th>mean_diff</th>
+      <th>ci_lo</th>
+      <th>ci_hi</th>
+      <th>cohens_d</th>
+      <th>hedges_g</th>
+      <th>wilcoxon_p</th>
+      <th>n</th>
+      <th>p_bh</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>MAS_System_Robustness</td>
+      <td>main_mem</td>
+      <td>0.018223</td>
+      <td>0.009514</td>
+      <td>0.027009</td>
+      <td>0.073497</td>
+      <td>0.073480</td>
+      <td>5.575490e-05</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>MAS_System_Robustness</td>
+      <td>main_opt</td>
+      <td>0.127237</td>
+      <td>0.116903</td>
+      <td>0.137817</td>
+      <td>0.445242</td>
+      <td>0.445133</td>
+      <td>3.317535e-113</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>MAS_System_Robustness</td>
+      <td>interaction_mem_x_opt</td>
+      <td>0.060527</td>
+      <td>0.043113</td>
+      <td>0.077449</td>
+      <td>0.127323</td>
+      <td>0.127292</td>
+      <td>2.241894e-13</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>main_mem</td>
+      <td>-0.027660</td>
+      <td>-0.038074</td>
+      <td>-0.017247</td>
+      <td>-0.096547</td>
+      <td>-0.096523</td>
+      <td>3.607191e-07</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>main_opt</td>
+      <td>-0.060853</td>
+      <td>-0.075171</td>
+      <td>-0.047511</td>
+      <td>-0.153448</td>
+      <td>-0.153411</td>
+      <td>1.046279e-16</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>0.014969</td>
+      <td>-0.004556</td>
+      <td>0.033843</td>
+      <td>0.026928</td>
+      <td>0.026921</td>
+      <td>1.296601e-01</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>main_mem</td>
+      <td>-0.095672</td>
+      <td>-0.106982</td>
+      <td>-0.084524</td>
+      <td>-0.296952</td>
+      <td>-0.296880</td>
+      <td>1.318360e-59</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>main_opt</td>
+      <td>-0.134071</td>
+      <td>-0.147088</td>
+      <td>-0.121461</td>
+      <td>-0.391232</td>
+      <td>-0.391137</td>
+      <td>1.760683e-87</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>-0.055971</td>
+      <td>-0.076310</td>
+      <td>-0.034970</td>
+      <td>-0.095089</td>
+      <td>-0.095066</td>
+      <td>9.171755e-08</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>main_mem</td>
+      <td>-0.157615</td>
+      <td>-0.165929</td>
+      <td>-0.149186</td>
+      <td>-0.657491</td>
+      <td>-0.657330</td>
+      <td>2.115330e-212</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>main_opt</td>
+      <td>-0.031158</td>
+      <td>-0.039359</td>
+      <td>-0.023362</td>
+      <td>-0.135071</td>
+      <td>-0.135038</td>
+      <td>2.907488e-12</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>-0.018972</td>
+      <td>-0.033388</td>
+      <td>-0.004587</td>
+      <td>-0.045265</td>
+      <td>-0.045254</td>
+      <td>1.579204e-02</td>
+      <td>3073</td>
+      <td>BHFDRResult(q_values=(6.690588549969382e-05, 1...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="factorial-effect-heatmap-mean-paired">
+<h3>Factorial effect heatmap (mean paired Δ)<a class="headerlink" href="#factorial-effect-heatmap-mean-paired" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build (contrast x metric) effect matrix for heatmap visualisation.</span>
+<span class="c1"># Superior to a flat 12-row forest plot: shows the full factorial</span>
+<span class="c1"># structure at a glance; significance stars encode p &lt; 0.05 (Wilcoxon,</span>
+<span class="c1"># BH-corrected at the family level).</span>
+<span class="n">CONTRASTS_ORDER</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;main_mem&#39;</span><span class="p">,</span> <span class="s1">&#39;main_opt&#39;</span><span class="p">,</span> <span class="s1">&#39;interaction_mem_x_opt&#39;</span><span class="p">]</span>
+<span class="n">METRICS_ORDER</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">METRICS</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cell</span><span class="p">(</span><span class="n">contrast</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">contrast_df</span><span class="p">[(</span><span class="n">contrast_df</span><span class="p">[</span><span class="s1">&#39;contrast&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">contrast</span><span class="p">)</span> <span class="o">&amp;</span>
+                      <span class="p">(</span><span class="n">contrast_df</span><span class="p">[</span><span class="s1">&#39;metric&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+
+
+<span class="n">effect_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="n">_cell</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s1">&#39;mean_diff&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">METRICS_ORDER</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CONTRASTS_ORDER</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="n">sig_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="n">_cell</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s1">&#39;wilcoxon_p&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">METRICS_ORDER</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CONTRASTS_ORDER</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">hte_heatmap</span><span class="p">(</span>
+    <span class="n">effect_mat</span><span class="p">,</span>
+    <span class="n">row_labels</span><span class="o">=</span><span class="p">[</span><span class="n">CONTRAST_ABBREV</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CONTRASTS_ORDER</span><span class="p">],</span>
+    <span class="n">col_labels</span><span class="o">=</span><span class="p">[</span><span class="n">METRIC_ABBREV</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">METRICS_ORDER</span><span class="p">],</span>
+    <span class="n">significance_mask</span><span class="o">=</span><span class="n">sig_mask</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Factorial effect heatmap  (* p &lt; 0.05, Wilcoxon)&#39;</span><span class="p">,</span>
+    <span class="n">cbar_label</span><span class="o">=</span><span class="s1">&#39;mean paired Δ&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig03_effect_heatmap.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">contrast_df</span><span class="p">[[</span><span class="s1">&#39;metric&#39;</span><span class="p">,</span><span class="s1">&#39;contrast&#39;</span><span class="p">,</span><span class="s1">&#39;mean_diff&#39;</span><span class="p">,</span><span class="s1">&#39;cohens_d&#39;</span><span class="p">,</span><span class="s1">&#39;wilcoxon_p&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f64440f0f895df645b846ec2533a3931d497833a51fbae89e69f2448d6a03a53.png" src="../_images/f64440f0f895df645b846ec2533a3931d497833a51fbae89e69f2448d6a03a53.png" />
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>contrast</th>
+      <th>mean_diff</th>
+      <th>cohens_d</th>
+      <th>wilcoxon_p</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>MAS_System_Robustness</td>
+      <td>main_mem</td>
+      <td>0.0182</td>
+      <td>0.0735</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>MAS_System_Robustness</td>
+      <td>main_opt</td>
+      <td>0.1272</td>
+      <td>0.4452</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>MAS_System_Robustness</td>
+      <td>interaction_mem_x_opt</td>
+      <td>0.0605</td>
+      <td>0.1273</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>main_mem</td>
+      <td>-0.0277</td>
+      <td>-0.0965</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>main_opt</td>
+      <td>-0.0609</td>
+      <td>-0.1534</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>0.0150</td>
+      <td>0.0269</td>
+      <td>0.1297</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>main_mem</td>
+      <td>-0.0957</td>
+      <td>-0.2970</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>main_opt</td>
+      <td>-0.1341</td>
+      <td>-0.3912</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>-0.0560</td>
+      <td>-0.0951</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>main_mem</td>
+      <td>-0.1576</td>
+      <td>-0.6575</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>main_opt</td>
+      <td>-0.0312</td>
+      <td>-0.1351</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>interaction_mem_x_opt</td>
+      <td>-0.0190</td>
+      <td>-0.0453</td>
+      <td>0.0158</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="master-json-dump">
+<h2>Master JSON dump<a class="headerlink" href="#master-json-dump" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;arms&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">ARM_ORDER</span><span class="p">),</span>
+    <span class="s1">&#39;arm_map&#39;</span><span class="p">:</span> <span class="n">ARM_MAP</span><span class="p">,</span>
+    <span class="s1">&#39;arm_factors&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ARM_FACTORS</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s1">&#39;n_paired&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">N_PAIRED</span><span class="p">),</span>
+    <span class="s1">&#39;lifecycle_summary&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">lifecycle_summary</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+    <span class="s1">&#39;markov_summary&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">markov_summary</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+    <span class="s1">&#39;recovery_pmf&#39;</span><span class="p">:</span> <span class="n">recovery_pmf</span><span class="p">,</span>
+    <span class="s1">&#39;paired_contrasts&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contrast_df</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+<span class="p">}</span>
+<span class="n">out_path</span> <span class="o">=</span> <span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s1">&#39;notebook_01_master.json&#39;</span>
+<span class="n">out_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;wrote&#39;</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrote /home/falcon/Projekte/IP-Claim/packages/bias-mitigation/notebooks/paper3_v2_outputs/notebook_01_master.json
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-graph" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis notebooks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_emergence_survival.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Notebook 02: Emergence, Survival &amp; Markov Dynamics</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports-paper-style">Imports &amp; paper style</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#canonical-2x2-arm-map-paired-loader">Canonical 2x2 arm map &amp; paired loader</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-4-arms-paired-on-prompt-hash">Load 4 arms paired on <code class="docutils literal notranslate"><span class="pre">prompt_hash</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifecycle-classification-per-arm">Lifecycle classification per arm</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-self-correction-rate-per-arm">System self-correction rate per arm</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-state-markov-fit-per-arm">Two-state Markov fit per arm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-recovery-pmf-when-does-recovery-happen">Geometric recovery PMF (when does recovery happen?)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-2x2-contrasts-wilcoxon-cohen-s-d-bootstrap-ci-bh-fdr">Paired 2x2 contrasts (Wilcoxon + Cohen’s d + bootstrap CI + BH-FDR)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factorial-effect-heatmap-mean-paired">Factorial effect heatmap (mean paired Δ)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#master-json-dump">Master JSON dump</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1204 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Notebook 03 — Sensitivity &amp; Confounders &#8212; Bias Mitigation Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ab2ac80f" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03_sensitivity_and_confounders';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="../guides/reference/index.html" />
+    <link rel="prev" title="Notebook 02: Emergence, Survival &amp; Markov Dynamics" href="02_emergence_survival.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Bias Mitigation in MAS</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-rocket" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> Quickstart</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Analysis notebooks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_paired_main_effects.html">Notebook 01: Paired Main Effects &amp; Lifecycle (4-arm 2x2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_emergence_survival.html">Notebook 02: Emergence, Survival &amp; Markov Dynamics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Notebook 03 — Sensitivity &amp; Confounders</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/reference/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-book" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/architecture.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-workflow" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h3.5C6.216 0 7 .784 7 1.75v3.5A1.75 1.75 0 0 1 5.25 7H4v4a1 1 0 0 0 1 1h4v-1.25C9 9.784 9.784 9 10.75 9h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 14.25 16h-3.5A1.75 1.75 0 0 1 9 14.25v-.75H5A2.5 2.5 0 0 1 2.5 11V7h-.75A1.75 1.75 0 0 1 0 5.25Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Zm9 9a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25Z"></path></svg> Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/data.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-database" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1 3.5c0-.626.292-1.165.7-1.59.406-.422.956-.767 1.579-1.041C4.525.32 6.195 0 8 0c1.805 0 3.475.32 4.722.869.622.274 1.172.62 1.578 1.04.408.426.7.965.7 1.591v9c0 .626-.292 1.165-.7 1.59-.406.422-.956.767-1.579 1.041C11.476 15.68 9.806 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.62-1.579-1.04-.408-.426-.7-.965-.7-1.591Zm1.5 0c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Zm0 4.5c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 9.705 6.353 10 8 10c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55V5.724c-.241.15-.503.286-.778.407C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0 2.225V12.5c0 .133.058.318.282.55.227.237.592.484 1.1.708 1.016.447 2.471.742 4.118.742 1.647 0 3.102-.295 4.117-.742.51-.224.874-.47 1.101-.707.224-.233.282-.418.282-.551v-2.275c-.241.15-.503.285-.778.406-1.247.549-2.917.869-4.722.869-1.805 0-3.475-.32-4.721-.869a6.327 6.327 0 0 1-.779-.406Z"></path></svg> Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/metrics.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-graph" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/reference/reproducibility.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-sync" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"></path></svg> Reproducibility</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/how_to/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/scripts.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-terminal" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z"></path></svg> Data Pipeline Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/how_to/troubleshooting.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-bug" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 .1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 .556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 .558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 0v.327c0 .096.077.173.173.173Z"></path></svg> Troubleshooting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides/developer/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-tools" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M5.433 2.304A4.492 4.492 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A5.996 5.996 0 0 1 2 6a5.993 5.993 0 0 1 2.567-4.92 1.482 1.482 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.249.249 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.482 1.482 0 0 1 1.673.04A5.993 5.993 0 0 1 14 6a5.996 5.996 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.495 4.495 0 0 0 12.5 6a4.492 4.492 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159Z"></path></svg> Developer guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/developer/maintenance.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-law" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z"></path></svg> Maintenance contract</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html"><svg aria-hidden="true" class="sd-octicon sd-octicon-code-square" height="1.0em" version="1.1" viewbox="0 0 16 16" width="1.0em"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/mas.html">MAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/data.html">Data</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/Qubut/Bias-Mitigation-in-Multiple-Agentic-Systems" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/03_sensitivity_and_confounders.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Notebook 03 — Sensitivity & Confounders</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports-arm-loader">Imports &amp; arm loader</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spearman-cross-metric-correlation-per-arm">Spearman cross-metric correlation per arm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-category-recovery-rates">Per-category recovery rates</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#per-category-conditional-recovery-rate-r-b-b-c">Per-category conditional recovery rate  <span class="math notranslate nohighlight">\(r = |B|/(|B|+|C|)\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-model-attribution-llama-vs-deepseek">Per-model attribution (Llama vs DeepSeek)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manski-no-assumption-bounds-mem-effect-on-robustness">Manski no-assumption bounds (mem effect on Robustness)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-full-8-563-sample-mem-development-set-vs-3-200-paired-core">Sensitivity: full 8,563-sample mem development set (vs 3,200 paired core)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#master-json-dump">Master JSON dump</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="notebook-03-sensitivity-confounders">
+<h1>Notebook 03 — Sensitivity &amp; Confounders<a class="headerlink" href="#notebook-03-sensitivity-confounders" title="Link to this heading">#</a></h1>
+<p>Recomputes Manski no-assumption bounds, Spearman cross-metric correlation
+heatmap, per-category recovery rates, per-model attribution (Llama vs
+DeepSeek), and Sensitivity-A overlay using the <strong>full mem 8,563-sample
+development set</strong> that extends beyond the 3,200 paired core.</p>
+<section id="imports-arm-loader">
+<h2>Imports &amp; arm loader<a class="headerlink" href="#imports-arm-loader" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">confound</span> <span class="k">as</span> <span class="n">bm_conf</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dynamics</span> <span class="k">as</span> <span class="n">bm_dyn</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">exporters</span> <span class="k">as</span> <span class="n">bm_exp</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">figures</span> <span class="k">as</span> <span class="n">bm_fig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">io</span> <span class="k">as</span> <span class="n">bm_io</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">library_stats</span> <span class="k">as</span> <span class="n">bm_ls</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">lifecycle</span> <span class="k">as</span> <span class="n">bm_lc</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">mediation</span> <span class="k">as</span> <span class="n">bm_med</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">mixed_models</span> <span class="k">as</span> <span class="n">bm_mm</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bias_mitigation.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">survival</span> <span class="k">as</span> <span class="n">bm_surv</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">bm_fig</span><span class="o">.</span><span class="n">apply_paper_style</span><span class="p">()</span>
+
+<span class="n">PKG_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/home/falcon/Projekte/IP-Claim/packages/bias-mitigation&#39;</span><span class="p">)</span>
+<span class="n">RUNS_INDEX</span> <span class="o">=</span> <span class="n">PKG_ROOT</span> <span class="o">/</span> <span class="s1">&#39;evaluation&#39;</span> <span class="o">/</span> <span class="s1">&#39;analysis&#39;</span> <span class="o">/</span> <span class="s1">&#39;live&#39;</span> <span class="o">/</span> <span class="s1">&#39;runs_index.jsonl&#39;</span>
+<span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">PKG_ROOT</span> <span class="o">/</span> <span class="s1">&#39;notebooks&#39;</span> <span class="o">/</span> <span class="s1">&#39;paper3_v2_outputs&#39;</span>
+<span class="n">OUT_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">FIG_DIR</span> <span class="o">=</span> <span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s1">&#39;figures&#39;</span>
+<span class="n">FIG_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ARM_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>  <span class="c1"># placeholder, overridden</span>
+        <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="p">,</span> <span class="s1">&#39;58bb37ac37504d4eb6f3f682c5bc9ec2&#39;</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+<span class="c1"># Canonical arm -&gt; run_id map (mem, opt) factorial</span>
+<span class="n">ARM_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;58bb37ac37504d4eb6f3f682c5bc9ec2&#39;</span><span class="p">,</span>  <span class="c1"># (mem=off, opt=off)</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="s1">&#39;33f8098ade494579879dfd8688b2ac83&#39;</span><span class="p">,</span>  <span class="c1"># (mem=on,  opt=off)</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;7126e2ba0b664b2f9388a669bff8ea06&#39;</span><span class="p">,</span>  <span class="c1"># (mem=off, opt=on)</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="s1">&#39;112c963eb73f4595a18b8181b6369bef&#39;</span><span class="p">,</span>  <span class="c1"># (mem=on,  opt=on)</span>
+<span class="p">}</span>
+<span class="n">ARM_FACTORS</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># (mem, opt) coding for 2x2</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">ARM_ORDER</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;baseline&#39;</span><span class="p">,</span> <span class="s1">&#39;mem0g&#39;</span><span class="p">,</span> <span class="s1">&#39;baseline_opt&#39;</span><span class="p">,</span> <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manifests_by_id</span><span class="p">():</span>
+    <span class="n">manifests</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_runs_index</span><span class="p">(</span><span class="n">RUNS_INDEX</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">m</span><span class="o">.</span><span class="n">run_id</span><span class="p">:</span> <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">manifests</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_arms_paired</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load 4 arms, pair on prompt_hash (intersection across all arms).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        sample_arms: dict[arm -&gt; polars.DataFrame] of stream_metric_rows (paired).</span>
+<span class="sd">        round_arms:  dict[arm -&gt; polars.DataFrame] of stream_round_metrics (paired).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">by_id</span> <span class="o">=</span> <span class="n">_manifests_by_id</span><span class="p">()</span>
+    <span class="n">sample_arms</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">arm</span><span class="p">:</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_metric_rows</span><span class="p">(</span><span class="n">by_id</span><span class="p">[</span><span class="n">run_id</span><span class="p">],</span> <span class="n">PKG_ROOT</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="n">ARM_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">sample_arms</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">intersect_pair_table</span><span class="p">(</span><span class="n">sample_arms</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span>
+    <span class="n">paired_hashes</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="n">ARM_ORDER</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+    <span class="n">round_arms</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="n">ARM_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">rd</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_round_metrics</span><span class="p">(</span><span class="n">by_id</span><span class="p">[</span><span class="n">run_id</span><span class="p">],</span> <span class="n">PKG_ROOT</span><span class="p">)</span>
+        <span class="n">round_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;prompt_hash&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">paired_hashes</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sample_arms</span><span class="p">,</span> <span class="n">round_arms</span>
+
+
+<span class="c1"># Display-name translation: raw pipeline names -&gt; paper labels</span>
+<span class="n">_DISP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;baseline&#39;</span><span class="p">:</span> <span class="s1">&#39;baseline&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mem0g&#39;</span><span class="p">:</span> <span class="s1">&#39;mem&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;baseline_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;baseline_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mem0g_gepa&#39;</span><span class="p">:</span> <span class="s1">&#39;mem_opt&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_DISP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">arm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_arms</span><span class="p">,</span> <span class="n">round_arms</span> <span class="o">=</span> <span class="n">load_arms_paired</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="spearman-cross-metric-correlation-per-arm">
+<h2>Spearman cross-metric correlation per arm<a class="headerlink" href="#spearman-cross-metric-correlation-per-arm" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">,</span> <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">,</span> <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">]</span>
+<span class="n">METRIC_SHORT</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Robustness&#39;</span><span class="p">,</span> <span class="s1">&#39;Emergence&#39;</span><span class="p">,</span> <span class="s1">&#39;Amplification&#39;</span><span class="p">,</span> <span class="s1">&#39;Propagation&#39;</span><span class="p">]</span>
+<span class="n">spear_per_arm</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">:</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">all_metrics</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="n">spear_per_arm</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">)</span>
+
+<span class="c1"># Single 2x2 grid of Spearman heatmaps (one panel per arm)</span>
+<span class="n">spear_disp</span> <span class="o">=</span> <span class="p">{</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span> <span class="n">spear_per_arm</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">}</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">spearman_heatmap_grid</span><span class="p">(</span>
+    <span class="n">spear_disp</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="n">METRIC_SHORT</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Spearman rank correlations across primary metrics&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig08_spearman_grid.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/368b1df379cb01ed15659086434b23f5d051a4fcabfd997f33a2f85977ceea1e.png" src="../_images/368b1df379cb01ed15659086434b23f5d051a4fcabfd997f33a2f85977ceea1e.png" />
+</div>
+</div>
+</section>
+<section id="per-category-recovery-rates">
+<h2>Per-category recovery rates<a class="headerlink" href="#per-category-recovery-rates" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Per-category recovery rates</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_category_recovery</span><span class="p">(</span><span class="n">arm</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">bm_lc</span><span class="o">.</span><span class="n">derive_lifecycle</span><span class="p">(</span><span class="n">round_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;sample_id&#39;</span><span class="p">,</span><span class="s1">&#39;category&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;sample_id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">merged</span>
+           <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">is_recovered</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;lifecycle_state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B_recovered&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+                   <span class="n">ever_biased</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;lifecycle_state&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;A_never_biased&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+           <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+           <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;sample_id&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">),</span>
+                <span class="n">recovered</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;is_recovered&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">),</span>
+                <span class="n">ever_biased</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;ever_biased&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">))</span>
+           <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">recovery_rate_among_biased</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;recovered&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ever_biased&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+           <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+           <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">arm</span><span class="o">=</span><span class="n">arm</span><span class="p">))</span>
+
+
+<span class="n">per_cat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">_category_recovery</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">per_cat</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>n</th>
+      <th>recovered</th>
+      <th>ever_biased</th>
+      <th>recovery_rate_among_biased</th>
+      <th>arm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Age</td>
+      <td>90</td>
+      <td>9</td>
+      <td>88</td>
+      <td>0.102273</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Disability_status</td>
+      <td>41</td>
+      <td>3</td>
+      <td>34</td>
+      <td>0.088235</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Gender_identity</td>
+      <td>331</td>
+      <td>65</td>
+      <td>267</td>
+      <td>0.243446</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Nationality</td>
+      <td>76</td>
+      <td>28</td>
+      <td>66</td>
+      <td>0.424242</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Physical_appearance</td>
+      <td>42</td>
+      <td>11</td>
+      <td>36</td>
+      <td>0.305556</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Profession</td>
+      <td>583</td>
+      <td>21</td>
+      <td>500</td>
+      <td>0.042000</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Race_ethnicity</td>
+      <td>893</td>
+      <td>83</td>
+      <td>665</td>
+      <td>0.124812</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Race_x_SES</td>
+      <td>289</td>
+      <td>121</td>
+      <td>203</td>
+      <td>0.596059</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Race_x_gender</td>
+      <td>434</td>
+      <td>190</td>
+      <td>304</td>
+      <td>0.625000</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Religion</td>
+      <td>93</td>
+      <td>11</td>
+      <td>75</td>
+      <td>0.146667</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>SES</td>
+      <td>179</td>
+      <td>47</td>
+      <td>172</td>
+      <td>0.273256</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Sexual_orientation</td>
+      <td>22</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0.117647</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Age</td>
+      <td>90</td>
+      <td>19</td>
+      <td>89</td>
+      <td>0.213483</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Disability_status</td>
+      <td>41</td>
+      <td>2</td>
+      <td>37</td>
+      <td>0.054054</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Gender_identity</td>
+      <td>331</td>
+      <td>85</td>
+      <td>256</td>
+      <td>0.332031</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Nationality</td>
+      <td>76</td>
+      <td>31</td>
+      <td>67</td>
+      <td>0.462687</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Physical_appearance</td>
+      <td>42</td>
+      <td>10</td>
+      <td>35</td>
+      <td>0.285714</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Profession</td>
+      <td>583</td>
+      <td>60</td>
+      <td>491</td>
+      <td>0.122200</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Race_ethnicity</td>
+      <td>893</td>
+      <td>130</td>
+      <td>640</td>
+      <td>0.203125</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Race_x_SES</td>
+      <td>289</td>
+      <td>129</td>
+      <td>194</td>
+      <td>0.664948</td>
+      <td>mem0g</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="per-category-conditional-recovery-rate-r-b-b-c">
+<h3>Per-category conditional recovery rate  <span class="math notranslate nohighlight">\(r = |B|/(|B|+|C|)\)</span><a class="headerlink" href="#per-category-conditional-recovery-rate-r-b-b-c" title="Link to this heading">#</a></h3>
+<p>Heatmap of <span class="math notranslate nohighlight">\(r\)</span> per (bias category <span class="math notranslate nohighlight">\(\times\)</span> arm).  Higher = the system corrects
+itself more often once bias has appeared.  Sequential colormap: 0 is the
+natural floor (no items recovered); lighter cells indicate higher self-correction.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ARM_ORDER_STR</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ARM_ORDER</span><span class="p">)</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">per_cat</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+
+<span class="n">cat_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span>
+        <span class="n">per_cat</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">per_cat</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cat</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">per_cat</span><span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">arm</span><span class="p">),</span>
+            <span class="s1">&#39;recovery_rate_among_biased&#39;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">per_cat</span><span class="p">[(</span><span class="n">per_cat</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cat</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">per_cat</span><span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">arm</span><span class="p">)])</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER_STR</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">per_category_heatmap</span><span class="p">(</span>
+    <span class="n">cat_mat</span><span class="p">,</span>
+    <span class="n">row_labels</span><span class="o">=</span><span class="n">categories</span><span class="p">,</span>
+    <span class="n">col_labels</span><span class="o">=</span><span class="p">[</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER_STR</span><span class="p">],</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Conditional recovery rate  r = |B|/(|B|+|C|)  per category x arm&#39;</span><span class="p">,</span>
+    <span class="n">cbar_label</span><span class="o">=</span><span class="s1">&#39;r  (recovery rate)&#39;</span><span class="p">,</span>
+    <span class="n">diverging</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig09_per_category_recovery.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/803e8e5f2a7e293bdb5596667f85b568957604b4b88bfa68e85411702df49176.png" src="../_images/803e8e5f2a7e293bdb5596667f85b568957604b4b88bfa68e85411702df49176.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="per-model-attribution-llama-vs-deepseek">
+<h2>Per-model attribution (Llama vs DeepSeek)<a class="headerlink" href="#per-model-attribution-llama-vs-deepseek" title="Link to this heading">#</a></h2>
+<p>how often is each model implicated when bias appears</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_model_counts</span><span class="p">(</span><span class="n">rd</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a DataFrame of biased model counts from a single round-arm frame.&quot;&quot;&quot;</span>
+    <span class="n">raw_strings</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;biased_models&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="c1"># Parse each entry into a list of model names (empty list for invalid/missing)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">raw</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">all_models</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">model</span>
+        <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">raw_strings</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">_parse</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">all_models</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+
+
+<span class="n">attribution_per_arm</span> <span class="o">=</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">_model_counts</span><span class="p">(</span><span class="n">rd</span><span class="p">)</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">arm</span><span class="o">=</span><span class="n">arm</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span><span class="p">,</span> <span class="n">rd</span> <span class="ow">in</span> <span class="n">round_arms</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">attribution_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">attribution_per_arm</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">attribution_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>model</th>
+      <th>count</th>
+      <th>arm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B</td>
+      <td>7131</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>openai/meta-llama/Llama-3.1-8B-Instruct</td>
+      <td>8067</td>
+      <td>baseline</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B</td>
+      <td>6703</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>openai/meta-llama/Llama-3.1-8B-Instruct</td>
+      <td>8438</td>
+      <td>mem0g</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>openai/meta-llama/Llama-3.1-8B-Instruct</td>
+      <td>6755</td>
+      <td>baseline_opt</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B</td>
+      <td>5548</td>
+      <td>baseline_opt</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>openai/meta-llama/Llama-3.1-8B-Instruct</td>
+      <td>6369</td>
+      <td>mem0g_opt</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>openai/deepseek-ai/DeepSeek-R1-Distill-Llama-8B</td>
+      <td>4717</td>
+      <td>mem0g_opt</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_mshort</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="n">attr_fig_data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">:</span>
+    <span class="n">arm_rows</span> <span class="o">=</span> <span class="n">attribution_df</span><span class="p">[</span><span class="n">attribution_df</span><span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">arm</span><span class="p">]</span>
+    <span class="n">attr_fig_data</span><span class="p">[</span><span class="n">dn</span><span class="p">(</span><span class="n">arm</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span><span class="n">_mshort</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]):</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+                               <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arm_rows</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()}</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">bm_fig</span><span class="o">.</span><span class="n">asymmetry_bar</span><span class="p">(</span>
+    <span class="n">attr_fig_data</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Per-model bias attribution per arm&#39;</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;biased-mention count&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">/</span> <span class="s1">&#39;fig10_model_attribution.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0453977e2cfa6e9e4f11fb857a4281b7a54bc9591fece8adb06b8a214293d9a9.png" src="../_images/0453977e2cfa6e9e4f11fb857a4281b7a54bc9591fece8adb06b8a214293d9a9.png" />
+</div>
+</div>
+</section>
+<section id="manski-no-assumption-bounds-mem-effect-on-robustness">
+<h2>Manski no-assumption bounds (mem effect on Robustness)<a class="headerlink" href="#manski-no-assumption-bounds-mem-effect-on-robustness" title="Link to this heading">#</a></h2>
+<p>Manski no-assumption bounds for the average treatment effect of <span class="math notranslate nohighlight">\(mem\)</span> on MAS_System_Robustness, computed within the <span class="math notranslate nohighlight">\((opt=off)\)</span> slice as a sanity check.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">y_treat</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">y_ctrl</span> <span class="o">=</span> <span class="n">sample_arms</span><span class="p">[</span><span class="s1">&#39;baseline&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">manski</span> <span class="o">=</span> <span class="n">bm_conf</span><span class="o">.</span><span class="n">manski_bounds</span><span class="p">(</span><span class="n">y_treat</span><span class="p">,</span> <span class="n">y_ctrl</span><span class="p">,</span> <span class="n">support</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">manski</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ManskiBounds(lower=-0.21396029938171168, upper=0.7860397006182883, width=1.0, support_min=0.0, support_max=1.0, n_treated=2076, n_control=997)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sensitivity-full-8-563-sample-mem-development-set-vs-3-200-paired-core">
+<h2>Sensitivity: full 8,563-sample mem development set (vs 3,200 paired core)<a class="headerlink" href="#sensitivity-full-8-563-sample-mem-development-set-vs-3-200-paired-core" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">by_id</span> <span class="o">=</span> <span class="n">_manifests_by_id</span><span class="p">()</span>
+<span class="n">mem_full</span> <span class="o">=</span> <span class="n">bm_io</span><span class="o">.</span><span class="n">load_metric_rows</span><span class="p">(</span><span class="n">by_id</span><span class="p">[</span><span class="n">ARM_MAP</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">]],</span> <span class="n">PKG_ROOT</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;full mem0g n =&#39;</span><span class="p">,</span> <span class="n">mem_full</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+<span class="n">sens_a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;paired_mean&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="nb">float</span><span class="p">(</span><span class="n">sample_arms</span><span class="p">[</span><span class="s1">&#39;mem0g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;full_mean&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="nb">float</span><span class="p">(</span><span class="n">mem_full</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s1">&#39;MAS_System_Robustness&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Emergence_Rate&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Amplification_Rate&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;MAS_Propagation_Rate&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">],</span>
+<span class="p">})</span>
+<span class="n">sens_a</span><span class="p">[</span><span class="s1">&#39;delta_full_minus_paired&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sens_a</span><span class="p">[</span><span class="s1">&#39;full_mean&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sens_a</span><span class="p">[</span><span class="s1">&#39;paired_mean&#39;</span><span class="p">]</span>
+<span class="n">sens_a</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>full mem0g n = 8209
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>paired_mean</th>
+      <th>full_mean</th>
+      <th>delta_full_minus_paired</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>MAS_System_Robustness</td>
+      <td>0.527009</td>
+      <td>0.532099</td>
+      <td>0.005089</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>MAS_Emergence_Rate</td>
+      <td>-0.224211</td>
+      <td>-0.228651</td>
+      <td>-0.004441</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>MAS_Amplification_Rate</td>
+      <td>0.498861</td>
+      <td>0.494884</td>
+      <td>-0.003977</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>MAS_Propagation_Rate</td>
+      <td>0.069964</td>
+      <td>0.068193</td>
+      <td>-0.001771</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="master-json-dump">
+<h2>Master JSON dump<a class="headerlink" href="#master-json-dump" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;arms&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">ARM_ORDER</span><span class="p">),</span>
+    <span class="s1">&#39;spearman&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">arm</span><span class="p">:</span> <span class="n">spear_per_arm</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">ARM_ORDER</span><span class="p">},</span>
+    <span class="s1">&#39;per_category_recovery&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">per_cat</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+    <span class="s1">&#39;model_attribution&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">attribution_df</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+    <span class="s1">&#39;manski_bounds_mem_on_robustness&#39;</span><span class="p">:</span> <span class="n">manski</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">manski</span><span class="p">,</span> <span class="s1">&#39;__dict__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">(</span><span class="n">manski</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">manski</span><span class="p">,</span><span class="s1">&#39;_asdict&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">manski</span><span class="p">,</span>
+    <span class="s1">&#39;sensitivity_A_full_vs_paired&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">sens_a</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)),</span>
+<span class="p">}</span>
+<span class="p">(</span><span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s1">&#39;notebook_03_master.json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;wrote&#39;</span><span class="p">,</span> <span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s1">&#39;notebook_03_master.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrote /home/falcon/Projekte/IP-Claim/packages/bias-mitigation/notebooks/paper3_v2_outputs/notebook_03_master.json
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_emergence_survival.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Notebook 02: Emergence, Survival &amp; Markov Dynamics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../guides/reference/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-book" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports-arm-loader">Imports &amp; arm loader</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spearman-cross-metric-correlation-per-arm">Spearman cross-metric correlation per arm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-category-recovery-rates">Per-category recovery rates</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#per-category-conditional-recovery-rate-r-b-b-c">Per-category conditional recovery rate  <span class="math notranslate nohighlight">\(r = |B|/(|B|+|C|)\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-model-attribution-llama-vs-deepseek">Per-model attribution (Llama vs DeepSeek)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manski-no-assumption-bounds-mem-effect-on-robustness">Manski no-assumption bounds (mem effect on Robustness)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-full-8-563-sample-mem-development-set-vs-3-200-paired-core">Sensitivity: full 8,563-sample mem development set (vs 3,200 paired core)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#master-json-dump">Master JSON dump</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdullah Alomar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Abdullah Alomar.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

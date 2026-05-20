@@ -1,70 +1,113 @@
-# Developer Guide
+# {octicon}`tools;1em` Developer guide
 
-This guide documents implementation constraints for the preregistered MAS bias study.
+```{toctree}
+:hidden:
 
-## Development Priorities
+maintenance
+```
 
-- Preserve intervention comparability across runs.
-- Keep randomization and data-processing logic reproducible.
-- Avoid introducing condition-specific behavior outside explicitly configured interventions.
-- Maintain metric definitions consistent with the preregistration (primary: $PR_t$).
-
-## Setup
+## {octicon}`package;1em` Setup
 
 ```bash
 uv sync
 ```
 
-## Contribution Standards
+## {octicon}`stack;1em` Packages
 
-- Keep public behavior stable unless a change is explicitly scoped.
-- Update docs whenever config schema, lifecycle flow, metrics, or CLI changes.
-- Add or update tests for changed logic in `data`, `mas`, and `memory` modules.
-- Keep intervention-specific logic isolated by `InterventionType`.
+| Package | Role |
+|---|---|
+| `bias_mitigation.data` | Dataset I/O, Pydantic config, splits. |
+| `bias_mitigation.mas` | Agent orchestration, protocols, state machines, evaluator, metrics, GEPA. |
+| `bias_mitigation.memory` | Async mem0 client, recovery pipeline, orchestrator + statechart. |
+| `bias_mitigation.analysis` | polars live-runs pipeline + scipy statistical primitives. |
+| `bias_mitigation.workflows` | `WorkflowMachine` for evaluate / train. |
+| `containers` + `analysis.containers` | `dependency-injector` wiring. |
 
-## Docstring Standards
+## {octicon}`shield-check;1em` Pre-PR checks
 
-- Prefer concise docstrings with explicit `Args`, `Returns`, and `Side Effects` where relevant.
-- Avoid placeholder text (`Main module for ...`) in module/class/function docstrings.
-- Keep terminology consistent with experiment docs (`baseline`, `baseline_prompt_opt`, `mem0g`, `mem0g_gepa`).
+::::{tab-set}
 
-## Local Quality Checks
-
-Run these checks before opening a PR:
+:::{tab-item} Lint
 
 ```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run sphinx-build -M html docs docs/_build -W --keep-going
+uv run ruff check src/
 ```
+:::
 
-## Pull Request Checklist
+:::{tab-item} Type-check
 
-- [ ] Updated related docs pages and API references.
-- [ ] Updated prompt tracker todos where requested.
-- [ ] Ran lint/tests/docs checks locally.
-- [ ] Added migration notes for config or schema changes.
+```bash
+uv run mypy src/bias_mitigation
+```
+:::
 
-## System Structure
+:::{tab-item} Docs
 
-The project relies on:
-- **DSPy** for language model programming.
-- **MLflow** for tracing and experiment tracking.
-- **Mem0** for long-term memory retrieval within memory interventions.
+```bash
+LC_ALL=C.UTF-8 uv run sphinx-build -M html docs docs/_build -W --keep-going
+```
+:::
 
-Core package boundaries:
+:::{tab-item} State diagrams
 
-- `bias_mitigation.data`: dataset transformation, split tracking, reproducibility artifacts.
-- `bias_mitigation.mas`: agent orchestration, protocols, state machine lifecycle.
-- `bias_mitigation.memory`: memory retrieval implementation and memory backend integration.
+After editing any `python-statemachine` subclass body:
 
-## Intervention Modes
+```bash
+uv run generate-statecharts
+```
+:::
 
-Supported intervention labels:
+::::
 
-- `baseline`
-- `baseline_prompt_opt`
-- `mem0g`
-- `mem0g_gepa`
+See [Maintenance contract](maintenance.md) for the full set of
+code-change → docs-update rules.
 
-When adding new functionality, ensure behavior changes are isolated by intervention type and do not leak into baseline execution.
+## {octicon}`beaker;1em` Testing with DI overrides
+
+Both `Container` (MAS) and `AnalysisContainer` (analysis) expose
+`.override()`:
+
+::::{tab-set}
+
+:::{tab-item} MAS container
+
+```python
+from dependency_injector import providers
+from bias_mitigation.containers import Container
+
+container = Container(mas_config=stub_config)
+container.memory_tools.override(providers.Object(stub_mem0_tools))
+try:
+    program = container.mas_program()
+    # ...
+finally:
+    container.memory_tools.reset_override()
+```
+:::
+
+:::{tab-item} Analysis container
+
+```python
+from dependency_injector import providers
+from bias_mitigation.analysis import AnalysisContainer
+
+AnalysisContainer.config.override(providers.Object(stub_analysis_cfg))
+try:
+    # ...
+finally:
+    AnalysisContainer.config.reset_override()
+```
+:::
+
+::::
+
+## {octicon}`law;1em` Standards
+
+- **Docstrings** — imperative, terse. Skip placeholder `Args` /
+  `Returns` sections when the signature is obvious.
+- **Intervention isolation** — keep intervention-specific logic
+  isolated by `InterventionType`; `Container`'s `providers.Selector`
+  is the dispatch seam.
+- **New state machines** — register in
+  `src/scripts/generate_statecharts.py::_MACHINES` so diagrams are
+  regenerated on every docs build.
