@@ -9,18 +9,16 @@ memory between turns, and GEPA reflective prompt optimisation.
 :color: primary
 :open:
 
-Two open-weight models are paired in every debate: a **Llama 3.1-8B
-Instruct** model and a **DeepSeek-R1** distilled into the same 8B
-backbone. Each sample is drawn from **BBQ + StereoSet**, runs four
-interaction rounds under a configurable protocol (cooperative /
-debate / competitive / malicious), and yields a per-turn trajectory
-of predictions per agent.
+Two agents debate every sample: **Llama 3.1-8B Instruct** and a
+**DeepSeek-R1** model distilled into the same 8B backbone. Samples
+come from **BBQ** and **StereoSet**. Each runs four interaction
+rounds under one of `cooperative`, `debate`, `competitive`, or
+`malicious` protocols, producing a per-turn prediction from each
+agent.
 
-The two factors — memory on/off, prompt optimisation on/off — define
-four arms. Per-category stratification (gender, race, religion,
-profession, …) is a **first-class deliverable**, since BBQ + StereoSet
-are categorically structured and the per-category lens is the most
-reviewer-relevant slice.
+The arms cross memory on/off with prompt optimisation on/off.
+Results are reported per bias category (gender, race, religion,
+profession, ...) because both datasets group items that way.
 :::
 
 ## {octicon}`beaker;1em` The four arms
